@@ -42,10 +42,10 @@ function dzn_preInitialize() {
 	form.deleteAllResponses();
   
 	Logger.log("Adding items to enter sides and slots names.");
-	var mode = form.addSectionHeaderItem().setTitle("dzn_MODE").setHelpText('COOP'); // COOP or TVT
-	var sides = form.addSectionHeaderItem().setTitle("dzn_sides").setHelpText("BLUFOR | OPFOR");
-	var slotsA = form.addSectionHeaderItem().setTitle("dzn_slotsA").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
-	var slotsB = form.addSectionHeaderItem().setTitle("dzn_slotsB").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
+	var mode = form.addSectionHeaderItem().setTitle("dzn_FORM MODE").setHelpText('COOP'); // COOP or TVT
+	var sides = form.addSectionHeaderItem().setTitle("dzn_NAMES OF THE OPPOSING SIDES").setHelpText("BLUFOR | OPFOR");
+	var slotsA = form.addSectionHeaderItem().setTitle("dzn_SLOTS FOR SIDE 1").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
+	var slotsB = form.addSectionHeaderItem().setTitle("dzn_SLOTS FOR SIDE 2").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
 
 	var ids = mode.getId().toString() + " | " + sides.getId().toString() + " | " + slotsA.getId().toString() + " | " + slotsB.getId().toString();
   
