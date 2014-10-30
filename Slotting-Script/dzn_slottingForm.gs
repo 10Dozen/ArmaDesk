@@ -99,6 +99,7 @@ function dzn_initialize() {
 			"tМиссия",
 			"oИгроки",
 			"pНик в игре",
+			"aВероятность присутствия",
 			"cСторона",
 			"bSIDEA",
 			"sSIDEA: Слоттинг",
@@ -112,7 +113,8 @@ function dzn_initialize() {
 			"iИзображение к миссии",
 			"tМиссия",
 			"sSIDEA: Слоттинг",			
-			"pНик в игре",			
+			"pНик в игре",
+			"aВероятность присутствия",
 			"cSIDEA: Роль"
 		];
 	}
@@ -122,6 +124,7 @@ function dzn_initialize() {
 	var slottingChoices = [];  //ids of Slotting choices items
 	var idName = 0;  //id of name section
 	var idOverall = 0;
+    var idPrecense = 0;
   
 	for (var i = 0; i < sectionNamesMasks.length; i++) {
 		var name = sectionNamesMasks[i];
@@ -143,6 +146,11 @@ function dzn_initialize() {
 		//Item names: i - img, t - text info, b - breakpage, s - slotting section, c - multi choice
 		var itemType = name.substring(0,1);
 		switch (itemType) {
+			case "a":
+				var item = form.addScaleItem().setTitile(itemName).setBounds(1, 10).setLabels('Не уверен', 'Буду');
+				idPrecense = item.getId();
+				if (debug) {Logger.log('Chance of presence item');}
+				break;
 			case "i":
 				var img = UrlFetchApp.fetch('http://cs608928.vk.me/v608928222/5f5f/MQqIEc6_iKY.jpg');
 				form.addImageItem().setTitle(itemName).setImage(img).setAlignment(FormApp.Alignment.CENTER);
@@ -236,8 +244,11 @@ function dzn_initialize() {
 		"slotsSideB" : slotsSideB,									// 9 Original names of slots for side B
 		"slotsHeadsSideA" : slotsHeadsSideA,						// 10 IDs of headers in slots names for side A
 		"slotsHeadsSideB" : slotsHeadsSideB,						// 11 IDs of headers in slots names for side B
-		"idOverall" : idOverall,									// 12 ID of Overall players names section
-		"mode" : mode  											// 13 mode
+		"idOverall" : idOverall,										// 12 ID of Overall players names section
+		"mode" : mode,  											// 13 mode
+		"idPrecense" : idPrecense,									// 14 id of PrecenseItem
+		"precenseSideA" : "0",
+		"precenseSideB" : "0"
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -269,6 +280,8 @@ function dzn_getDocumentData(form) {
 // 11 IDs of headers in slots names for side B // string
 // 12 ID of Overall players names section // string/int
 // 13 mode // string/bool
+// 14 idPrecense // int
+// 15, 16 - Precense of player linked via index, for sides A and B
 
 	var debug = false;
 	if (debug) {Logger.log('    Running dzn_getDocumentData');}
@@ -284,7 +297,7 @@ function dzn_getDocumentData(form) {
 		"idName","idSections","idChoices",
 		"usedSlotsSideA","usedSlotsSideB","usedNicksSideA","usedNicksSideB",
 		"sides","slotsSideA","slotsSideB","slotsHeadsSideA","slotsHeadsSideB",
-        "idOverall", "mode"
+        "idOverall", "mode", "idPrecense", "precenseSideA", "precenseSideB"
     ];
 	
 	var lists = data.getKeys();
@@ -305,9 +318,9 @@ function dzn_getDocumentData(form) {
 
 //
 // Checks last 4 responses - updates or add nickname's slot
-// INPUT: 	[form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode]
+// INPUT: 	[form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode, idPrecense]
 // OUTPUT: 	[0 usedNicksSideA, 1 usedNicksSideB, 2 usedSlotsSideA, 3 usedSlotsSideB];
-function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode) {
+function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode, idPrcense, precenseSideA, precenseSideB) {
 	if (false) {
 		var form = FormApp.getActiveForm();       
 		var idName = PropertiesService.getScriptProperties().getProperty('idName');
@@ -331,8 +344,9 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 	for (var i = 1; i < iMax; i++) {
 		var response = formResponses[formResponses.length-(i)];  
 		// Get form response
-		var sideResponse, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite
+		var sideResponse, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
 		var nickResponse = response.getResponseForItem(form.getItemById(idName));
+		var precenseResponse = response.getRespomseForItem(form.getItemById(idPrcense));
 		
 		if (mode == "T") {
 			// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
@@ -343,23 +357,29 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 				usedNicks = usedNicksSideA;
 				usedSlotsOpposite = usedSlotsSideB;
 				usedNicksOpposite = usedNicksSideB;
+				precenseList = precenseSideA;
+				precenseListOpposite = precenseSideB;
 			} else {
 				slotResponse = response.getResponseForItem(form.getItemById(idChoices[2]));
 				usedSlots = usedSlotsSideB;
 				usedNicks = usedNicksSideB;
 				usedSlotsOpposite = usedSlotsSideA;
 				usedNicksOpposite = usedNicksSideA;
+				precenseList = precenseSideB;
+				precenseListOpposite = precenseSideA;
 			}	
 		} else {
 			// if NOT TVT: assign slots and nicks 
 			slotResponse = response.getResponseForItem(form.getItemById(idChoices[0]));
 			usedSlots = usedSlotsSideA;
-			usedNicks = usedNicksSideA;	
+			usedNicks = usedNicksSideA;
+			precenseList = precenseSideA;
 		}
 		
 		// Get actual values of response NICK and SLOT
 		var nick = nickResponse.getResponse();
-		var slot = slotResponse.getResponse();		
+		var slot = slotResponse.getResponse();
+		var precense = precenseResponse.getResponse();
 		if (debug) {Logger.log("Nick -  %s, slot - %s", nick, slot);}
 		
 		// Id of NICK at the side's usedNick/Slot array
@@ -377,16 +397,19 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 				} else {
 					usedNicks.splice(nickIndex,1);
 					usedSlots.splice(nickIndex,1);
+					precenseList.splice(nickIndex,1);
 				}
 			} else {
 				usedNicks.push(nick);
 				usedSlots.push(slot);
+				precenseList.push(precense);
 				// If TVT - remove nick/slot from opposite side's arrays (if had been added earlier)
 				if (mode == "T") {
 					var idToRemove = usedNicksOpposite.indexOf(nick);
 					if ( idToRemove > -1 ) {
 						usedNicksOpposite.splice(idToRemove,1);
 						usedSlotsOpposite.splice(idToRemove,1);
+						precenseListOpposite.splice(idToRemove,1);
 					}
 				}
 			}
@@ -397,20 +420,22 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 		"usedSlotsSideA" : dzn_convert(usedSlotsSideA, "toString"),				// Used slots for side A
 		"usedSlotsSideB" : dzn_convert(usedSlotsSideB, "toString"),				// Used slots for side B
 		"usedNicksSideA" : dzn_convert(usedNicksSideA, "toString"),				// Used nicknames for side A
-		"usedNicksSideB" : dzn_convert(usedNicksSideB, "toString")				// Used nicknames for side B       
+		"usedNicksSideB" : dzn_convert(usedNicksSideB, "toString"),				// Used nicknames for side B  
+		"precenseSideA" : dzn_convert(precenseSideA, "toString"),			// Precenses of side A  
+		"precenseSideB" : dzn_convert(precenseSideB, "toString")			// Precenses of side B
 	}, false); 
 	
 	if (debug) { Logger.log ('OUT:\n%s\n%s\n%s\n%s',usedNicksSideA, usedSlotsSideA, usedNicksSideB, usedSlotsSideB); }; 
 	if (debug) {Logger.log('    << End of dzn_checkResponses');}
 	
-	return [usedNicksSideA, usedNicksSideB, usedSlotsSideA, usedSlotsSideB]
+	return [usedNicksSideA, usedNicksSideB, usedSlotsSideA, usedSlotsSideB, precenseSideA, precenseSideB]
 }
 
 //
 // Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 // INPUT:	form, usedNicks, usedSlots, slots, headers
 // OUTPUT:	0 sectionInfoOutput, 1 slots
-function dzn_getUpdatedInfo(form, usedNicks, usedSlots, slots, headers) {
+function dzn_getUpdatedInfo(form, usedNicks, usedSlots, slots, headers, precenses) {
 	var debug = false;
 	if (debug) {
 		Logger.log('    Running dzn_getUpdatedInfo');
@@ -445,7 +470,13 @@ function dzn_getUpdatedInfo(form, usedNicks, usedSlots, slots, headers) {
 		var slotIndex = sectionInfo.indexOf(usedSlots[i]);
 		if (slotIndex > -1) {
 			excludeId.push(slotIndex);
-			sectionInfo[slotIndex] = "✔ " + sectionInfo[slotIndex] + " -- " + usedNicks[i]; 
+			var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + usedNicks[i]; 
+            if (precenses[slotIndex].length > 0) {
+                if  (precenses[slotIndex].toString != "10") {
+                	infoString = infoString + " ( где-то" + precenses[slotIndex] + "0%)";
+                }
+            }
+			sectionInfo[slotIndex] = infoString; 
 			if (debug) { Logger.log('for step %s __ slot index is %s and value %s\n%s', i.toString(), slotIndex.toString(), usedSlots[i], sectionInfo[slotIndex]) };
 		} else {
 			if (debug) { Logger.log('for step %s __ skipped', i.toString())};       
@@ -500,6 +531,8 @@ function dzn_onSave() {
 // 11 IDs of headers in slots names for side B // string
 // 12 ID of Overall players names section // string/int
 // 13 mode // string/bool
+// 14 ID of Precense item // int
+// 15, 16 - Precense of player linked via index, for sides A and B
 
 	// Get Mode of form
 	var mode = data[13];
@@ -520,7 +553,10 @@ function dzn_onSave() {
 		data[4], //used slots side B
 		data[5], //used nicknames side A
 		data[6],  //used nicknames side B
-		mode
+		mode,
+		data[14],  // ID of precenseItem
+      	data[15],  // Precense side A
+      	data[16]  // Precense side B
 	); 
 	
 	var overallInfo = '';
@@ -529,7 +565,7 @@ function dzn_onSave() {
 	if (mode == "T") { iMax = 2; }
 	for (var i = 0; i < iMax; i++) {
 		//Get Update Info
-		//(form, idSection, idChoice, usedNicks, usedSlots, slots, headers) 
+		//(form, idSection, idChoice, usedNicks, usedSlots, slots, headers, precenses) 
 		var idChoice = data[2][0];
 		if (mode == "T") { idChoice = data[2][1+i]; }
 		
@@ -538,7 +574,8 @@ function dzn_onSave() {
             updatedItems[i],  //usedNicks
             updatedItems[2+i], // usedSlots
 			data[8+i], //slots
-			data[10+i] //headers
+			data[10+i], //headers
+			updatedItems[4+i]  //precenses
 		);
 
 		//Update info
