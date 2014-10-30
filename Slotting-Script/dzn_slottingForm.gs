@@ -29,7 +29,7 @@ function dzn_convert(value, type) {
 }
 
 //
-// Will prepare empty from to use for slotting purposes
+// Will prepare empty form to use for slotting purposes
 function dzn_preInitialize() {
 	Logger.log("Pre-intialization...");
 	var form = FormApp.getActiveForm();
@@ -58,7 +58,7 @@ function dzn_preInitialize() {
 
 
 //
-// After form creator entered SIDA and SLOTS names for every SIDE, calling dzn_initialize
+// After form creator entered SIDE and SLOTS names for every SIDE, calling dzn_initialize
 // INPUT: none | OUTPUT: none (write to ScriptProperties)
 function dzn_initialize() {
 	Logger.log("Intialization...");
@@ -144,7 +144,8 @@ function dzn_initialize() {
 		var itemType = name.substring(0,1);
 		switch (itemType) {
 			case "i":
-				form.addImageItem().setTitle(itemName);
+				var img = UrlFetchApp.fetch('http://cs608928.vk.me/v608928222/5f5f/MQqIEc6_iKY.jpg');
+				form.addImageItem().setTitle(itemName).setImage(img).setAlignment(FormApp.Alignment.CENTER);
 				if (debug) {Logger.log('Image item');}
 				break;
 			case "t":
