@@ -147,7 +147,7 @@ function dzn_initialize() {
 		var itemType = name.substring(0,1);
 		switch (itemType) {
 			case "a":
-				var item = form.addScaleItem().setTitile(itemName).setBounds(1, 10).setLabels('Не уверен', 'Буду');
+				var item = form.addScaleItem().setTitle(itemName).setBounds(1, 7).setLabels('Не уверен', 'Буду');
 				idPrecense = item.getId();
 				if (debug) {Logger.log('Chance of presence item');}
 				break;
@@ -320,7 +320,7 @@ function dzn_getDocumentData(form) {
 // Checks last 4 responses - updates or add nickname's slot
 // INPUT: 	[form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode, idPrecense]
 // OUTPUT: 	[0 usedNicksSideA, 1 usedNicksSideB, 2 usedSlotsSideA, 3 usedSlotsSideB];
-function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode, idPrcense, precenseSideA, precenseSideB) {
+function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, mode, idPrecense, precenseSideA, precenseSideB) {
 	if (false) {
 		var form = FormApp.getActiveForm();       
 		var idName = PropertiesService.getScriptProperties().getProperty('idName');
@@ -346,7 +346,7 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 		// Get form response
 		var sideResponse, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
 		var nickResponse = response.getResponseForItem(form.getItemById(idName));
-		var precenseResponse = response.getRespomseForItem(form.getItemById(idPrcense));
+		var precenseResponse = response.getResponseForItem(form.getItemById(idPrecense));
 		
 		if (mode == "T") {
 			// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
@@ -379,7 +379,14 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 		// Get actual values of response NICK and SLOT
 		var nick = nickResponse.getResponse();
 		var slot = slotResponse.getResponse();
-		var precense = precenseResponse.getResponse();
+      
+      
+		var precense 
+        if (precenseResponse == null) {
+        	precense = "";
+        } else {
+        	precense = precenseResponse.getResponse();
+        }
 		if (debug) {Logger.log("Nick -  %s, slot - %s", nick, slot);}
 		
 		// Id of NICK at the side's usedNick/Slot array
@@ -394,6 +401,7 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 			if (nickIndex > -1) {
 				if (slot != 'Без слота') {
 					usedSlots[nickIndex] = slot;
+					precenseList[nickIndex] = precense;
 				} else {
 					usedNicks.splice(nickIndex,1);
 					usedSlots.splice(nickIndex,1);
@@ -436,6 +444,7 @@ function dzn_checkResponses(form, idName, sides, idChoices, usedSlotsSideA, used
 // INPUT:	form, usedNicks, usedSlots, slots, headers
 // OUTPUT:	0 sectionInfoOutput, 1 slots
 function dzn_getUpdatedInfo(form, usedNicks, usedSlots, slots, headers, precenses) {
+  
 	var debug = false;
 	if (debug) {
 		Logger.log('    Running dzn_getUpdatedInfo');
@@ -470,11 +479,9 @@ function dzn_getUpdatedInfo(form, usedNicks, usedSlots, slots, headers, precense
 		var slotIndex = sectionInfo.indexOf(usedSlots[i]);
 		if (slotIndex > -1) {
 			excludeId.push(slotIndex);
-			var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + usedNicks[i]; 
-            if (precenses[slotIndex].length > 0) {
-                if  (precenses[slotIndex].toString != "10") {
-                	infoString = infoString + " ( где-то" + precenses[slotIndex] + "0%)";
-                }
+			var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + usedNicks[i];           
+            if (precenses[i] > 0) {               
+                	infoString = infoString + " (" + precenses[i] + "0%)";
             }
 			sectionInfo[slotIndex] = infoString; 
 			if (debug) { Logger.log('for step %s __ slot index is %s and value %s\n%s', i.toString(), slotIndex.toString(), usedSlots[i], sectionInfo[slotIndex]) };
@@ -541,7 +548,7 @@ function dzn_onSave() {
 		roleItem = form.getItemById(data[2][0]);
 		roleItem.setHelpText("Обработка... Обновите страницу через несколько секунд.");
 	}
-	
+
 	// Get Resonses
 	//Will return: 0 - usedNicnamese side A, 1 - used nicknames side B, 2 - used slots side A,  3 - used slots side B
 	var updatedItems = dzn_checkResponses(
