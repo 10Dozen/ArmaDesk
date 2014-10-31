@@ -105,11 +105,11 @@ function dzn_initialize() {
 		sectionNamesMasks = [
 			"iИзображение к миссии",
 			"tМиссия",
-			"oИгроки",
+			"lИгроки",
 			"pНик в игре",
 			"aВероятность присутствия",
 			"xПасскод",
-			"cСторона",
+			"oСторона",
 			"bSIDEA",
 			"sSIDEA: Слоттинг",
 			"cSIDEA: Роль",       
@@ -135,7 +135,8 @@ function dzn_initialize() {
 	var idName = 0;  //id of name section
 	var idOverall = 0;
     var idPrecense = 0;
-  var idPasscode = 0;
+	var idPasscode = 0;
+	var idSidechoice = 0;
   
 	for (var i = 0; i < sectionNamesMasks.length; i++) {
 		var name = sectionNamesMasks[i];
@@ -157,11 +158,31 @@ function dzn_initialize() {
 		//Item names: i - img, t - text info, b - breakpage, s - slotting section, c - multi choice
 		var itemType = name.substring(0,1);
 		switch (itemType) {
+			//Functional items
 			case "a":
 				var item = form.addScaleItem().setTitle(itemName).setBounds(1, 7).setLabels('Не уверен', 'Буду');
 				idPrecense = item.getId();
 				if (debug) {Logger.log('Chance of presence item');}
 				break;
+			case "p":
+            	var item = form.addTextItem().setRequired(true).setTitle(itemName);
+            	idName = item.getId().toString();
+            	break;				
+			case "l":
+				var item = form.addSectionHeaderItem().setTitle(itemName);
+				idOverall = item.getId().toString();
+				if (debug) {Logger.log('Overall players info item');}
+				break;
+			case "x":
+				var item = form.addTextItem().setTitle(itemName);
+				idPasscode = item.getId().toString();
+				break;
+			case "o":
+				var item = form.addMultiChoiseItem.setTitle(itemName);
+				idSidechoice = item.getId();
+				break;
+			
+			//Design items
 			case "i":
 				var img = UrlFetchApp.fetch('http://cs608928.vk.me/v608928222/5f5f/MQqIEc6_iKY.jpg');
 				form.addImageItem().setTitle(itemName).setImage(img).setAlignment(FormApp.Alignment.CENTER);
@@ -186,26 +207,13 @@ function dzn_initialize() {
 				slottingChoices.push(item.getId().toString());
             	if (debug) {Logger.log('Slotting choice item - %s and ids %s', itemName, item.getId().toString());}
             	break;
-			case "p":
-            	var item = form.addTextItem().setRequired(true).setTitle(itemName);
-            	idName = item.getId().toString();
-            	break;
-			case "o":
-				var item = form.addSectionHeaderItem().setTitle(itemName);
-				idOverall = item.getId().toString();
-				if (debug) {Logger.log('Overall players info item');}
-				break;
-          case "x":
-				var item = form.addTextItem().setTitle(itemName);
-				idPasscode = item.getId().toString();
-				break;
 		}
 	}		
 
 	//Linking 'Side choosing' to page break	
 	if (mode == "T") {
-		var sideChoice = form.getItemById(slottingChoices[0]).asMultipleChoiceItem();
-		if (debug) {Logger.log('\n Side choice item id is %s',  slottingChoices[0]);}
+		var sideChoice = form.getItemById(idSidechoice).asMultipleChoiceItem();
+		if (debug) {Logger.log('\n Side choice item id is %s',  idSidechoice);}
 		var choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
 		var choiceSideB = sideChoice.createChoice(sidesNames[1], form.getItemById(breakToSides[1]).asPageBreakItem());
 		sideChoice.setChoices([choiceSideA, choiceSideB]);
@@ -262,6 +270,7 @@ function dzn_initialize() {
 		"precenseSideB" : "0",										// 16 Precenses list for sideB
 		"passcodes" : passcodes,									// 17 List of Allowed passcodes
 		"idPasscode" : idPasscode									// 18 id of Passcode item
+		"idSidechoice" : idSidechoice
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -473,11 +482,7 @@ function dzn_onSave() {
 	
 	// Get Updated Info and Update
 	var overallInfo = '';
-	if (data.mode == "T") {
-	
-	
-	} else {
-		var idChoice = data.idChoices;		
+	if (data.mode == "C") {
 		var updatedSideInfo = dzn_getUpdatedInfo(
 			data.usedNicksSideA, data.usedSlotsSideA, data.precenseSideA, 
 			data.slotsSideA, data.slotsHeadsSideA
@@ -485,7 +490,25 @@ function dzn_onSave() {
 		// OUT: sectionInfoOutput, slots
 		updatedSideInfo[1].push("Без слота");		
 		form.getItemById(data.idSections).setHelpText(updateSideInfo[0]);
-		form.getItemById(data.idChoice).asCheckboxItem().setChoiceValues(updatedSideInfo[1]);
+		form.getItemById(data.idChoice).asCheckboxItem().setChoiceValues(updatedSideInfo[1]);		
+	} else {
+		var updatedSideInfoSideA = dzn_getUpdatedInfo(
+			data.usedNicksSideA, data.usedSlotsSideA, data.precenseSideA, 
+			data.slotsSideA, data.slotsHeadsSideA
+		);		
+		var updatedSideInfoSideB = dzn_getUpdatedInfo(
+			data.usedNicksSideB, data.usedSlotsSideB, data.precenseSideB, 
+			data.slotsSideB, data.slotsHeadsSideB
+		);
+		
+		updatedSideInfoSideA[1].push("Без слота");				
+		form.getItemById(data.idSections[0]).setHelpText(updatedSideInfoSideA[0]);
+		form.getItemById(data.idChoice[0]).asCheckboxItem().setChoiceValues(updatedSideInfoSideA[1]);		
+		
+		
+		updatedSideInfoSideB[1].push("Без слота");	
+		form.getItemById(data.idSections[1]).setHelpText(updatedSideInfoSideB[0]);
+		form.getItemById(data.idChoice[1]).asCheckboxItem().setChoiceValues(updatedSideInfoSideB[1]);		
 	}
 	
 	
