@@ -281,6 +281,7 @@ function dzn_onSave() {
 		var duplicates = [];
     
 		for (var i = 1; i < iMax; i++) {
+          Logger.log("Step %s", i.toString());
 			var response = formResponses[formResponses.length-(i)];  
 			// Get form response
 			var sideResponse, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
@@ -320,6 +321,7 @@ function dzn_onSave() {
 				var nickIndex = usedNicks.indexOf(nick);  // Id of NICK at the side's usedNick/Slot array
 				if (duplicates.indexOf(nick) == -1) {
 					duplicates.push(nick);
+                  Logger.log("Duplicates: %s", duplicates);
 					// Update or Add nick/slot to side's usedSlot/Nick array
 					if (nickIndex > -1) {
 						// Change Nickname-Slot
@@ -357,24 +359,36 @@ function dzn_onSave() {
 
 			function dzn_unassignMultipleSlots() {
 				// There is NO SLOT chosen
+				Logger.log(usedNicks);
+                Logger.log(usedNicks.length);
+         /*     var nicksList = [];
+              for (var k = 0; k < usedNicks.length; k++) {
+                nicksList.push(usedNicks[k]);
+              }*/
 				var nickRE = new RegExp (nick + "-\\\d");						
-				for (var j = 0; j < usedNicks.length; j++) {
-					if (nickRE.test(usedNicks[j])) {
-						var numeredNick = usedNicks[j];
+				for (var k = 0; k < usedNicks.length; k++) {
+					Logger.log(k.toString());
+					Logger.log(nickRE.test(usedNicks[k]))
+					if (nickRE.test(usedNicks[k])) {
+						var numeredNick = usedNicks[k];
+						Logger.log(numeredNick);
 						dzn_assignSlot(numeredNick, 'Без слота', "10");
+                        k--;
 					}
 				}
 			};
 			
 			if (slot.length == 1) {
+              Logger.log("Single choice!");
 				// Chosen single 'Unassign slot'
 					// Passcode given -- e.g. squad unassigment
 				var passcode;
 				if ((passcodeResponse != null) 
 					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
-					
+					Logger.log("Passcode given! Unassassigning squad!");
 					dzn_unassignMultipleSlots();
 				} else {
+                  Logger.log("No passcode given! Assigning one player!");
 					// Passcode Not ginve -- e.g. single man
 					var precense;
 					if (precenseResponse == null) {
@@ -387,14 +401,17 @@ function dzn_onSave() {
 					dzn_assignSlot(nick, slot[0], precense);
 				}			
 			} else {
+              Logger.log("Multichoice!");
 				var passcode;
 				if ((passcodeResponse != null) 
 					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
 					// Passcode confirmed
 					if (slot.indexOf('Без слота') > -1) {
+                      Logger.log("Passcode confirmed! Assigning from multi branch!");
 						// Unassign multiple slots
 						dzn_unassignMultipleSlots();
 					} else {
+                       Logger.log("Assigning from multi branch!");
 						// Slots chosen						
 						for (var j = 0; j < slot.length; j++) {
 							var numeredNick = nick + "-" + j.toString();
@@ -415,19 +432,6 @@ function dzn_onSave() {
             property = dzn_convert(property, "toString");
             properties.setProperty(propertyList[i], property);
 		}
-		
-		
-		
-		/*		
-		PropertiesService.getScriptProperties().setProperties({
-			"usedSlotsSideA" : 	dzn_convert(data.usedSlotsSideA, "toString"),				// Used slots for side A
-			"usedSlotsSideB" : 	dzn_convert(data.usedSlotsSideB, "toString"),				// Used slots for side B
-			"usedNicksSideA" : 	dzn_convert(data.usedNicksSideA, "toString"),				// Used nicknames for side A
-			"usedNicksSideB" : 	dzn_convert(data.usedNicksSideB, "toString"),				// Used nicknames for side B  
-			"precenseSideA" : 	dzn_convert(data.precenseSideA, "toString"),			// Precenses of side A  
-			"precenseSideB" : 	dzn_convert(data.precenseSideB, "toString")			// Precenses of side B
-		}, false); 
-		*/
 	}
 
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
@@ -439,6 +443,7 @@ function dzn_onSave() {
 		// Fill section info with ALL original slots name
 		var sectionInfo = [];
 		for (var i = 0; i < slots.length; i++) {
+          
 			sectionInfo.push(slots[i]);
 		}
 
