@@ -257,7 +257,7 @@ function dzn_initialize() {
 	}
 	Logger.log("Initialized");
 	// Running save trigger to update form
-    dzn_onSave();
+    //dzn_onSave();
 }
 
 //
@@ -265,6 +265,15 @@ function dzn_initialize() {
 //
 function dzn_onSave() {  
 	function dzn_checkResponses() { 
+		
+		function dzn_trim(str) {
+			var	str = str.replace(/^\s\s*/, ''),
+				ws = /\s/,
+				i = str.length;
+			while (ws.test(str.charAt(--i)));
+			return str.slice(0, i + 1);
+		}
+
 		var formResponses = form.getResponses();   
 		var responsesToCheck = [];  
 		var iMax = 4;
@@ -343,36 +352,73 @@ function dzn_onSave() {
 			}
 		  
 			// Get actual values of response NICK and SLOT
-			var nick = nickResponse.getResponse(); // string
+			var nick = dzn_trim(nickResponse.getResponse()); // string
 			var slot = slotResponse.getResponse(); // array
 
-			if (slot.length == 1) {
-				// Single slot chosen
-				var precense;
-				if (precenseResponse == null) {
-					// No response were given
-					precense = "10";
-				} else {
-					// Get value from response
-					precense = precenseResponse.getResponse();
+			function dzn_unassignMultipleSlots() {
+				// There is NO SLOT chosen
+				var nickRE = new RegExp (nick + "-\\\d");						
+				for (var j = 0; j < usedNicks.length; j++) {
+					if (nickRE.test(usedNicks[j])) {
+						var numeredNick = usedNicks[j];
+						dzn_assignSlot(numeredNick, 'Без слота', "10");
+					}
 				}
-				dzn_assignSlot(nick, slot[0], precense);
+			};
+			
+			if (slot.length == 1) {
+				// Chosen single 'Unassign slot'
+					// Passcode given -- e.g. squad unassigment
+				var passcode;
+				if ((passcodeResponse != null) 
+					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
+					
+					dzn_unassignMultipleSlots();
+				} else {
+					// Passcode Not ginve -- e.g. single man
+					var precense;
+					if (precenseResponse == null) {
+						// No response were given
+						precense = "10";
+					} else {
+						// Get value from response
+						precense = precenseResponse.getResponse();
+					}					
+					dzn_assignSlot(nick, slot[0], precense);
+				}			
 			} else {
 				var passcode;
 				if ((passcodeResponse != null) 
-					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {					
-					// Correct Passcode where given
-				// SHOULD BE FIXED
+					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
+					// Passcode confirmed
+					if (slot.indexOf('Без слота') > -1) {
+						// Unassign multiple slots
+						dzn_unassignMultipleSlots();
+					} else {
+						// Slots chosen						
 						for (var j = 0; j < slot.length; j++) {
 							var numeredNick = nick + "-" + j.toString();
 							dzn_assignSlot(numeredNick, slot[j], "10");
-						}
-	
+						}		
+					}					
 				}
-			} 
+			}
+		}
+			
+			
+		// Update ScriptProperties by new usedNick/Slot values for each side
+		var properties = PropertiesService.getScriptProperties();
+		var propertyList = ["usedSlotsSideA", "usedSlotsSideB",  "usedNicksSideA", "usedNicksSideB", "precenseSideA", "precenseSideB"];
+		for (var i = 0; i < propertyList.length; i++) {
+			var property = data[propertyList[i]];
+			if (property.length == 0) { property = [0] };
+            property = dzn_convert(property, "toString");
+            properties.setProperty(propertyList[i], property);
 		}
 		
-		// Update ScriptProperties by new usedNick/Slot values for each side
+		
+		
+		/*		
 		PropertiesService.getScriptProperties().setProperties({
 			"usedSlotsSideA" : 	dzn_convert(data.usedSlotsSideA, "toString"),				// Used slots for side A
 			"usedSlotsSideB" : 	dzn_convert(data.usedSlotsSideB, "toString"),				// Used slots for side B
@@ -381,6 +427,7 @@ function dzn_onSave() {
 			"precenseSideA" : 	dzn_convert(data.precenseSideA, "toString"),			// Precenses of side A  
 			"precenseSideB" : 	dzn_convert(data.precenseSideB, "toString")			// Precenses of side B
 		}, false); 
+		*/
 	}
 
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
@@ -431,10 +478,9 @@ function dzn_onSave() {
 	// Get DATA from PropertiesService
 	var data = {};
 	var datalist = properties.getKeys();
-	for (var i = 0; i < datalist.length; i++) {
-		var key = datalist[i].toString();
-		var value = dzn_convert(properties.getProperty(key), "toList");		
-		
+	for (var i = 0; i < datalist.length; i++) {        
+		var key = datalist[i].toString();    
+		var value = dzn_convert(properties.getProperty(key), "toList");	
 		if (value.length == 1) {
 			// Property isn't array or array with only one item
 			if (key.substring(0,2) == "id") {
