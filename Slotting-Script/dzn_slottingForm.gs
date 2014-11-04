@@ -3,30 +3,8 @@
 //
 // MAY BE NOT SAFE FOR WORK, FOR EXAMPLE
 
-//
-// Convert List to String or String to List (type = 'toString' and 'toList')
-function dzn_convert(value, type) {
-	var output = '';
-	if (type == "toList") {
-		output = value.split(" | ");
-	} else {
-		// Concetate string with delimeter
-		function dzn_writeWithDelimeter(value, string) {
-			var output = '';    
-			if (string.length > 0) {
-				output = string + " | " + value.toString();
-			} else {
-				output = value;        
-			}
-			return output.toString();
-		}
-		for (var i = 0; i < value.length; i++) {
-			output = dzn_writeWithDelimeter(value[i], output);
-		} 
-	}
-    
-	return output;
-}
+
+
 
 //
 // Will prepare empty form to use for slotting purposes
@@ -42,9 +20,9 @@ function dzn_preInitialize() {
 	form.deleteAllResponses();
   
 	Logger.log("Adding items to enter sides and slots names.");
-	var mode = form.addSectionHeaderItem().setTitle("dzn_FORM MODE").setHelpText('COOP'); // COOP or TVT
+	var mode = form.addSectionHeaderItem().setTitle("dzn_FORM MODE").setHelpText('COOP or TVT'); // COOP or TVT
 	var sides = form.addSectionHeaderItem().setTitle("dzn_NAMES OF THE OPPOSING SIDES").setHelpText("BLUFOR | OPFOR");
-	var slotsA = form.addSectionHeaderItem().setTitle("dzn_SLOTS FOR SIDE 1").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
+	var slotsA = form.addSectionHeaderItem().setTitle("dzn_SLOTS FOR SIDE 1").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman | [Bravo] AR | [Bravo] AAR | [Bravo] AT");
 	var slotsB = form.addSectionHeaderItem().setTitle("dzn_SLOTS FOR SIDE 2").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
 	var passcodes = form.addSectionHeaderItem().setTitle("dzn_PASSCODES").setHelpText("QW21 | 34RF | IKLO | 09OI | NBZX | 0112");
 
@@ -68,6 +46,8 @@ function dzn_preInitialize() {
 // INPUT: none | OUTPUT: none (write to ScriptProperties)
 function dzn_initialize() {
 	Logger.log("Intialization...");
+	
+	var str = dzn_setStringtable();
 	
 	var form = FormApp.getActiveForm();
 	var properties = PropertiesService.getScriptProperties();	
@@ -100,7 +80,7 @@ function dzn_initialize() {
 			"tМиссия",
 			"lИгроки",
 			"pНик в игре",
-			"aВероятность присутствия",
+			"aВероятность присутствия на игре",
 			"xПасскод",
 			"oСторона",
 			"bSIDEA",
@@ -118,7 +98,7 @@ function dzn_initialize() {
 			"pНик в игре",
 			"cSIDEA: Роль",
 			"xПасскод",
-			"aВероятность присутствия"
+			"aВероятность присутствия на игре"
 		];
 	}
 
@@ -149,13 +129,13 @@ function dzn_initialize() {
 		switch (itemType) {
 			//Functional items			
 			case "p":
-            	idName = form.addTextItem().setRequired(true).setTitle(itemName).getId().toString();
+            	idName = form.addTextItem().setRequired(true).setTitle(itemName).setHelpText(str.nick).getId().toString();
             	break;
-			case "a":
-				idPrecense = form.addScaleItem().setTitle(itemName).setBounds(1, 7).setLabels('Не уверен', 'Буду').getId().toString();				
+			case "a":			
+				idPrecense = form.addScaleItem().setTitle(itemName).setHelpText(str.precense).setBounds(1, 7).setLabels('Не уверен', '% Буду').getId().toString();				
 				break;			
 			case "x":
-				idPasscode = form.addTextItem().setTitle(itemName).getId().toString();
+				idPasscode = form.addTextItem().setTitle(itemName).setHelpText(str.passcode).getId().toString();
 				break;				
 			case "l":
 				idOverall = form.addSectionHeaderItem().setTitle(itemName).getId().toString();
@@ -181,10 +161,10 @@ function dzn_initialize() {
 				slottingSections.push(item.getId().toString());
 				break;
 			case "c":
-				var item = form.addCheckboxItem().setRequired(true).setTitle(itemName);            
+				var item = form.addCheckboxItem().setRequired(true).setTitle(itemName).setHelpText(str.slots);            
 				slottingChoices.push(item.getId().toString());
             	break;
-		}
+		} 
 	}		
 
 	//Linking 'Side choosing' to page break	
@@ -225,7 +205,7 @@ function dzn_initialize() {
 	}
 	
 	// WRITE TO PROPERTIES
-	properties.setProperties({
+	PropertiesService.getScriptProperties().setProperties({
 		"idName" : 			idName,										//  ID of Name item
 		"idSections" : 		dzn_convert(slottingSections, "toString"),	//  IDs of Section for every side
 		"idChoices" : 		dzn_convert(slottingChoices, "toString"),	//  IDs of Choices for every side		
@@ -255,9 +235,12 @@ function dzn_initialize() {
 	for (var i = 0; i < ids.length; i++) {
 		form.deleteItem(form.getItemById(ids[i]).getIndex());
 	}
+	
+	// Set confirm message
+	form.setConfirmationMessage(str.formConfirm);
 	Logger.log("Initialized");
 	// Running save trigger to update form
-    //dzn_onSave();
+    dzn_onSave();
 }
 
 //
@@ -274,21 +257,18 @@ function dzn_onSave() {
 			return str.slice(0, i + 1);
 		}
 
-		var formResponses = form.getResponses();   
-		var responsesToCheck = [];  
-		var iMax = 4;
-		if (formResponses.length < 4) {iMax = formResponses.length + 1;};
-		var duplicates = [];
-    
-		for (var i = 1; i < iMax; i++) {
-          Logger.log("Step %s", i.toString());
-			var response = formResponses[formResponses.length-(i)];  
+		var formResponses = form.getResponses();   		
+		var duplicates = [];    
+		
+		var response = formResponses[formResponses.length-1];
+      
+		if (response != null) {        
 			// Get form response
 			var sideResponse, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
 			var nickResponse = response.getResponseForItem(form.getItemById(data.idName));
 			var precenseResponse = response.getResponseForItem(form.getItemById(data.idPrecense));
 			var passcodeResponse = response.getResponseForItem(form.getItemById(data.idPasscode));
-			
+
 			if (data.mode == "T") {
 				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
 				sideResponse = response.getResponseForItem(form.getItemById(data.idChoices[0]));	
@@ -316,12 +296,12 @@ function dzn_onSave() {
 				usedNicks 					= data.usedNicksSideA;
 				precenseList 				= data.precenseSideA;	
 			}
-		  
+
 			function dzn_assignSlot(nick, slot, precense) {
 				var nickIndex = usedNicks.indexOf(nick);  // Id of NICK at the side's usedNick/Slot array
 				if (duplicates.indexOf(nick) == -1) {
 					duplicates.push(nick);
-                  Logger.log("Duplicates: %s", duplicates);
+					Logger.log("Duplicates: %s", duplicates);
 					// Update or Add nick/slot to side's usedSlot/Nick array
 					if (nickIndex > -1) {
 						// Change Nickname-Slot
@@ -360,77 +340,67 @@ function dzn_onSave() {
 			function dzn_unassignMultipleSlots() {
 				// There is NO SLOT chosen
 				Logger.log(usedNicks);
-                Logger.log(usedNicks.length);
-         /*     var nicksList = [];
-              for (var k = 0; k < usedNicks.length; k++) {
-                nicksList.push(usedNicks[k]);
-              }*/
-				var nickRE = new RegExp (nick + "-\\\d");						
+				Logger.log(usedNicks.length);        
+				var nickRE = new RegExp (nick + "-sq\\\d{1,2}$");						
 				for (var k = 0; k < usedNicks.length; k++) {
 					Logger.log(k.toString());
 					Logger.log(nickRE.test(usedNicks[k]))
 					if (nickRE.test(usedNicks[k])) {
 						var numeredNick = usedNicks[k];
 						Logger.log(numeredNick);
-						dzn_assignSlot(numeredNick, 'Без слота', "10");
-                        k--;
+						dzn_assignSlot(numeredNick, 'Без слота', precense);
+						   k--;
 					}
 				}
 			};
 			
-			if (slot.length == 1) {
-              Logger.log("Single choice!");
+			var precense;
+			if (precenseResponse == null) {
+				// No response were given
+				precense = "10";
+			} else {
+				// Get value from response
+				precense = precenseResponse.getResponse();
+			}	
+			
+			if (slot.length == 1) {				
 				// Chosen single 'Unassign slot'
 					// Passcode given -- e.g. squad unassigment
 				var passcode;
 				if ((passcodeResponse != null) 
-					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
-					Logger.log("Passcode given! Unassassigning squad!");
+					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {					
 					dzn_unassignMultipleSlots();
-				} else {
-                  Logger.log("No passcode given! Assigning one player!");
-					// Passcode Not ginve -- e.g. single man
-					var precense;
-					if (precenseResponse == null) {
-						// No response were given
-						precense = "10";
-					} else {
-						// Get value from response
-						precense = precenseResponse.getResponse();
-					}					
+				} else {					
+					// Passcode Not ginve -- e.g. single man				
 					dzn_assignSlot(nick, slot[0], precense);
 				}			
-			} else {
-              Logger.log("Multichoice!");
+			} else {				
 				var passcode;
 				if ((passcodeResponse != null) 
 					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
 					// Passcode confirmed
-					if (slot.indexOf('Без слота') > -1) {
-                      Logger.log("Passcode confirmed! Assigning from multi branch!");
+					if (slot.indexOf('Без слота') > -1) {						
 						// Unassign multiple slots
 						dzn_unassignMultipleSlots();
-					} else {
-                       Logger.log("Assigning from multi branch!");
+					} else {						
 						// Slots chosen						
 						for (var j = 0; j < slot.length; j++) {
-							var numeredNick = nick + "-" + j.toString();
-							dzn_assignSlot(numeredNick, slot[j], "10");
+							var numeredNick = nick + "-sq" + j.toString();
+							dzn_assignSlot(numeredNick, slot[j], precense);
 						}		
 					}					
 				}
-			}
+			}	
 		}
-			
-			
+		
 		// Update ScriptProperties by new usedNick/Slot values for each side
 		var properties = PropertiesService.getScriptProperties();
 		var propertyList = ["usedSlotsSideA", "usedSlotsSideB",  "usedNicksSideA", "usedNicksSideB", "precenseSideA", "precenseSideB"];
 		for (var i = 0; i < propertyList.length; i++) {
 			var property = data[propertyList[i]];
 			if (property.length == 0) { property = [0] };
-            property = dzn_convert(property, "toString");
-            properties.setProperty(propertyList[i], property);
+			property = dzn_convert(property, "toString");
+			properties.setProperty(propertyList[i], property);
 		}
 	}
 
@@ -442,8 +412,7 @@ function dzn_onSave() {
 		
 		// Fill section info with ALL original slots name
 		var sectionInfo = [];
-		for (var i = 0; i < slots.length; i++) {
-          
+		for (var i = 0; i < slots.length; i++) {          
 			sectionInfo.push(slots[i]);
 		}
 
@@ -452,8 +421,11 @@ function dzn_onSave() {
 			var slotIndex = sectionInfo.indexOf(usedSlots[i]);
 			if (slotIndex > -1) {
 				excludeId.push(slotIndex);
-				var infoString = "? " + sectionInfo[slotIndex] + " -- " + usedNicks[i];           
-				if (precenses[i] > 0) {               
+				var nicknameToShow = usedNicks[i];			
+				nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
+				
+				var infoString = "? " + sectionInfo[slotIndex] + " -- " + nicknameToShow;           
+				if ((precenses[i] > 0) && (precenses[i] < 8)) {               
 						infoString = infoString + " (" + precenses[i] + "0%)";
 				}
 				sectionInfo[slotIndex] = infoString; 			
@@ -475,8 +447,7 @@ function dzn_onSave() {
 		return [sectionInfoOutput, slots];
 	}
 
-	var debug = true;
-	if (debug) {Logger.log("   Running dzn_onSave");}
+	Logger.log("   Running dzn_onSave");
 	var form = FormApp.getActiveForm();  
     var properties = PropertiesService.getScriptProperties();
   
@@ -499,15 +470,17 @@ function dzn_onSave() {
 		}		
 		data[key] = value;	// A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"		
     }
-// idName, idSections, idChoices, idPrecense, idOverall, idPasscode
-// usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, precenseSideA, precenseSideB
-// sides, slotsSideA, slotsSideB, slotsHeadsSideA, slotsHeadsSideB, passcodes
-// mode	
+/* idName, idSections, idChoices, idPrecense, idOverall, idPasscode, mode
+ usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, precenseSideA, precenseSideB
+ sides, slotsSideA, slotsSideB, slotsHeadsSideA, slotsHeadsSideB, passcodes	*/
+
+	// Stringtable
+	var str = dzn_setStringtable();
 
 	// Get Mode of form	
 	var roleItem
  	if (data.mode == "C") {
-		roleItem = form.getItemById(data.idChoices).setHelpText("Обработка... Обновите страницу через несколько секунд.");
+		roleItem = form.getItemById(data.idChoices).setHelpText(str.slotsLoading);
 	}
 
 	// Get Responses
@@ -521,13 +494,13 @@ function dzn_onSave() {
 			data.slotsSideA, data.slotsHeadsSideA
 		);
       
-      Logger.log("UPDATE INFO:\n%s", updatedSideInfo[0]);
+// Logger.log("UPDATE INFO:\n%s", updatedSideInfo[0]);
 		// OUT: sectionInfoOutput, slots
 		updatedSideInfo[1].push("Без слота");		
 		form.getItemById(data.idSections).setHelpText(updatedSideInfo[0]);
 		form.getItemById(data.idChoices).asCheckboxItem().setChoiceValues(updatedSideInfo[1]);
 
-		roleItem.setHelpText("Выберите одну из доступных ролей из списка ниже.");
+		roleItem.setHelpText(str.slots);
 	} else {
 		var updatedSideInfoSideA = dzn_getUpdatedInfo(
 			data.usedNicksSideA, data.usedSlotsSideA, data.precenseSideA, 
@@ -553,5 +526,43 @@ function dzn_onSave() {
 		form.getItemById(idOverall).setHelpText(overallInfo);
 	}
 	
-	if (debug) {Logger.log('    << End of dzn_onSave');}
+	Logger.log('    << End of dzn_onSave');
+}
+
+
+function dzn_setStringtable() {
+	var str = {
+		"precense" 		:	"Если считаешь, что не успеешь на игру - укажи, пожалуйста, вероятность своего появления на игре.",
+		"passcode" 		:	"Введите код для того, чтобы занять несколько слотов для отряда.",
+		"nick"			:	"",
+		"slots"			:	"Выберите одну из доступных ролей из списка ниже.",
+		"slotsLoading"	:	"Обработка... Обновите страницу через несколько секунд.",
+      	"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЧтобы ПОСМОТРЕТЬ текщий слоттинг - повторно посети форму и проверь раздел 'Слоттинг'.\nЧтобы СМЕНИТЬ слот - вновь введи свой никнейм и выбери новый слот из доступных, отправь форму.\nЧтобы ОСВОБОДИТЬ свой слот - вновь введи свой никнейм, но не выбирай ни один из доступных слотов, отправь форму.\n\nЕсли ты выбрал слот, а в 'Слоттинге' этот слот уже занят другим товарищем, то, пожалуйста, выбери новый слот."
+    };
+  return str
+}
+
+
+// Convert List to String or String to List (type = 'toString' and 'toList')
+function dzn_convert(value, type) {
+	var output = '';
+	if (type == "toList") {
+		output = value.split(" | ");
+	} else {
+		// Concetate string with delimeter
+		function dzn_writeWithDelimeter(value, string) {
+			var output = '';    
+			if (string.length > 0) {
+				output = string + " | " + value.toString();
+			} else {
+				output = value;        
+			}
+			return output.toString();
+		}
+		for (var i = 0; i < value.length; i++) {
+			output = dzn_writeWithDelimeter(value[i], output);
+		} 
+	}
+    
+	return output;
 }
