@@ -4,9 +4,6 @@
 // MAY BE NOT SAFE FOR WORK, FOR EXAMPLE
 
 
-
-
-//
 // Will prepare empty form to use for slotting purposes
 function dzn_preInitialize() {
 	Logger.log("Pre-intialization...");
@@ -41,7 +38,7 @@ function dzn_preInitialize() {
 	Logger.log("Pre-initialized!");
 }
 
-//
+
 // After form creator entered SIDE and SLOTS names for every SIDE, calling dzn_initialize
 // INPUT: none | OUTPUT: none (write to ScriptProperties)
 function dzn_initialize() {
