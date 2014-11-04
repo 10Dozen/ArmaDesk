@@ -138,7 +138,7 @@ function dzn_initialize() {
 				idOverall = form.addSectionHeaderItem().setTitle(itemName).getId().toString();
 				break;
 			case "o":
-				idSidechoice = form.addMultiChoiseItem.setTitle(itemName).getId().toString();
+				idSidechoice = form.addMultipleChoiceItem().setTitle(itemName).getId().toString();
 				break;
 			
 			//Design items
@@ -166,8 +166,7 @@ function dzn_initialize() {
 
 	//Linking 'Side choosing' to page break	
 	if (mode == "T") {
-		var sideChoice = form.getItemById(idSidechoice).asMultipleChoiceItem();
-		if (debug) {Logger.log('\n Side choice item id is %s',  idSidechoice);}
+		var sideChoice = form.getItemById(idSidechoice).asMultipleChoiceItem();		
 		var choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
 		var choiceSideB = sideChoice.createChoice(sidesNames[1], form.getItemById(breakToSides[1]).asPageBreakItem());
 		sideChoice.setChoices([choiceSideA, choiceSideB]);
