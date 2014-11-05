@@ -236,7 +236,7 @@ function dzn_initialize() {
 	form.setConfirmationMessage(str.formConfirm);
 	Logger.log("Initialized");
 	// Running save trigger to update form
-    dzn_onSave();
+   // dzn_onSave();
 }
 
 //
@@ -267,9 +267,10 @@ function dzn_onSave() {
 
 			if (data.mode == "T") {
 				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
-				sideResponse = response.getResponseForItem(form.getItemById(data.idChoices[0]));	
-				if (sides.indexOf(sideResponse.getResponse()) == 0) {
-					slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[1]));
+              Logger.log(data.idSidechoice)
+				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));	
+				if (data.sides.indexOf(sideResponse.getResponse()) == 0) {
+					slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[0]));
 					usedSlots 				= data.usedSlotsSideA;
 					usedNicks 				= data.usedNicksSideA;
 					usedSlotsOpposite 		= data.usedSlotsSideB;
@@ -277,7 +278,7 @@ function dzn_onSave() {
 					precenseList 			= data.precenseSideA;
 					precenseListOpposite	= data.precenseSideB;
 				} else {
-					slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[2]));
+					slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[1]));
 					usedSlots 				= data.usedSlotsSideB;
 					usedNicks 				= data.usedNicksSideB;
 					usedSlotsOpposite 		= data.usedSlotsSideA;
@@ -318,7 +319,7 @@ function dzn_onSave() {
 						precenseList.push(precense);						
 						// If TVT - remove nick/slot from opposite side's arrays (if had been added earlier)
 						if (data.mode == "T") {
-							var idToRemove = nickListOp.indexOf(nick);
+							var idToRemove = usedNicksOpposite.indexOf(nick);
 							if ( idToRemove > -1 ) {
 								usedNicksOpposite.splice(idToRemove,1);
 								usedSlotsOpposite.splice(idToRemove,1);
@@ -453,7 +454,8 @@ function dzn_onSave() {
 	for (var i = 0; i < datalist.length; i++) {        
 		var key = datalist[i].toString();    
 		var value = dzn_convert(properties.getProperty(key), "toList");	
-		if (value.length == 1) {
+      Logger.log("%s -- %s", key, value);
+		if (value.length == 1) {          
 			// Property isn't array or array with only one item
 			if (key.substring(0,2) == "id") {
 				// If property is "id" property - then should be used as single item
@@ -466,7 +468,7 @@ function dzn_onSave() {
 		}		
 		data[key] = value;	// A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"		
     }
-/* idName, idSections, idChoices, idPrecense, idOverall, idPasscode, mode
+/* idName, idSections, idChoices, idPrecense, idOverall, idPasscode, idSidechoice, mode
  usedSlotsSideA, usedSlotsSideB, usedNicksSideA, usedNicksSideB, precenseSideA, precenseSideB
  sides, slotsSideA, slotsSideB, slotsHeadsSideA, slotsHeadsSideB, passcodes	*/
 
@@ -509,17 +511,18 @@ function dzn_onSave() {
 		// OUT: sectionInfoOutput, slots for SIDE A
 		updatedSideInfoSideA[1].push("Без слота");				
 		form.getItemById(data.idSections[0]).setHelpText(updatedSideInfoSideA[0]);
-		form.getItemById(data.idChoice[0]).asCheckboxItem().setChoiceValues(updatedSideInfoSideA[1]);
+      Logger.log(data.idChoices)
+		form.getItemById(data.idChoices[0]).asCheckboxItem().setChoiceValues(updatedSideInfoSideA[1]);
 		// OUT: sectionInfoOutput, slots for SIDE B
 		updatedSideInfoSideB[1].push("Без слота");	
 		form.getItemById(data.idSections[1]).setHelpText(updatedSideInfoSideB[0]);
-		form.getItemById(data.idChoice[1]).asCheckboxItem().setChoiceValues(updatedSideInfoSideB[1]);
+		form.getItemById(data.idChoices[1]).asCheckboxItem().setChoiceValues(updatedSideInfoSideB[1]);
 
 		// Update Overall info
 		var overallInfo = 
 			data.sides[0] + "\n" + data.usedNicksSideA.join(", ") + "\n\n"
 			+ data.sides[1] + "\n" + data.usedNicksSideB.join(", ");			
-		form.getItemById(idOverall).setHelpText(overallInfo);
+		form.getItemById(data.idOverall).setHelpText(overallInfo);
 	}
 	
 	Logger.log('    << End of dzn_onSave');
@@ -533,7 +536,7 @@ function dzn_setStringtable() {
 		"nick"			:	"",
 		"slots"			:	"Выберите одну из доступных ролей из списка ниже.",
 		"slotsLoading"	:	"Обработка... Обновите страницу через несколько секунд.",
-      	"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЧтобы ПОСМОТРЕТЬ текщий слоттинг - повторно посети форму и проверь раздел 'Слоттинг'.\nЧтобы СМЕНИТЬ слот - вновь введи свой никнейм и выбери новый слот из доступных, отправь форму.\nЧтобы ОСВОБОДИТЬ свой слот - вновь введи свой никнейм, но не выбирай ни один из доступных слотов, отправь форму.\n\nЕсли ты выбрал слот, а в 'Слоттинге' этот слот уже занят другим товарищем, то, пожалуйста, выбери новый слот."
+      	"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЧтобы ПОСМОТРЕТЬ текщий слоттинг - повторно посети форму и проверь раздел 'Слоттинг'.\nЧтобы СМЕНИТЬ слот - вновь введи свой никнейм и выбери новый слот из доступных, отправь форму. \nЧтобы ОСВОБОДИТЬ свой слот - вновь введи свой никнейм и выбери 'Без слота', отправь форму.\n\nЕсли ты выбрал слот, а в 'Слоттинге' этот слот уже занят другим товарищем, то, пожалуйста, выбери новый слот."
     };
   return str
 }
