@@ -138,9 +138,13 @@ function dzn_initialize() {
 				idOverall = form.addSectionHeaderItem().setTitle(itemName).getId().toString();
 				break;
 			case "o":
-				idSidechoice = form.addMultipleChoiceItem().setTitle(itemName).getId().toString();
+				idSidechoice = form.addMultipleChoiceItem().setRequired(true).setTitle(itemName).getId().toString();
 				break;
-			
+			case "c":
+				var item = form.addCheckboxItem().setRequired(true).setTitle(itemName).setHelpText(str.slots);            
+				slottingChoices.push(item.getId().toString());
+            	break;
+            
 			//Design items
 			case "i":
 				var img = UrlFetchApp.fetch('http://cs608928.vk.me/v608928222/5f5f/MQqIEc6_iKY.jpg');
@@ -156,16 +160,13 @@ function dzn_initialize() {
 			case "s":
 				var item = form.addSectionHeaderItem().setTitle(itemName);        
 				slottingSections.push(item.getId().toString());
-				break;
-			case "c":
-				var item = form.addCheckboxItem().setRequired(true).setTitle(itemName).setHelpText(str.slots);            
-				slottingChoices.push(item.getId().toString());
-            	break;
+				break;			
 		} 
 	}		
 
 	//Linking 'Side choosing' to page break	
 	if (mode == "T") {
+      Logger.log(idSidechoice);
 		var sideChoice = form.getItemById(idSidechoice).asMultipleChoiceItem();		
 		var choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
 		var choiceSideB = sideChoice.createChoice(sidesNames[1], form.getItemById(breakToSides[1]).asPageBreakItem());
@@ -421,7 +422,9 @@ function dzn_onSave() {
 				excludeId.push(slotIndex);
 				var nicknameToShow = usedNicks[i];			
 				nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
+              if (nickList.indexOf(nicknameToShow) == -1) {
 				nickList.push(nicknameToShow);
+              }
 				
 				var infoString = "? " + sectionInfo[slotIndex] + " -- " + nicknameToShow;           
 				if ((precenses[i] > 0) && (precenses[i] < 8)) {               
@@ -532,12 +535,12 @@ function dzn_onSave() {
 
 function dzn_setStringtable() {
 	var str = {
-		"precense" 		:	"Если считаешь, что не успеешь на игру - укажи, пожалуйста, вероятность своего появления на игре.",
-		"passcode" 		:	"Введите код для того, чтобы занять несколько слотов для отряда.",
+		"precense" 		:	"Если считаешь, что не успеешь на игру и об этом должны знать все - укажи, пожалуйста, вероятность своего появления на игре (1 = 10%, 7 = 70%).",
+		"passcode" 		:	"Ввод паскода(выданного только лидерам ленивых отрядов) позволит занять несколько слотов. Если у Вас нет паскода и/или Вы не собираетесь занимать более одного слота - не заполняйте поле.",
 		"nick"			:	"",
 		"slots"			:	"Выберите одну из доступных ролей из списка ниже.",
 		"slotsLoading"	:	"Обработка... Обновите страницу через несколько секунд.",
-      	"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЧтобы ПОСМОТРЕТЬ текщий слоттинг - повторно посети форму и проверь раздел 'Слоттинг'.\nЧтобы СМЕНИТЬ слот - вновь введи свой никнейм и выбери новый слот из доступных, отправь форму. \nЧтобы ОСВОБОДИТЬ свой слот - вновь введи свой никнейм и выбери 'Без слота', отправь форму.\n\nЕсли ты выбрал слот, а в 'Слоттинге' этот слот уже занят другим товарищем, то, пожалуйста, выбери новый слот."
+      	"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЕсли твой ник не появился в списке - обнови страницу через несколько секунд."
     };
   return str
 }
