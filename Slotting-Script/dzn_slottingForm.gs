@@ -406,6 +406,7 @@ function dzn_onSave() {
 	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
 		// Get ids of names which are not available for choosing at the slots item
 		var excludeId = headers;
+		var nickList = [];
 		
 		// Fill section info with ALL original slots name
 		var sectionInfo = [];
@@ -420,6 +421,7 @@ function dzn_onSave() {
 				excludeId.push(slotIndex);
 				var nicknameToShow = usedNicks[i];			
 				nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
+				nickList.push(nicknameToShow);
 				
 				var infoString = "? " + sectionInfo[slotIndex] + " -- " + nicknameToShow;           
 				if ((precenses[i] > 0) && (precenses[i] < 8)) {               
@@ -441,7 +443,7 @@ function dzn_onSave() {
 			slots.splice(excludeId[i]-i, 1);        
 		}
 
-		return [sectionInfoOutput, slots];
+		return [sectionInfoOutput, slots, nickList];
 	}
 
 	Logger.log("   Running dzn_onSave");
@@ -519,9 +521,8 @@ function dzn_onSave() {
 		form.getItemById(data.idChoices[1]).asCheckboxItem().setChoiceValues(updatedSideInfoSideB[1]);
 
 		// Update Overall info
-		var overallInfo = 
-			data.sides[0] + "\n" + data.usedNicksSideA.join(", ") + "\n\n"
-			+ data.sides[1] + "\n" + data.usedNicksSideB.join(", ");			
+		var overallInfo = data.sides[0] + "\n" + updatedSideInfoSideA[2].join(", ") + "\n\n"
+			+ data.sides[1] + "\n" + updatedSideInfoSideB[2].join(", ");			
 		form.getItemById(data.idOverall).setHelpText(overallInfo);
 	}
 	
