@@ -165,36 +165,89 @@ function dzn_onSave() {
 	for (var i = 0; i < idNames.length; i++) {response[idNames[i]] = idItems[i];}
 
 	// Head
-	var nickname = lastResponse.getResponseForItem(form.getItemById(response.nickId)).getResponse();
-	var role = lastResponse.getResponseForItem(form.getItemById(response.roleId)).getResponse();
-	var score = lastResponse.getResponseForItem(form.getItemById(response.scoreId)).getResponse();
-	if (nickname.length == 0) {nickname = 'Аноним';}
-	if (role.length == 0) {role = "";}
-	if (score.length == 0) {score = "Без оценки"; }
-	var AARTitle = nickname + " (" + role + ") - " + score;
+	var headItems = ["nickId","roleId","scoreId"];
+	var formattedResponses = [];
+	for (var i = 0; i < headItems.length; i++) {
+		var currentResponse = lastResponse.getResponseForItem(form.getItemById(response[headItems[i]]));
+		if (currentResponse != null) {
+			currentResponse = currentResponse.getResponse()
+        } else {
+			switch (i) {
+				case 0:
+					currentResponse = 'Аноним';
+					break;
+				case 1:
+					currentResponse = '';
+					break;
+				case 2:
+					currentResponse = 'Без оценки';
+					break;
+			}
+        }
+		formattedResponses.push(currentResponse);
+	}
+	var AARTitle = formattedResponses[0] + " (" + formattedResponses[1] + ") - " + formattedResponses[2];
 
 	// Body
-	var briefing = lastResponse.getResponseForItem(form.getItemById(response.briefingId)).getResponse();
-	var action = lastResponse.getResponseForItem(form.getItemById(response.actionId)).getResponse();
-	var result = lastResponse.getResponseForItem(form.getItemById(response.resultId)).getResponse();
-	if (briefing.length > 0) {briefing = "О брифинге:\n    " + briefing + "\n";}
-	if (action.length > 0) {action = "Об исполнении:\n    " + action + "\n";}
-	if (result.length > 0) {action = "О результатах:\n    " + result + "\n";}
-	var AARBody = briefing + action + result;
+	var bodyItems = ["briefingId","actionId","resultId"];
+	var formattedResponses = [];
+	for (var i = 0; i < headItems.length; i++) {
+		var currentResponse = lastResponse.getResponseForItem(form.getItemById(response[bodyItems[i]]));
+		if (currentResponse != null) {
+			currentResponse = currentResponse.getResponse()
+			if (currentResponse == "") {
+				currentResponse = "";
+            } else {
+				switch (i) {
+					case 0:
+						currentResponse = "О брифинге:\n    " + currentResponse + "\n";
+						break;
+					case 1:
+						currentResponse = "Об исполнении:\n    " + currentResponse + "\n";
+						break;
+					case 2:
+						currentResponse = "О результатах:\n    " + currentResponse + "\n";
+						break;
+				}
+            }
+        } else {
+			currentResponse = "";
+        }
+		formattedResponses.push(currentResponse);
+	}
+	var AARBody = formattedResponses[0] + formattedResponses[1] + formattedResponses[2];
 
 	// Footer
-	var briefingScore = lastResponse.getResponseForItem(form.getItemById(response.briefScoreId)).getResponse();
-	var actionScore = lastResponse.getResponseForItem(form.getItemById(response.actionScoreId)).getResponse();
-	var resultScore = lastResponse.getResponseForItem(form.getItemById(response.resultScoreId)).getResponse();
-	var AARFooter;
-	if ( (briefingScore.length == 0) && (actionScore.length == 0) && (resultScore.length == 0) ) {
-		AARFooter = "";
-	} else {
-		if (briefingScore.length > 0) {briefingScore =    "\n  Брифинг:		" + briefingScore.join(", ");}   
-		if (actionScore.length > 0) {actionScore =        "\n  Акция:		" + actionScore.join(", ");}
-		if (resultScore.length > 0) {resultScore =        "\n  Выводы:		" + resultScore.join(", ");}
-		AARFooter = "\n\nСтатистика:" + briefingScore + actionScore + resultScore;
+	var footerItems = ["briefScoreId","actionScoreId","resultScoreId"];
+	var formattedResponses = [];
+	for (var i = 0; i < headItems.length; i++) {
+		var currentResponse = lastResponse.getResponseForItem(form.getItemById(response[footerItems[i]]));
+		if (currentResponse != null) {
+			if (currentResponse == "") {
+				currentResponse = "";
+            } else {
+				currentResponse = currentResponse.getResponse()
+				switch (i) {
+					case 0:
+						currentResponse = "\n  Брифинг:		" + currentResponse.join(", ");
+						break;
+					case 1:
+						currentResponse = "\n  Акция:		" + currentResponse.join(", ");
+						break;
+					case 2:
+						currentResponse = "\n  Выводы:		" + currentResponse.join(", ");
+						break;
+				}
+            }
+        } else {
+			currentResponse = "";
+        }
+		formattedResponses.push(currentResponse);
 	}
+	var AARFooter = "";
+	if (formattedResponses.join("") != "") {
+		AARFooter = "\n\nСтатистика:" + formattedResponses[0] + formattedResponses[1] + formattedResponses[2];
+    }
 
 	// Adding item with Formatted Response
 	var item = form.addSectionHeaderItem().setTitle(AARTitle).setHelpText(AARBody + AARFooter);
