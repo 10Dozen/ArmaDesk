@@ -1,8 +1,6 @@
-//  form.moveItem(form.getItemById(id).getIndex(), index+1);
-
 function dzn_preInitialize() {
 	var form = FormApp.getActiveForm();
-  	Logger.log('Pre-Initialization!\n  Clearing form!');
+  	Logger.log('Pre-Initialization!  Clearing form!');
 	var items = form.getItems();
 	for (var i = 0; i < items.length; i++) {
     	form.deleteItem(items[i]);
@@ -163,13 +161,53 @@ function dzn_initialize() {
 
 function dzn_onSave() {
   	var form = FormApp.getActiveForm();
-	// Get IDs of items
-	
-	// Get last Form response
-	// Get responses from Form response
-	// Format response
-	// Form addItem  - headerItem: title = NickNake + Role, helpText: formated response
-	// Move item (itemIndex, 0)
+  	var idNames = PropertiesService.getScriptProperties().getProperty("names").split(" | ");
+  	var idItems = PropertiesService.getScriptProperties().getProperty("ids").split(" | ");
+
+  	var formResponse = form.getResponses();
+    var lastResponse = formResponse[formResponse.length-1];
+    var response = {"name" : "Response"};
+    for (var i = 0; i < idNames.length; i++) {
+        response[idNames[i]] = idItems[i];
+    }
+
+    // Head
+    var nickname = lastResponse.getResponseForItem(form.getItemById(response.nickId)).getResponse();
+    if (nickname.length == 0) {nickname = 'Аноним';}
+    var role = lastResponse.getResponseForItem(form.getItemById(response.roleId)).getResponse();
+    if (role.length == 0) {role = "";}
+    var score = lastResponse.getResponseForItem(form.getItemById(response.scoreId)).getResponse();
+    if (score.length == 0) {score = "Без оценки"; }
+    var AARTitle = nickname + " (" + role + ") - " + score;
+
+    // Body
+    var briefing = lastResponse.getResponseForItem(form.getItemById(response.briefingId)).getResponse();
+    if (briefing.length > 0) {briefing = "О брифинге:\n    " + briefing + "\n";}
+    var action = lastResponse.getResponseForItem(form.getItemById(response.actionId)).getResponse();
+    if (action.length > 0) {action = "Об исполнении:\n    " + action + "\n";}
+    var result = lastResponse.getResponseForItem(form.getItemById(response.resultId)).getResponse();
+    if (result.length > 0) {action = "О результатах:\n    " + result + "\n";}
+    var AARBody = briefing + action + result;
+
+    // Footer
+    var briefingScore = lastResponse.getResponseForItem(form.getItemById(response.briefScoreId)).getResponse();
+    var actionScore = lastResponse.getResponseForItem(form.getItemById(response.actionScoreId)).getResponse();
+    var resultScore = lastResponse.getResponseForItem(form.getItemById(response.resultScoreId)).getResponse();
+    var AARFooter;
+    if ( (briefingScore.length == 0) && (actionScore.length == 0) && (resultScore.length == 0) ) {
+        AARFooter = "";
+    } else {
+        if (briefingScore.length > 0) {briefingScore =    "\n  Брифинг:        " + briefingScore.join(", ");}   
+        if (actionScore.length > 0) {actionScore =        "\n  Акция:        " + actionScore.join(", ");}
+        if (resultScore.length > 0) {resultScore =        "\n  Выводы:        " + resultScore.join(", ");}
+        AARFooter = "\n\nСтатистика:" + briefingScore + actionScore + resultScore;
+    }
+
+    // Adding item with Formatted Response
+    var item = form.addSectionHeaderItem().setTitle(AARTitle).setHelpText(AARBody + AARFooter);
+    form.moveItem(item.getIndex(), 1);
+
+    Logger.log("AAR Added!");
 }
 
 function dzn_getStringtable() {
