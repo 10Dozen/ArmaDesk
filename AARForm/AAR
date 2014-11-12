@@ -170,12 +170,9 @@ function dzn_onSave() {
 	for (var i = 0; i < headItems.length; i++) {
 		var currentResponse = lastResponse.getResponseForItem(form.getItemById(response[headItems[i]]));
 		if (currentResponse != null) {
-			currentResponse = currentResponse.getResponse()
+			currentResponse = currentResponse.getResponse();
         } else {
 			switch (i) {
-				case 0:
-					currentResponse = 'Аноним';
-					break;
 				case 1:
 					currentResponse = '';
 					break;
