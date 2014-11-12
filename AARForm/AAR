@@ -1,4 +1,4 @@
-////form.moveItem(form.getItemById(id).getIndex(), index+1);
+//  form.moveItem(form.getItemById(id).getIndex(), index+1);
 
 function dzn_preInitialize() {
 	var form = FormApp.getActiveForm();
