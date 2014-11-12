@@ -197,13 +197,13 @@ function dzn_onSave() {
             } else {
 				switch (i) {
 					case 0:
-						currentResponse = "О брифинге:\n    " + currentResponse + "\n";
+						currentResponse = "\nО брифинге:\n    " + currentResponse + "\n";
 						break;
 					case 1:
-						currentResponse = "Об исполнении:\n    " + currentResponse + "\n";
+						currentResponse = "\nОб исполнении:\n    " + currentResponse + "\n";
 						break;
 					case 2:
-						currentResponse = "О результатах:\n    " + currentResponse + "\n";
+						currentResponse = "\nО результатах:\n    " + currentResponse + "\n";
 						break;
 				}
             }
