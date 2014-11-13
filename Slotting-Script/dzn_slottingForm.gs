@@ -426,7 +426,7 @@ function dzn_onSave() {
 				nickList.push(nicknameToShow);
               }
 				
-				var infoString = "? " + sectionInfo[slotIndex] + " -- " + nicknameToShow;           
+				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;           
 				if ((precenses[i] > 0) && (precenses[i] < 8)) {               
 						infoString = infoString + " (" + precenses[i] + "0%)";
 				}
