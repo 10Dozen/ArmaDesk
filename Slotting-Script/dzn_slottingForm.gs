@@ -129,7 +129,7 @@ function dzn_initialize() {
             	idName = form.addTextItem().setRequired(true).setTitle(itemName).setHelpText(str.nick).getId().toString();
             	break;
 			case "a":			
-				idPrecense = form.addScaleItem().setTitle(itemName).setHelpText(str.precense).setBounds(1, 7).setLabels('Не уверен', '% Буду').getId().toString();				
+				idPrecense = form.addScaleItem().setTitle(itemName).setHelpText(str.precense).setBounds(1, 7).setLabels('Не уверен', 'Буду').getId().toString();				
 				break;			
 			case "x":
 				idPasscode = form.addTextItem().setTitle(itemName).setHelpText(str.passcode).getId().toString();
