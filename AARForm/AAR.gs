@@ -171,6 +171,9 @@ function dzn_onSave() {
 		var currentResponse = lastResponse.getResponseForItem(form.getItemById(response[headItems[i]]));
 		if (currentResponse != null) {
 			currentResponse = currentResponse.getResponse();
+			if (currentResponse == 10) {
+				currentResponse = "10 из 10, господи, 10 из 10!"; 
+			}
         } else {
 			switch (i) {
 				case 1:
