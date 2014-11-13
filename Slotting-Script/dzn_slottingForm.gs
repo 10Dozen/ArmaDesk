@@ -237,7 +237,7 @@ function dzn_initialize() {
 	form.setConfirmationMessage(str.formConfirm);
 	Logger.log("Initialized");
 	// Running save trigger to update form
-   // dzn_onSave();
+	dzn_onSave();
 }
 
 //
