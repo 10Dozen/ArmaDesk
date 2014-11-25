@@ -1,0 +1,40 @@
+/*
+  Report.fsm 
+  Runned for each unit
+  _this = unt
+*/
+
+// Start -> True
+_unit = _this;
+_unitID = _unit getVariable "dzn_aar_id";
+_unitType = _unit getVariable "dzn_aar_type"; // if (isKindOf "Man") then { 0 } else { 6 };
+_timing = if (isPlayer _unit) then { 1.1 } else { 3.1 };
+
+// True -> Report
+
+// Report -> Timer
+_lastTimeStamp = floor(time);
+
+if (_unitType == 0) then {
+  _pos = getPosASL _unit;
+  _stepReport = format[
+    "%1,%2,%3,%4,%5,%6,0",
+    _unitType,
+    _unitID,
+    _pos select 0,
+    _pos select 1,
+    getDir _unit,
+    if (vehicle _unit == _unit) then { 0 } else { 1 }
+  ];
+  
+  call compile format [
+    "_unit setVariable [
+      'dzn_aar_ts_%1',
+    
+};
+
+
+
+
+// Timer -> Report
+// (time - _lastTimeStamp > _timing)
