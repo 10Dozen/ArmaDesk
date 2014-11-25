@@ -4,23 +4,55 @@
 dzn_aar_unitList = [ /*list of units*/ ];
 waitUntil { time > 20 };
 {
-	_type = if (vehicle _x == _x) then { 0 }; // if (isKindOf "Man") then { 0 } else { 6 };
+	_type = if (vehicle _x == _x) then { 0 } else { 6 }; // if (isKindOf "Man") then { 0 } else { 6 };
 	
-	_unit setVariable ["dzn_aar_id", (_forEachIndex + 1), true];
+	_id = 	(_forEachIndex + 1)
+	_pos = getPosASL _x;
+	_dir = getDir _x;
+	
+	_unit setVariable ["dzn_aar_id", _id, true];
 	_unit setVariable ["dzn_aar_type",_type,true];
 	
+	
 	if (_type == 0) then {
-		_pos = getPosASL _x;
 		diag_log format[
 			"%1,%2,%3,%4,1,%5,%6,%7,0,1", 
 			_type, 
-			(_forEachIndex + 1),
+			_id,
 			side _x, 
 			name _x, 
 			_pos select 0,
-			_y, 
-			getDir _x
+			_pos select 1, 
+			_dir
 		];
+	} else {
+		diag_log format[
+			"%1,%2,%3,2,    %4,1,%5,%6,%7,0,1", 
+			_type, 
+			_id,
+			name _x, 
+			
+			 
+			_pos select 0,
+			_y, 
+			_dir
+		];	
+	
+	
+	
+	
+		6,83,DOZENOFFROAD,2,-1,0,7550.67,5116.42,350.81
+	[
+		6,				// Тип - 6 машина
+		83,				// id объекта
+		DOZENOFFROAD,	// Ник в подписи
+		2,				//
+		-1,				//	Цвет/заполненность - -1 белый, 1 - синий, 2 - красный
+		0,				//
+		7550.67,		//	X-coord
+		5116.42,		//	Y-coord
+		350.81			//	Direction
+	]
 	};
 	
 	if (isPlayer _x) then {
