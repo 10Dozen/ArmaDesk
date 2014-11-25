@@ -6,7 +6,14 @@ dzn_aar_fireEH = _unit addEventHandler ["Fired", {
 	_unit = _this select 0;
 	_ammo = _this select 4;
 	_projectile = _this select 6;
-	_shotLine = "AARShot";
+	
+	_initPos = getPosASL _unit;
+	
+	_shotLine = format[
+		"AARShot",
+		_initPos select 0,
+		_initPos select 1
+	];
 	
 	call compile format [
 		"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
@@ -16,6 +23,8 @@ dzn_aar_fireEH = _unit addEventHandler ["Fired", {
 		};",
 		floor(time)
 	];
+	
+	
 }];
 
 
