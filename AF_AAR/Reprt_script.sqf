@@ -1,5 +1,39 @@
+/* 
+	FiredEH
+	EvendHandler on each unit (maybe without AI units)
+*/
+dzn_aar_fireEH = 
+
+
 /*
-  Report.fsm 
+	INIT
+*/
+dzn_aar_unitList = [ /*list of units*/ ];
+{
+	_type = if (vehicle _x == _x) then { 0 };
+	if (_type == 0) then {
+		_pos = getPosASL _x;
+		diag_log format[
+			"%1,%2,%3,%4,1,%5,%6,%7,0,1", 
+			_type, 
+			(_forEachIndex + 1),
+			side _x, 
+			name _x, 
+			_pos select 0,
+			_y, 
+			getDir _x
+		];
+	};
+	
+	if (isPlayer _x) then {
+		[[[_x],"dzn_report.fsm"],"BIS_fnc_execFSM",_x] call BIS_fnc_MP;
+	};
+} forEach dzn_aar_unitList;
+
+
+
+/*
+  dzn_report.fsm 
   Runned for each unit
   _this = unt
 */
@@ -14,6 +48,7 @@ _timing = if (isPlayer _unit) then { 1.1 } else { 3.1 };
 // Report -> Timer
 _lastTimeStamp = floor(time);
 if (_unitType == 0) then {
+  
   _pos = getPosASL _unit;
   _stepReport = format[
     "<%2_AAR>%1,%2,%3,%4,%5,%6,0",
@@ -38,7 +73,7 @@ if (_unitType == 0) then {
 
 
 /*
-	dumpReport.fsm
+	dzn_dumpReport.fsm
 	Running on server
 	_this = null
 */
