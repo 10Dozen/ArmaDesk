@@ -7,25 +7,38 @@ dzn_aar_fireEH = _unit addEventHandler ["Fired", {
 	_ammo = _this select 4;
 	_projectile = _this select 6;
 	
-	_initPos = getPosASL _unit;
+	[_unit, _ammo, _projectile] spawn {
+		_unit = _this select 0;
+		_ammo = _this select 1;
+		_proj = _this select 2;
+		
+		_timeStart = floor(time);
+		_posStart = getPosASL _proj;
+		waitUntil { time + 1.1 > _timeStart };
+		_posEnd = getPosASL _proj;
+		
+		_shotLineStart = format[
+			"<AAR>2,0,%1,%2,%3,%4,%5,1",
+			_ammo,
+			_posStart select 0,
+			_posStart select 1,
+			_posEnd select 0,
+			_posEnd select 1
+		];
+		
+		for "_i" from _timeStart to (_timeStart + 1) do {
+			call compile format [
+				"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
+					_unit setVariable ['dzn_aar_ts_%1', [_shotLine], true];
+				} else {
+					_unit setVariable ['dzn_aar_ts_%1', (_unit getVariable 'dzn_aar_ts_%1') + [_shotLine], true];
+				};",
+				floor(time)
+			];
+		};
+	};
+
 	
-	_shotLine = format[
-		"<AARShot>2,0,%1,%2,%3,%4,%5,1",
-		_ammo,
-		_initPos select 0,
-		_initPos select 1,
-		POSEND,
-		POSEND
-	];
-	
-	call compile format [
-		"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
-			_unit setVariable ['dzn_aar_ts_%1', [_shotLine], true];
-		} else {
-			_unit setVariable ['dzn_aar_ts_%1', (_unit getVariable 'dzn_aar_ts_%1') + [_shotLine], true];
-		};",
-		floor(time)
-	];
 	
 	
 }];
