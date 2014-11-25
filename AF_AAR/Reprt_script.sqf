@@ -2,13 +2,37 @@
 	FiredEH
 	EvendHandler on each unit (maybe without AI units)
 */
-dzn_aar_fireEH = 
+dzn_aar_fireEH = _unit addEventHandler ["Fired", {
+	_unit = _this select 0;
+	_ammo = _this select 4;
+	_projectile = _this select 6;
+	_shotLine = "AARShot";
+	
+	call compile format [
+		"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
+			_unit setVariable ['dzn_aar_ts_%1', [_shotLine], true];
+		} else {
+			_unit setVariable ['dzn_aar_ts_%1', (_unit getVariable 'dzn_aar_ts_%1') + [_shotLine], true];
+		};",
+		floor(time)
+	];
+}];
+
+
+
+
+
+
+
+
+
 
 
 /*
 	INIT
 */
 dzn_aar_unitList = [ /*list of units*/ ];
+waitUntil { time > 20 };
 {
 	_type = if (vehicle _x == _x) then { 0 };
 	if (_type == 0) then {
@@ -27,9 +51,11 @@ dzn_aar_unitList = [ /*list of units*/ ];
 	
 	if (isPlayer _x) then {
 		[[[_x],"dzn_report.fsm"],"BIS_fnc_execFSM",_x] call BIS_fnc_MP;
+	} else {
+		_x execFSM "dzn_report.fsm";
 	};
 } forEach dzn_aar_unitList;
-
+[] execFSM "dzn_dumpReport.fsm";
 
 
 /*
