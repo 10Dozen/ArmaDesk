@@ -70,16 +70,21 @@ _timer = time + 5;
 // (time > _timer)
 
 // DumpReport
-_timeStamp = floor(time)-1;
-call compile format[
-	"if (!isNil {dzn_aar_timeStack_%1}) then {
-		{
-			diag_log _x;
-		} forEach dzn_aar_timeStack_%1;
-		dzn_aar_timeStack_%1 = nil;
-	}",
-	_timeStamp
-];
+_timeStamp = floor(time);
+_fromTime = if ((_timeStamp - 20) > 0) then { _timeStamp - 20 } else { 0 };
+_toTime = _timeStamp - 1;
+
+for "_i" from _fromTime to _toTime do {
+	call compile format[
+		"if (!isNil {dzn_aar_timeStack_%1}) then {
+			{
+				diag_log _x;
+			} forEach dzn_aar_timeStack_%1;
+			dzn_aar_timeStack_%1 = nil;
+		}",
+		_i
+	];
+}
 _timer = time + 5;
 
 // Timer2 -> GetStackedReport
