@@ -4,7 +4,11 @@
 dzn_aar_unitList = [ /*list of units*/ ];
 waitUntil { time > 20 };
 {
-	_type = if (vehicle _x == _x) then { 0 };
+	_type = if (vehicle _x == _x) then { 0 }; // if (isKindOf "Man") then { 0 } else { 6 };
+	
+	_unit setVariable ["dzn_aar_id", (_forEachIndex + 1), true];
+	_unit setVariable ["dzn_aar_type",_type,true];
+	
 	if (_type == 0) then {
 		_pos = getPosASL _x;
 		diag_log format[
