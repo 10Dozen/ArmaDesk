@@ -1,5 +1,7 @@
 /*
+	-------------------------------------------
 	INIT
+	-------------------------------------------
 */
 dzn_aar_unitList = [ /*list of units*/ ];
 waitUntil { time > 20 };
@@ -11,7 +13,7 @@ waitUntil { time > 20 };
 	_dir = getDir _x;
 	
 	_unit setVariable ["dzn_aar_id", _id, true];
-	_unit setVariable ["dzn_aar_type",_type,true];
+	_unit setVariable ["dzn_aar_type", (if (_type == 0) then { 0 } else { 7 }), true];
 	
 	
 	if (_type == 0) then {
@@ -27,32 +29,14 @@ waitUntil { time > 20 };
 		];
 	} else {
 		diag_log format[
-			"%1,%2,%3,2,    %4,1,%5,%6,%7,0,1", 
+			"%1,%2,%3,2,-1,0,%4,%5,%6", 
 			_type, 
 			_id,
 			name _x, 
-			
-			 
 			_pos select 0,
-			_y, 
+			_pos select 1, 
 			_dir
-		];	
-	
-	
-	
-	
-		6,83,DOZENOFFROAD,2,-1,0,7550.67,5116.42,350.81
-	[
-		6,				// Тип - 6 машина
-		83,				// id объекта
-		DOZENOFFROAD,	// Ник в подписи
-		2,				//
-		-1,				//	Цвет/заполненность - -1 белый, 1 - синий, 2 - красный
-		0,				//
-		7550.67,		//	X-coord
-		5116.42,		//	Y-coord
-		350.81			//	Direction
-	]
+		];
 	};
 	
 	if (isPlayer _x) then {
@@ -65,15 +49,17 @@ waitUntil { time > 20 };
 
 
 /*
-  dzn_report.fsm 
-  Runned for each unit
-  _this = unt
+	-------------------------------------------
+	dzn_report.fsm 
+	Runned for each unit
+	_this = unt
+	------------------------------------------- 
 */
 
 // Start -> True
 _unit = _this;
 _unitID = _unit getVariable "dzn_aar_id";
-_unitType = _unit getVariable "dzn_aar_type"; // if (isKindOf "Man") then { 0 } else { 6 };
+_unitType = _unit getVariable "dzn_aar_type"; // if (isKindOf "Man") then { 0 } else { 7 };
 _timing = if (isPlayer _unit) then { 1.1 } else { 3.1 };
 
  
@@ -116,23 +102,50 @@ dzn_aar_fireEH = _unit addEventHandler ["Fired", {
 // True -> Report
 // Report -> Timer
 _lastTimeStamp = floor(time);
+
+_pos = getPosASL _unit;
 if (_unitType == 0) then {
+	_stepReport = format[
+		"<%2_AAR>%1,%2,%3,%4,%5,%6,0",
+		_unitType,
+		_unitID,
+		_pos select 0,
+		_pos select 1,
+		getDir _unit,
+		if (vehicle _unit == _unit) then { 0 } else { 1 }
+	];
   
-  _pos = getPosASL _unit;
-  _stepReport = format[
-    "<%2_AAR>%1,%2,%3,%4,%5,%6,0",
-    _unitType,
-    _unitID,
-    _pos select 0,
-    _pos select 1,
-    getDir _unit,
-    if (vehicle _unit == _unit) then { 0 } else { 1 }
-  ];
-  
-  call compile format [
-    "_unit setVariable ['dzn_aar_ts_%1', _stepReport, true];",
-    _lastTimeStamp
-  ];
+	call compile format [
+		"_unit setVariable ['dzn_aar_ts_%1', _stepReport, true];",
+		_lastTimeStamp
+	];
+} else {
+	_crewIDs = [];
+
+	_stepReport = format[
+		"<%2_AAR>%1,%2,%3,%4,%5,%6,0",
+		_unitType,	// Тип юнита? 1 - пихот, 7 - коробчка, 2 - пуля
+		_unitID,	// ID of Unit
+		/* ID of CREW */	// ID экипажа
+		count(crew _unit),	// Число членов экипажа
+		_pos select 0,		// X-coord
+		_pos select 1,		// Y-coord
+		getDir _unit		// Direction
+	];
+
+
+
+Машина
+	7,83,66,0,7550.66,5116.45,350.82
+	[
+		7,			// Тип юнита? 1 - пихот, 7 - коробчка, 2 - пуля
+		83,			// ID of Unit
+		66,			// ID экипажа
+		0,			// Число членов экипажа
+		7550.66,	// X-coord
+		5116.45,	// Y-coord
+		350.82		// Direction
+	]
 };
 
 // Timer -> Report
@@ -142,9 +155,11 @@ if (_unitType == 0) then {
 
 
 /*
+	-------------------------------------------
 	dzn_dumpReport.fsm
 	Running on server
 	_this = null
+	-------------------------------------------
 */
 
 // Start -> True
