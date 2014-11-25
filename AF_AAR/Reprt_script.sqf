@@ -18,7 +18,7 @@ waitUntil { time > 20 };
 	
 	if (_type == 0) then {
 		diag_log format[
-			"%1,%2,%3,%4,1,%5,%6,%7,0,1", 
+			"<AAR>%1,%2,%3,%4,1,%5,%6,%7,0,1", 
 			_type, 
 			_id,
 			side _x, 
@@ -29,7 +29,7 @@ waitUntil { time > 20 };
 		];
 	} else {
 		diag_log format[
-			"%1,%2,%3,2,-1,0,%4,%5,%6", 
+			"<AAR>%1,%2,%3,2,-1,0,%4,%5,%6", 
 			_type, 
 			_id,
 			name _x, 
