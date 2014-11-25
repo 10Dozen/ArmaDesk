@@ -114,7 +114,7 @@ if (_unitType == 0) then {
 		if (vehicle _unit == _unit) then { 0 } else { 1 }
 	];
 } else {
-	_crew = ((crew _unit) select 0)
+	_crew = ((crew _unit) select 0);
 	_crewID = if (!isNil {_crew getVariable "dzn_aar_id"}) then { _crew getVariable "dzn_aar_id" } else { -1 };
 	_stepReport = format[
 		"<%2_AAR>%1,%2,%3,%4,%5,%6,0",
