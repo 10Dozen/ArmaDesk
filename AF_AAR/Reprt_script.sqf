@@ -1,58 +1,3 @@
-/* 
-	FiredEH
-	EvendHandler on each unit (maybe without AI units)
-*/
-dzn_aar_fireEH = _unit addEventHandler ["Fired", {
-	_unit = _this select 0;
-	_ammo = _this select 4;
-	_projectile = _this select 6;
-	
-	[_unit, _ammo, _projectile] spawn {
-		_unit = _this select 0;
-		_ammo = _this select 1;
-		_proj = _this select 2;
-		
-		_timeStart = floor(time);
-		_posStart = getPosASL _proj;
-		waitUntil { time + 1.1 > _timeStart };
-		_posEnd = getPosASL _proj;
-		
-		_shotLineStart = format[
-			"<AAR>2,0,%1,%2,%3,%4,%5,1",
-			_ammo,
-			_posStart select 0,
-			_posStart select 1,
-			_posEnd select 0,
-			_posEnd select 1
-		];
-		
-		for "_i" from _timeStart to (_timeStart + 1) do {
-			call compile format [
-				"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
-					_unit setVariable ['dzn_aar_ts_%1', [_shotLine], true];
-				} else {
-					_unit setVariable ['dzn_aar_ts_%1', (_unit getVariable 'dzn_aar_ts_%1') + [_shotLine], true];
-				};",
-				floor(time)
-			];
-		};
-	};
-
-	
-	
-	
-}];
-
-
-
-
-
-
-
-
-
-
-
 /*
 	INIT
 */
@@ -94,6 +39,43 @@ _unit = _this;
 _unitID = _unit getVariable "dzn_aar_id";
 _unitType = _unit getVariable "dzn_aar_type"; // if (isKindOf "Man") then { 0 } else { 6 };
 _timing = if (isPlayer _unit) then { 1.1 } else { 3.1 };
+
+ 
+// FiredEH
+// EvendHandler on each unit (maybe without AI units)
+dzn_aar_fireEH = _unit addEventHandler ["Fired", {
+	[ _this select 0, _this select 4, _this select 6] spawn {
+		_unit = _this select 0;
+		_ammo = _this select 1;
+		_proj = _this select 2;
+		
+		_timeStart = floor(time);
+		_posStart = getPosASL _proj;
+		waitUntil { time + 1.1 > _timeStart };
+		_posEnd = getPosASL _proj;
+		
+		_shotLineStart = format[
+			"<AAR>2,0,%1,%2,%3,%4,%5,1",
+			_ammo,
+			_posStart select 0,
+			_posStart select 1,
+			_posEnd select 0,
+			_posEnd select 1
+		];
+		
+		for "_i" from _timeStart to (_timeStart + 1) do {
+			call compile format [
+				"if (!isNil {_unit getVariable 'dzn_aar_ts_%1'}) then {
+					_unit setVariable ['dzn_aar_ts_%1', [_shotLine], true];
+				} else {
+					_unit setVariable ['dzn_aar_ts_%1', (_unit getVariable 'dzn_aar_ts_%1') + [_shotLine], true];
+				};",
+				_i
+			];
+		};
+	};
+}];
+
 
 // True -> Report
 // Report -> Timer
