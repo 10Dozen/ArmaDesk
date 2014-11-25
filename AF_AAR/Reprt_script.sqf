@@ -10,9 +10,12 @@ dzn_aar_fireEH = _unit addEventHandler ["Fired", {
 	_initPos = getPosASL _unit;
 	
 	_shotLine = format[
-		"AARShot",
+		"<AARShot>2,0,%1,%2,%3,%4,%5,1",
+		_ammo,
 		_initPos select 0,
-		_initPos select 1
+		_initPos select 1,
+		POSEND,
+		POSEND
 	];
 	
 	call compile format [
