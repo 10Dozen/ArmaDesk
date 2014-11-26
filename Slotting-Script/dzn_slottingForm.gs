@@ -421,7 +421,8 @@ function dzn_onSave() {
 			if (slotIndex > -1) {
 				excludeId.push(slotIndex);
 				var nicknameToShow = usedNicks[i];			
-				nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
+			//	nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
+				nicknameToShow = nicknameToShow.replace(/[A-Za-zА-Яа-я-_0-9\[\]])+(-sq(\d){1,2}$/, "$1");
               if (nickList.indexOf(nicknameToShow) == -1) {
 				nickList.push(nicknameToShow);
               }
