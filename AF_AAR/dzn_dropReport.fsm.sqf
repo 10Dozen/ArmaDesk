@@ -18,7 +18,10 @@
 	
 				if (!isNil {_this getVariable 'dzn_aar_ts_%1'}) then {
 					_aarLine = _this getVariable 'dzn_aar_ts_%1';
-					dzn_aar_timeStack_%1 = dzn_aar_timeStack_%1 + [_aarLine];
+					{
+						dzn_aar_timeStack_%1 = dzn_aar_timeStack_%1 + _x;
+					} forEach _aarLine;
+					
 					_this setVariable ['dzn_aar_ts_%1', nil, true];
 
 					player sideChat format [
