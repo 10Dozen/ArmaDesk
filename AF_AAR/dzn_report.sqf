@@ -8,8 +8,9 @@ waitUntil {time > 0};
 dzn_aar_unitList = [ 
 	player,
 	hitman1,
-	hitman2
+	hitman2	
 ];
+dzn_aar_unitList = dzn_aar_unitList + units (group uhitman1) + 	units (group uhitman2);
 waitUntil { time > 1 };
 {
 	_type = if (vehicle _x == _x) then { 0 } else { 6 }; // if (isKindOf "Man") then { 0 } else { 6 };
@@ -55,4 +56,5 @@ waitUntil { time > 1 };
 		_x execFSM "dzn_report.fsm";
 	};
 } forEach dzn_aar_unitList;
+
 [] execFSM "dzn_dumpReport.fsm";
