@@ -16,7 +16,7 @@ dzn_aar_fireEH = player addEventHandler ["Fired", {
 		_timeStart = floor(time);
 		_posStart = getPosASL _unit;
 	//!(getPos _proj isEqualTo [0,0,0]) ||
-		_posEnd = getPosASL _proj;
+		_posEnd = [getPosASL _proj, [0,0,0]];
 		
 		dzn_checkShot = {
 			_shot = _this select 0;
@@ -27,8 +27,22 @@ dzn_aar_fireEH = player addEventHandler ["Fired", {
 		};
 		
 		while {[_proj,_timeStart] call dzn_checkShot} do {
-			_posEnd = getPosASL _proj;
+			_pos = getPosASL _proj;
+			if ((_pos select 0) % 2 == 0) then {
+				_posEnd = [_pos, _posEnd select 1];
+			} else {
+				_posEnd = [_posEnd select 0, _pos];
+			}
 			player sideChat str[getPosASL _proj];
+		};
+		_posEnd = if ( ((_posEnd select 0) distance (_posStart) > (_posEnd select 1) distance (_posStart)) && {!(_posEnd isEqualTo [0,0,0])}) then {
+			_posEnd = _posEnd select 0;
+		} else {
+			if !((_posEnd select 1) isEqualTo [0,0,0]) then {
+				_posEnd = _posEnd select 1;
+			} else {
+				_posEnd = _posEnd select 0;
+			};
 		};
 		
 		player sideChat "SHOT END!";
