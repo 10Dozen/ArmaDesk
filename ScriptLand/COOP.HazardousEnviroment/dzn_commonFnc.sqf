@@ -1,5 +1,5 @@
-// Global MP messenger: [ personOBJ, typeOfChatSTR, [messageSTR] ] call dzn_gm_sendMessage
-dzn_gm_sendMessage = {
+// Show radio message
+dzn_client_sendMessage = {
 	/* 	Will show text message to All players via BIS_fnc_MP
 		[ person, type of chat, message ] call dzn_gm_sendMessage
 		0: PERSON	- unit who is called to message (message author - "name" or [west, "HQ"]): STRING or ARRAY
@@ -7,28 +7,37 @@ dzn_gm_sendMessage = {
 		2: ARRAY	- text of the message and placeholders to format: [STRING, STRING, STRING...]		
 		
 		OUTPUT: True
-	*/	
-	private ["_messenger","_type","_text"];
-	_messenger = _this select 0;	
-	_this select 0;
-	_type = _this select 1;
-	_text = format (_this select 2);	
+	*/
+	
+	if ( (_this select 0) == 0 ) then {
+		call compile format [
+			"%1 %2 %3;",
+			_this select 0, 
+			"sideChat", 
+			_this select 2
+		];
+	};
+};
 
-	call compile format ["
-		[
-			{
-				%1 %2 %3;
-			},
-			'BIS_fnc_spawn',
-			nil
-		] spawn BIS_fnc_MP;",
-		_messenger,
-		_type,
-		str(_text)	
-	];
+// Global MP messenger: [ personOBJ, typeOfChatSTR, [messageSTR] ] call dzn_gm_sendMessage
+dzn_gm_sendMessage = {
+	/* 	Will show text message to All players via BIS_fnc_MP
+		[ person, type of chat, message ] call dzn_gm_sendMessage
+		0: PERSON	- unit who is called to message (message author - "name" or [west, "HQ"]): STRING or ARRAY
+		1: TYPE		- type of chat ('0', '1' etc.): 0 - sideChat, NUM
+		2: ARRAY	- text of the message and placeholders to format: [STRING, STRING, STRING...]		
+		
+		OUTPUT: True
+	*/
+	[
+		[_this select 0, _this select 1, str(format (_this select 2);)],
+		"dzn_client_sendMessage",
+		nil
+	] spawn BIS_fnc_MP;
 
 	true
 };
+
 
 // Completes given task
 dzn_client_completeTaskNotif = {
