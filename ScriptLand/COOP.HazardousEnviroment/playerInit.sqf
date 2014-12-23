@@ -86,7 +86,6 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	dzn_bioweaponItem addAction [
 		"<t color='#8AD2FF'>Проверить статус деактивации</t>",
 		{
-			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
 			hint format ["Деактивация завершится через:\n%1", dzn_task_deactivationTime];
 		}, 
 		"", 
@@ -97,7 +96,6 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	   	"(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
 	];
 	
-	/*	
 	dzn_bioweaponItem addAction [
 		"<t color='#8AD2FF'>Установить GPS-маркер</t>",
 		{
@@ -111,7 +109,20 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	   	"", 
 	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable "dzn_placingGPS") && (dzn_task_addDestroyObjectTask) }"
 	];
-	*/
+	
+	dzn_bioweaponItem addAction [
+		"<t color='#8AD2FF'>Проверить получение координат</t>",
+		{
+			hint format ["Деактивация завершится через:\n%1", dzn_task_gpsPlacingTime];
+		}, 
+		"", 
+		6, 
+		true, 
+	   	true,
+	   	"", 
+	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable "dzn_placingGPS") && (dzn_task_addDestroyObjectTask) }"
+	];
+	
 };
 
 // Вешаем действия на Ученых-крученых
