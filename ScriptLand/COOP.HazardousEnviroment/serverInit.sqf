@@ -6,10 +6,27 @@ dzn_task_deactivated = false;
 dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
-dzn_task_deactivationLimit = 10;
+// Максимум времени который нужно чтобы деактивировать образец
+dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
-dzn_task_deactivationTime = 600;
+
+dzn_task_deactivationTime = dzn_c_desactivationTimeLimit * 60;
 publicVariable "dzn_task_deactivationTime";
+
+dzn_fnc_convertToTimestring = {
+	// time
+	private [];
+	_minutes = (_this) / 60 - (_this) % 60;
+	_seconds = (_this) - _minutes;
+	
+	_output = if (_minutes > 0) then {
+		call compile format ["%1 мин %2 сек", _minutes, _seconds];
+	} else {
+		call compile format ["%1 сек", _seconds];
+	};
+	
+	_output
+};
 
 [] spawn {
 	// Уничтожение ПУ
@@ -22,7 +39,16 @@ publicVariable "dzn_task_deactivationTime";
 
 [] spawn {
 	// Образец
+	private ["_i","_time"];
 	waitUntil { time > 0 };
+	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
-
+	_time = 0;
+	while { _time < (dzn_task_deactivationLimit * 60) } then {
+		sleep 1;
+		_time = _time + 1;
+		
+		dzn_task_deactivationTime = ((dzn_task_deactivationLimit * 60) - _time) call dzn_fnc_convertToTimestring;
+		publicVariable "dzn_task_deactivationTime";
+	};
 };
