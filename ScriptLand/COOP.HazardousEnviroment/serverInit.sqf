@@ -8,7 +8,8 @@ dzn_task_extracted = false;
 
 dzn_task_deactivationLimit = 10;
 publicVariable "dzn_task_deactivationLimit";
-
+dzn_task_deactivationTime = 600;
+publicVariable "dzn_task_deactivationTime";
 
 [] spawn {
 	// Уничтожение ПУ
