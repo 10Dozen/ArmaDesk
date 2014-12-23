@@ -1,0 +1,6 @@
+// Вставить в init юнитов-специалистов
+this setVariable ["dzn_isSpecialist", true, true];
+
+// В playerInit.sqf (запуститься только на игроке)
+_men = entites "CAManBase";
+
