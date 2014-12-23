@@ -2,6 +2,8 @@
 if !(isNil "dzn_plr_missionStarted") exitWith {};
 dzn_plr_missionStarted = true;
 
+waitUntil { !isNil "dzn_c_delayTime" };
+
 // Создаем таски
 [] spawn {
 	private ["_briefingTasksInit", "_briefingTasksToDestroy"];
@@ -65,7 +67,7 @@ dzn_plr_missionStarted = true;
 // Вешаем действие на образце
 [] spawn {
 	//dzn_bioweaponItem
-	waitUntil { time > 0 };
+	waitUntil { time > dzn_c_delayTime };
 	
 	dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
 	
@@ -101,7 +103,7 @@ dzn_plr_missionStarted = true;
 // Вешаем действия на Ученых-крученых
 [] spawn {
 	// Ждем когда миска начнется (т.е. все проинициализируются)
-	waitUntil { time > 0 };
+	waitUntil { time > dzn_c_delayTime };
    
 	// Тут мы будем ловить злобных ученых
 	// вернет всех человеков на карте - ученым лучше стоять простыми тушками, а не в машинах.
@@ -137,7 +139,8 @@ dzn_plr_missionStarted = true;
 // Специалисты записываются в список и сообщают в случае своей смерти
 [] spawn {
 	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
-
+	
+	waitUntil { time > dzn_c_delayTime };
 	waitUntil { !isNil "dzn_task_specialistsCount" };
 		
 	if (dzn_task_specialistsCount == -1) then {
