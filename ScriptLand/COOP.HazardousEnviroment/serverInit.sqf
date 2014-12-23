@@ -38,6 +38,7 @@ publicVariable "publicVariable";
 
 // Деактивация не удалась, ставим ГПС передатчик
 dzn_task_addDestroyObjectTask = false;
+
 dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
@@ -97,6 +98,8 @@ dzn_fnc_convertToTimestring = {
 		];
 		
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
+	
+	
 	};
 	
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!" ] call dzn_gm_sendMessage;
@@ -169,3 +172,5 @@ dzn_fnc_convertToTimestring = {
 		// Отключили враги деактивацию
 	};
 };
+
+
