@@ -16,5 +16,5 @@ publicVariable "dzn_task_deactivationLimit";
 	waitUntil { !alive dzn_launchPod_1 && { !alive dzn_launchPod_2 } };
 	
 	dzn_task_launchPodDestroyed = true;
-
+	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
 };
