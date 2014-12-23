@@ -71,8 +71,11 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { time > dzn_c_delayTime };
 	waitUntil { !alive dzn_launchPod_1 };
 	
+	sleep 3;
+	
 	dzn_task_launchPodDestroyed = true;
 	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!" ] call dzn_gm_sendMessage;
 };
 
 [] spawn {
@@ -92,8 +95,11 @@ dzn_fnc_convertToTimestring = {
 			"dzn_task_deactivationCancelled = true; publicVariable 'dzn_task_deactivationCancelled';",
 			""
 		];
+		
+		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
 	};
 	
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!" ] call dzn_gm_sendMessage;
 	_time = 0;
 	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } then {
 		sleep 1;
@@ -105,6 +111,7 @@ dzn_fnc_convertToTimestring = {
 	if !(dzn_task_deactivationCancelled) then {
 		dzn_task_deactivated = true;
 		[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
+		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Отлично, систем полностью под нашим контролем. Образец больше не представляет опасности." ] call dzn_gm_sendMessage;
 	} else {
 		// Отключили враги деактивацию
 	};
@@ -120,6 +127,8 @@ dzn_fnc_convertToTimestring = {
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
 	
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!" ] call dzn_gm_sendMessage;
+	
 	// Устанавливаем ГПС маркер
 	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
@@ -134,8 +143,11 @@ dzn_fnc_convertToTimestring = {
 			"dzn_task_gpsPlacingCancelled = true; publicVariable 'dzn_task_gpsPlacingCancelled';",
 			""
 		];
+		
+		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
 	};
 	
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинает уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим." ] call dzn_gm_sendMessage;
 	private ["_time"];
 	_time = 0;
 	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } then {
@@ -149,6 +161,7 @@ dzn_fnc_convertToTimestring = {
 		dzn_task_gpsPlaced = true;
 		publicVariable "dzn_task_gpsPlaced";
 		[ "dzn_plrTask3", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
+		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!" ] call dzn_gm_sendMessage;
 		
 		sleep (dzn_c_strikeDelay);
 		// Тут авиаудар
