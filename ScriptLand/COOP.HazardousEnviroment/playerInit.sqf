@@ -231,17 +231,19 @@ player setVariable ["dzn_plagued", false, false];
 dzn_deathZone = {
 	_unit = _this select 0;
 	_trg = _this select 1;
-	
 	if (_unit getVariable "dzn_plagued") exitWith {};
-	
 	_dist = (triggerArea _trg) select 0;
 	
-	sleep 5;
+	sleep 10;
 	if (_unit distance _trg < _dist) exitWith {
 		player setVariable ["dzn_plagued", true, false];
 		[] spawn {
-			sleep 50;
-			player setDamage 0.8;
+			sleep 10;
+			player setDamage ((damage player) + 0.8);
+			sleep 5;
+			player setDamage ((damage player) + 0.1);
+			sleep 5;
+			player setDamage 1;
 		};
 	};
 };
