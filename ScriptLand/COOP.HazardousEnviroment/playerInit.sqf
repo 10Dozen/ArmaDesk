@@ -231,6 +231,8 @@ player setVariable ["dzn_plagued", false, false];
 dzn_deathZone = {
 	_unit = _this select 0;
 	_trg = _this select 1;
+	hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
+	
 	if (_unit getVariable "dzn_plagued") exitWith {};
 	_dist = (triggerArea _trg) select 0;
 	
@@ -238,6 +240,7 @@ dzn_deathZone = {
 	if (_unit distance _trg < _dist) exitWith {
 		player setVariable ["dzn_plagued", true, false];
 		[] spawn {
+			hint "Химический детектор завис на максимальном показателе.\nКажется, что это конец.";
 			sleep 10;
 			player setDamage ((damage player) + 0.8);
 			sleep 5;
