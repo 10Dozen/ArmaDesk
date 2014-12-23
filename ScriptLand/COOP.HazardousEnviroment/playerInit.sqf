@@ -190,17 +190,14 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	waitUntil { !isNil "dzn_task_gpsPlaced" };
 	waitUntil { dzn_task_gpsPlaced };
 	
-	private ["_trg", "_islandTrgParam"];
-	
-	_islandTrgParam = triggerArea TRIGGER_X; // result is [200, 120, 45, false]
-	
-	_trg = createTrigger ["EmptyDetector",getPosASL(dzn_bioweaponItem)];
-	_trg setTriggerArea _islandTrgParam;
+	private ["_trg"];
+	_trg = createTrigger ["EmptyDetector", [3605,3642,0]];
+	_trg setTriggerArea [1200, 800, -139.84, false];
 	_trg setTriggerActivation ["WEST","PRESENT",false];
 	_trg setTriggerStatements [
-	"this && (player in thisList)",
-	"player setVariable ['dzn_playerSurvived', true, true];",
-	""
+		"this && (player in thisList)",
+		"player setVariable ['dzn_playerSurvived', true, true];",
+		""
 	];
 	
 	dzn_task_players = dzn_task_players + [player];
