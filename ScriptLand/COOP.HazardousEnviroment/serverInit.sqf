@@ -8,20 +8,21 @@ dzn_task_deactivated = false;
 // Отмена деактивации врагами
 dzn_task_deactivationCancelled = false;
 
-// Живость специалистов
-dzn_task_specialistsCount = -1;
-publicVariable "dzn_task_specialistsCount";
-dzn_task_specialistsDeadCount = 0;
-publicVariable "dzn_task_specialistsAreDead";
-
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
 dzn_task_deactivationTime = dzn_task_deactivationLimit * 60;
 publicVariable "dzn_task_deactivationTime";
 
+
+// Живость специалистов
+dzn_task_specialistsCount = -1;
+publicVariable "dzn_task_specialistsCount";
+dzn_task_specialistsDeadCount = 0;
+publicVariable "dzn_task_specialistsAreDead";
+
 // Деактивация не удалась, ставим ГПС передатчик
-dzn_task_addDestroyObjectTask = true;
+dzn_task_addDestroyObjectTask = false;
 dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
@@ -78,5 +79,9 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Установка на образец ГПС передатчика
 	waitUntil { time > 120 };
+	// Все специалисты убиты
+	waitUntil { dzn_task_specialistsCount <= dzn_task_specialistsDeadCount };
+	dzn_task_addDestroyObjectTask = true;
+	publicVariable "dzn_task_addDestroyObjectTask";
 	
 };
