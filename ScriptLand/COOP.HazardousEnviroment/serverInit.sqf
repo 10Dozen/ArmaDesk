@@ -14,17 +14,18 @@ dzn_task_gpsPlacingCancelled = false;
 
 // Деактивация
 dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
-dzn_bioweaponItem setVariable ["dzn_placingGPS", false, true];
 dzn_task_deactivated = false;
 
-dzn_task_gpsPlaced = false;
-dzn_task_gpsPlacingTime = str(dzn_c_gpsPlacingTimeLimit * 60);
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
 dzn_task_deactivationTime = str(dzn_task_deactivationLimit * 60);
 publicVariable "dzn_task_deactivationTime";
 
+//GPS Маркер
+dzn_bioweaponItem setVariable ["dzn_placingGPS", false, true];
+dzn_task_gpsPlaced = false;
+dzn_task_gpsPlacingTime = str(dzn_c_gpsPlacingTimeLimit * 60);
 
 // Живость специалистов
 dzn_task_specialistsCount = -1;
@@ -37,9 +38,13 @@ dzn_task_addDestroyObjectTask = false;
 dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
+// Убегание после бомбежки
+dzn_task_runaway = false;
 
 [] spawn {
 	// Проверяем условия для завершения миски
+	
+	
 };
 
 // Time to string function
@@ -71,6 +76,19 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { time > dzn_c_delayTime };
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
+	// Проверка набигания врагов с целью сломать дезактивацию
+	[] spawn {
+		private ["_trg"];
+		_trg = createTrigger ["EmptyDetector",getPosASL(dzn_bioweaponItem)];
+		_trg setTriggerArea [20,20,0,false];
+		_trg setTriggerActivation ["EAST","PRESENT",false];
+		_trg setTriggerStatements [
+			"this", 
+			"dzn_task_deactivationCancelled = true; publicVariable 'dzn_task_deactivationCancelled';",
+			""
+		];
+	};
+	
 	_time = 0;
 	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } then {
 		sleep 1;
@@ -100,6 +118,19 @@ dzn_fnc_convertToTimestring = {
 	// Устанавливаем ГПС маркер
 	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
+	// Проверка набигания врагов с целью сломать GPS-маркер
+	[] spawn {
+		private ["_trg"];
+		_trg = createTrigger ["EmptyDetector",getPosASL(dzn_bioweaponItem)];
+		_trg setTriggerArea [20,20,0,false];
+		_trg setTriggerActivation ["EAST","PRESENT",false];
+		_trg setTriggerStatements [
+			"this", 
+			"dzn_task_gpsPlacingCancelled = true; publicVariable 'dzn_task_gpsPlacingCancelled';",
+			""
+		];
+	};
+	
 	private ["_time"];
 	_time = 0;
 	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } then {
@@ -112,6 +143,9 @@ dzn_fnc_convertToTimestring = {
 	if !(dzn_task_gpsPlacingCancelled) then {
 		dzn_task_gpsPlaced = true;
 		[ "dzn_plrTask3", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
+		
+		sleep (dzn_c_strikeDelay);
+		
 	} else {
 		// Отключили враги деактивацию
 	};
