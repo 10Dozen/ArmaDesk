@@ -41,9 +41,10 @@ dzn_client_completeTaskNotif = {
 
 		OUTPUT: True
 	*/
-	if (isNil {_task}) exitWith { };	
+	_task = call compile (_this select 0);
+	if (isNil { _task }) exitWith { };	
 	['TaskSucceeded',['',(_this select 1)]] call BIS_fnc_showNotification;
-	(call compile (_this select 0)) setTaskState 'Succeeded';
+	_task setTaskState 'Succeeded';
 };
 
 // Global MP task completer: [ taskNameSTR, taskTextSTR ] call dzn_gm_completeTaskNotif
@@ -55,13 +56,9 @@ dzn_gm_completeTaskNotif = {
 
 		OUTPUT: True
 	*/	
-	private ["_task","_text"];
-	_task = _this select 0;
-	_text = _this select 1;		
-	
-	if (isNil {_task}) exitWith {  };	
+	private ["_task","_text"];		
 	[
-		[_task, _text],
+		[_this select 0, _this select 1],
 		"dzn_client_completeTaskNotif",
 		nil
 	] spawn BIS_fnc_MP;
