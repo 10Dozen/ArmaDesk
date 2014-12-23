@@ -49,9 +49,9 @@ dzn_fnc_convertToTimestring = {
 	_minutes = (_this) / 60 - (_this) % 60;
 	_seconds = (_this) - _minutes;
 	_output = if (_minutes > 0) then {
-		call compile format ["%1 мин %2 сек", _minutes, _seconds];
+		call compile format ["%1 мин %2 сек", _minutes, _seconds]
 	} else {
-		call compile format ["%1 сек", _seconds];
+		call compile format ["%1 сек", _seconds]
 	};
 	_output
 };
