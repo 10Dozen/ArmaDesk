@@ -3,24 +3,28 @@ if (!isNil "dzn_srv_missionStarted") exitWith {};
 dzn_srv_missionStarted = true;
 waitUntil { !isNil "dzn_c_delayTime" };
 waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
+waitUntil { !isNil "dzn_c_gpsPlacingTimeLimit"};
 
 // Пусковая установка
 dzn_task_launchPodDestroyed = false;
 
 // Отмена деактивации врагами
 dzn_task_deactivationCancelled = false;
-
+dzn_task_gpsPlacingCancelled = false;
 
 // Деактивация
 dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
 dzn_bioweaponItem setVariable ["dzn_placingGPS", false, true];
 dzn_task_deactivated = false;
+
 dzn_task_gpsPlaced = false;
+dzn_task_gpsPlacingTime = str(dzn_c_gpsPlacingTimeLimit * 60);
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
-dzn_task_deactivationTime = dzn_task_deactivationLimit * 60;
+dzn_task_deactivationTime = str(dzn_task_deactivationLimit * 60);
 publicVariable "dzn_task_deactivationTime";
+
 
 // Живость специалистов
 dzn_task_specialistsCount = -1;
@@ -63,7 +67,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Дезактивация Образца
-	private ["_i","_time"];
+	private ["_time"];
 	waitUntil { time > dzn_c_delayTime };
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
@@ -96,4 +100,19 @@ dzn_fnc_convertToTimestring = {
 	// Устанавливаем ГПС маркер
 	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
+	private ["_time"];
+	_time = 0;
+	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } then {
+		sleep 1;
+		_time = _time + 1;
+		dzn_task_gpsPlacingTime = ((dzn_c_gpsPlacingTimeLimit * 60) - _time) call dzn_fnc_convertToTimestring;
+		publicVariable "dzn_task_deactivationTime";
+	};
+	
+	if !(dzn_task_gpsPlacingCancelled) then {
+		dzn_task_gpsPlaced = true;
+		[ "dzn_plrTask3", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
+	} else {
+		// Отключили враги деактивацию
+	};
 };
