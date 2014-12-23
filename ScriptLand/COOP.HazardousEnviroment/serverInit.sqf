@@ -48,7 +48,7 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Уничтожение ПУ
 	waitUntil { time > 0 };
-	waitUntil { !alive dzn_launchPod_1 && { !alive dzn_launchPod_2 } };
+	waitUntil { !alive dzn_launchPod_1 };
 	
 	dzn_task_launchPodDestroyed = true;
 	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
