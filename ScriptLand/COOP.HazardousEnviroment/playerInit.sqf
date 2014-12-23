@@ -56,22 +56,21 @@
 		true, 
 	   	true,
 	   	"", 
-	    	"(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	    "(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
 	];
 	
 	dzn_bioweaponItem addAction [
 		"<t color='#8AD2FF'>Проверить статус деактивации</t>",
 		{
 			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
-			
-			//hint "Начата деактивация образца";
+			hint format ["Деактивация завершится через:\n%1", dzn_task_deactivationTime];
 		}, 
 		"", 
 		6, 
 		true, 
 	   	true,
 	   	"", 
-	    	"(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	    "(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
 	];
 };
 
