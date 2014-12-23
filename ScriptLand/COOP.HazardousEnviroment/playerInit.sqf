@@ -41,6 +41,38 @@
 // Вешаем действие на образце
 [] spawn {
 	//dzn_bioweaponItem
+	waitUntil { time > 0 };
+	
+	dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
+	
+	dzn_bioweaponItem addAction [
+		"<t color='#FF852E'>Начать деактивацию образца</t>",
+		{
+			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
+			hint "Начата деактивация образца";
+		}, 
+		"", 
+		6, 
+		true, 
+	   	true,
+	   	"", 
+	    	"(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	];
+	
+	dzn_bioweaponItem addAction [
+		"<t color='#8AD2FF'>Проверить статус деактивации</t>",
+		{
+			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
+			
+			//hint "Начата деактивация образца";
+		}, 
+		"", 
+		6, 
+		true, 
+	   	true,
+	   	"", 
+	    	"(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	];
 };
 
 // Вешаем действия на Ученых-крученых
