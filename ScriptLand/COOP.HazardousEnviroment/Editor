@@ -7,3 +7,6 @@ this setVariable ["dzn_isSpecialist", true, true];
 // Имя "Пусковой установки" = dzn_launchPod_1
 
 // "Зараженная зона"?
+// Накидать триггеров повторяющихся на ВЕСТ ПРЕСЕНТ 
+// в OnAct:
+{_x spawn dzn_deathZone;} forEach thisList;
