@@ -1,4 +1,6 @@
 // В playerInit.sqf (запуститься только на игроке)
+if !(isNil "dzn_plr_missionStarted") exitWith {};
+dzn_plr_missionStarted = true;
 
 // Создаем таски
 [] spawn {
@@ -50,6 +52,7 @@
 			"Образец", getPosASL(dzn_bioweaponItem)
 		]
 	];
+	_briefingTasksToDestroy call briefingCreateTasks;
 	
 	dzn_plrTask99 = player createSimpleTask ["Покинуть остров"];
 	dzn_plrTask99 setSimpleTaskDescription [
@@ -57,7 +60,6 @@
 		"Покинуть остров",
 		"Покинуть остров"
 	];
-	
 };
 
 // Вешаем действие на образце
@@ -78,7 +80,7 @@
 		true, 
 	   	true,
 	   	"", 
-	    "(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	    "(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') && (_this getVariable 'dzn_isSpecialist') }"
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -103,12 +105,9 @@
    
 	// Тут мы будем ловить злобных ученых
 	// вернет всех человеков на карте - ученым лучше стоять простыми тушками, а не в машинах.
-	_men = entites "CAManBase"; 
-	dzn_scientists = [];
+	_men = entities "CAManBase"; 
 	{
 	    	if (side _x == "CIVILIAN") then {
-	    		dzn_scientists = dzn_scientists + [_x];
-	    		
 		    	_x setVariable ["dzn_asked", false, true];
 		    	_x addAction ["<t color='#FF852E'>Допросить</t>", {
 		    			if (!isNil { (_this select 1) getVariable "dzn_isSpecialist" } ) then {
@@ -129,7 +128,7 @@
 			    	true, 
 			    	true,
 			    	"", 
-			    	"(_targer distance _this < 5)"
+			    	"(_targer distance _this < 3)"
 		    	];
 	    	};
 	} forEach _men;
@@ -139,17 +138,17 @@
 [] spawn {
 	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
 
-	if (isPlayer) then {
-		waitUntil { !isNil "dzn_task_specialistsCount" };
+	waitUntil { !isNil "dzn_task_specialistsCount" };
 		
-		if (dzn_task_specialistsCount == -1) then {
-			dzn_task_specialistsCount = 1;
-		} else {
-			dzn_task_specialistsCount = dzn_task_specialistsCount + 1;
-		};
-		publicVariable "dzn_task_specialistsCount";
-		
-		waitUntil { (!alive player) || !(isPlayer) };
-		dzn_task_specialistsDeadCount = dzn_task_specialistsDeadCount + 1;
+	if (dzn_task_specialistsCount == -1) then {
+		dzn_task_specialistsCount = 1;
+	} else {
+		dzn_task_specialistsCount = dzn_task_specialistsCount + 1;
 	};
+	publicVariable "dzn_task_specialistsCount";
+		
+	waitUntil { (!alive player) || !(isPlayer) };
+	
+	dzn_task_specialistsDeadCount = dzn_task_specialistsDeadCount + 1;
+	publicVariable "dzn_task_specialistsDeadCount";
 };
