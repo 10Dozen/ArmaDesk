@@ -45,12 +45,13 @@ dzn_task_extracted = false;
 // Time to string function
 dzn_fnc_convertToTimestring = {
 	private ["_minutes","_seconds"];
-	_minutes = (_this) / 60 - (_this) % 60;
-	_seconds = (_this) - _minutes;
-	_output = if (_minutes > 0) then {
-		call compile format ["%1 мин %2 сек", _minutes, _seconds]
+	_minutes = floor(_this / 60);
+	_seconds = _this - _minutes * 60;
+	_output = "";
+	if (_minutes > 0) then {
+		_output = str(_minutes) + " мин " + str(_seconds) + " сек";
 	} else {
-		call compile format ["%1 сек", _seconds]
+		_output = str(_seconds) + " сек";
 	};
 	_output
 };
