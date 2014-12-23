@@ -113,6 +113,7 @@
 	} forEach _men;
 };
 
+// Специалисты записываются в список и сообщают в случае своей смерти
 [] spawn {
 	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
 
