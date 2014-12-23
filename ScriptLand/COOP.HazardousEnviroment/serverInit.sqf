@@ -44,8 +44,7 @@ dzn_task_extracted = false;
 
 // Time to string function
 dzn_fnc_convertToTimestring = {
-	// time
-	private [];
+	private ["_minutes","_seconds"];
 	_minutes = (_this) / 60 - (_this) % 60;
 	_seconds = (_this) - _minutes;
 	_output = if (_minutes > 0) then {
