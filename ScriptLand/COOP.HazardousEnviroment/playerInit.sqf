@@ -39,8 +39,6 @@
 };
 
 [] spawn {
-	waitUntil { time > 0 };
-	
 	briefingCreateTasks = {
 		{
 			_task = _x select 0;
@@ -59,11 +57,19 @@
 	};
 	
 	_briefingTasks = [
-		["INSERTION","Reach insertion point by helicopter","INSERTION","INSERTION POINT", position(baseLoc)],
-		["OBJ 1: Destroy AA MANPADS", "Eliminate all AA units at the both AA sites","OBJ 1: Destroy AA MANPADS","AA SITES", position(baseLoc)],
-		["OBJ 2: Supress resistance", "Clear camp from guerillas. Take no prisoners.","OBJ 2: Supress resistance","Guerilla's Camp", position(baseLoc)],
-		["OBJ 3: Destroy cache","Destroy weapon and ammo cache at the camp.","OBJ 3: Destroy cache","Find and Destroy cache", position(baseLoc)],
-		["OBJ 4: Destroy vehicles", "Destroy all vehicles at the camp","OBJ 4: Destroy vehicles","Destroy all vehicles", position(baseLoc)]
+		[	
+			"Уничтожить ПУ",
+			"Обнаружить и уничтожить пусковую установку.",
+			"Уничтожить Пусковую установку",
+			"Пусковая установка", getPosASL(dzn_launchPod_1)
+		],
+		[
+			"Обезвредить образец", 
+			"Найти и обезвредить образец биооружия, расположенный на территории аэродрома.",
+			"Обезвердить образец",
+			"Лаборатория", 
+			position(baseLoc)
+		]
 	];
 	
 	_briefingTasks call briefingCreateTasks;
