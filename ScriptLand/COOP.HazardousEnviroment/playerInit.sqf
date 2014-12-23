@@ -113,4 +113,10 @@
 	} forEach _men;
 };
 
-
+[] spawn {
+	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
+	if (isPlayer) then {
+		
+	};
+	waitUntil { !alive player }
+};
