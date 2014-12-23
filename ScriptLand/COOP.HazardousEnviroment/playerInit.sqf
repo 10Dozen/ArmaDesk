@@ -7,7 +7,7 @@
 	// Тут мы будем ловить злобных ученых
 	// вернет всех человеков на карте - ученым лучше стоять простыми тушками, а не в машинах.
 	_men = entites "CAManBase"; 
-    dzn_scientists = [];
+	dzn_scientists = [];
 	{
     	if (side _x == "CIVILIAN") then {
     		dzn_scientists = dzn_scientists + [_x];
@@ -36,4 +36,7 @@
 	    	];
     	};
 	} forEach _men;
+	
+	
+	
 };
