@@ -51,4 +51,6 @@ dzn_fnc_convertToTimestring = {
 		dzn_task_deactivationTime = ((dzn_task_deactivationLimit * 60) - _time) call dzn_fnc_convertToTimestring;
 		publicVariable "dzn_task_deactivationTime";
 	};
+	
+	[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
 };
