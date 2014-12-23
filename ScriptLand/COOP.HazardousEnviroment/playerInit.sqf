@@ -69,8 +69,6 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	//dzn_bioweaponItem
 	waitUntil { time > dzn_c_delayTime };
 	
-	
-	
 	dzn_bioweaponItem addAction [
 		"<t color='#FF852E'>Начать деактивацию образца</t>",
 		{
@@ -82,7 +80,7 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	    "(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') && (_this getVariable 'dzn_isSpecialist') }"
+	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') && (_this getVariable 'dzn_isSpecialist') }"
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -96,22 +94,22 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	    "(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	   	"(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
 	];
 	
 	/*	
 	dzn_bioweaponItem addAction [
 		"<t color='#8AD2FF'>Установить GPS-маркер</t>",
 		{
-			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
-			hint format ["Деактивация завершится через:\n%1", dzn_task_deactivationTime];
+			dzn_bioweaponItem setVariable ["dzn_placingGPS", true, true];
+			hint "GPS-маркер установлен. Уточняются координаты.";
 		}, 
 		"", 
 		6, 
 		true, 
 	   	true,
 	   	"", 
-	    "(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable "dzn_placingGPS") && (dzn_task_addDestroyObjectTask) }"
 	];
 	*/
 };
