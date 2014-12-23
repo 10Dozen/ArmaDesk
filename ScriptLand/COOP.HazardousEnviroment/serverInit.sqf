@@ -1,23 +1,24 @@
+// Будет запущено только на сервере
 if (!isNil "dzn_srv_missionStarted") exitWith {};
 dzn_srv_missionStarted = true;
 waitUntil { !isNil "dzn_c_delayTime" };
-
-// Будет запущено только на сервере
 waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
 
 // Пусковая установка
 dzn_task_launchPodDestroyed = false;
-// Деактивация
-dzn_task_deactivated = false;
+
 // Отмена деактивации врагами
 dzn_task_deactivationCancelled = false;
 
+
+// Деактивация
+dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
+dzn_task_deactivated = false;
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
 dzn_task_deactivationTime = dzn_task_deactivationLimit * 60;
 publicVariable "dzn_task_deactivationTime";
-
 
 // Живость специалистов
 dzn_task_specialistsCount = -1;
