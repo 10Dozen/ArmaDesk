@@ -9,4 +9,4 @@ this setVariable ["dzn_isSpecialist", true, true];
 // "Зараженная зона"?
 // Накидать триггеров повторяющихся на ВЕСТ ПРЕСЕНТ 
 // в OnAct:
-{_x spawn dzn_deathZone;} forEach thisList;
+{[_x, thisTrigger] spawn dzn_deathZone;} forEach thisList;
