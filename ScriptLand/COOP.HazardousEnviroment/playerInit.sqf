@@ -93,7 +93,7 @@
 		    			if (!isNil { (_this select 1) getVariable "dzn_isSpecialist" } ) then {
 		    				if ( (_this select 0) getVariable "dzn_asked" ) then {
 		    					hint "Ученый объяснет Вам как дезактивировать образец";
-		    					dzn_task_deactivationLimit = dzn_task_deactivationLimit - 1;
+		    					dzn_task_deactivationLimit = dzn_task_deactivationLimit - dzn_c_desactivationTimeReducer;
 								publicVariable "dzn_task_deactivationLimit";
 		    					(_this select 0) setVariable ["dzn_asked", true, true];
 		    				} else {
