@@ -46,7 +46,9 @@ dzn_task_runaway = false;
 
 [] spawn {
 	// Проверяем условия для завершения миски
+	waitUntil { time > dzn_c_delayTime };
 	
+	waitUntil {};
 	
 };
 
