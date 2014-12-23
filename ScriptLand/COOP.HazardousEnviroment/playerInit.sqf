@@ -2,6 +2,8 @@
 
 // Создаем таски
 [] spawn {
+	private ["_briefingTasksInit", "_briefingTasksToDestroy"];
+	dzn_taskId = 0;
 	briefingCreateTasks = {
 		{
 			_task = _x select 0;
@@ -14,12 +16,14 @@
 				"dzn_plrTask%1 = player createSimpleTask [_task];
 				dzn_plrTask%1 setSimpleTaskDescription [_taskDesc, _taskTitle, _taskPointDesc];
 				dzn_plrTask%1 setSimpleTaskDestination _taskPointPos;",
-				_forEachIndex
+				dzn_taskId
 			];
+			
+			dzn_taskId = dzn_taskId + 1;
 		} forEach _this;	
 	};
 	
-	_briefingTasks = [
+	_briefingTasksInit = [
 		[	
 			"Уничтожить ПУ",
 			"Обнаружить и уничтожить пусковую установку.",
@@ -35,7 +39,25 @@
 		]
 	];
 	
-	_briefingTasks call briefingCreateTasks;
+	_briefingTasksInit call briefingCreateTasks;
+	
+	waitUntil { dzn_task_addDestroyObjectTask };
+	_briefingTasksToDestroy = [
+		[	
+			"Установить GPS-маркер",
+			"Установить GPS-маркер на образец и дождаться пока не будут зафиксированы координаты цели. После получения точных координат по цели будет нанесен удар. Вы должны покинуть остров ДО удара. У вас будет меньше 2 минут, чтобы покинуть остров после получения координат. Не допускайте противника к образцу - он может уничтожить GPS-маркер!",
+			"Установить GPS-маркер",
+			"Образец", getPosASL(dzn_bioweaponItem)
+		]
+	];
+	
+	dzn_plrTask99 = player createSimpleTask ["Покинуть остров"];
+	dzn_plrTask99 setSimpleTaskDescription [
+		"Покиньте остров до нанесения удара! После уничтожения образца существует критическая вероятность заражения территории! Все кто будут в пределах зоны заражения - умрут!",
+		"Покинуть остров",
+		"Покинуть остров"
+	];
+	
 };
 
 // Вешаем действие на образце
