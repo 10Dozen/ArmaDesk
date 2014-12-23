@@ -225,3 +225,23 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	dzn_task_players = dzn_task_players + [player];
 	publicVariable "dzn_task_players";
 };
+
+player setVariable ["dzn_plagued", false, false];
+//Смертельная зона
+dzn_deathZone = {
+	_unit = _this select 0;
+	_trg = _this select 1;
+	
+	if (_unit getVariable "dzn_plagued") exitWith {};
+	
+	_dist = (triggerArea _trg) select 0;
+	
+	sleep 5;
+	if (_unit distance _trg < _dist) exitWith {
+		player setVariable ["dzn_plagued", true, false];
+		[] spawn {
+			sleep 50;
+			player setDamage 0.8;
+		};
+	};
+};
