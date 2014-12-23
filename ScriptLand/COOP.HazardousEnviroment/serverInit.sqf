@@ -149,7 +149,7 @@ dzn_fnc_convertToTimestring = {
 		[ "dzn_plrTask3", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
 		
 		sleep (dzn_c_strikeDelay);
-		
+		// Тут авиаудар
 	} else {
 		// Отключили враги деактивацию
 	};
