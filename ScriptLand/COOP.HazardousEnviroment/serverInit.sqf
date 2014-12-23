@@ -1,3 +1,7 @@
+if (!isNil "dzn_srv_missionStarted") exitWith {};
+dzn_srv_missionStarted = true;
+waitUntil { !isNil "dzn_c_delayTime" };
+
 // Будет запущено только на сервере
 waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
 
@@ -47,7 +51,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Уничтожение ПУ
-	waitUntil { time > 0 };
+	waitUntil { time > dzn_c_delayTime };
 	waitUntil { !alive dzn_launchPod_1 };
 	
 	dzn_task_launchPodDestroyed = true;
@@ -57,7 +61,7 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Дезактивация Образца
 	private ["_i","_time"];
-	waitUntil { time > 0 };
+	waitUntil { time > dzn_c_delayTime };
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
 	_time = 0;
@@ -78,7 +82,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Установка на образец ГПС передатчика
-	waitUntil { time > 120 };
+	waitUntil { time > dzn_c_delayTime + 120 };
 	// Все специалисты убиты
 	waitUntil { dzn_task_specialistsCount <= dzn_task_specialistsDeadCount };
 	dzn_task_addDestroyObjectTask = true;
