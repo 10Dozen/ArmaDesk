@@ -1,4 +1,5 @@
 // Будет запущено только на сервере
+waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
 
 // Условия победы и поражения
 dzn_task_launchPodDestroyed = false;
@@ -8,17 +9,19 @@ dzn_task_extracted = false;
 
 dzn_task_deactivationCancelled = false;
 
+// Жиовсть специалистов
+dzn_task_specialistsAreDead = 0;
+publicVariable "dzn_task_specialistsAreDead";
 
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
 
-dzn_task_deactivationTime = dzn_c_desactivationTimeLimit * 60;
+dzn_task_deactivationTime = dzn_task_deactivationLimit * 60;
 publicVariable "dzn_task_deactivationTime";
 
 [] spawn {
-	// Проверяем условия
-	
+	// Проверяем условия для завершения миски
 };
 
 // Time to string function
@@ -27,13 +30,11 @@ dzn_fnc_convertToTimestring = {
 	private [];
 	_minutes = (_this) / 60 - (_this) % 60;
 	_seconds = (_this) - _minutes;
-	
 	_output = if (_minutes > 0) then {
 		call compile format ["%1 мин %2 сек", _minutes, _seconds];
 	} else {
 		call compile format ["%1 сек", _seconds];
 	};
-	
 	_output
 };
 
@@ -47,7 +48,7 @@ dzn_fnc_convertToTimestring = {
 };
 
 [] spawn {
-	// Образец
+	// Дезактивация Образца
 	private ["_i","_time"];
 	waitUntil { time > 0 };
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
@@ -56,7 +57,6 @@ dzn_fnc_convertToTimestring = {
 	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } then {
 		sleep 1;
 		_time = _time + 1;
-		
 		dzn_task_deactivationTime = ((dzn_task_deactivationLimit * 60) - _time) call dzn_fnc_convertToTimestring;
 		publicVariable "dzn_task_deactivationTime";
 	};
@@ -67,4 +67,13 @@ dzn_fnc_convertToTimestring = {
 	} else {
 		// Отключили враги деактивацию
 	};
+};
+
+[] spawn {
+	// Установка на образец ГПС передатчика
+	
+	waitUntil { time > 0 };
+	dzn_s_getAliveSpecialists = [];
+	
+	waitUntil { 
 };
