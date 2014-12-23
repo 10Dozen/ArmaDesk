@@ -115,8 +115,18 @@
 
 [] spawn {
 	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
+
 	if (isPlayer) then {
+		waitUntil { !isNil "dzn_task_specialistsCount" };
 		
+		if (dzn_task_specialistsCount == -1) then {
+			dzn_task_specialistsCount = 1;
+		} else {
+			dzn_task_specialistsCount = dzn_task_specialistsCount + 1;
+		};
+		publicVariable "dzn_task_specialistsCount";
+		
+		waitUntil { (!alive player) || !(isPlayer) };
+		dzn_task_specialistsDeadCount = dzn_task_specialistsDeadCount + 1;
 	};
-	waitUntil { !alive player }
 };
