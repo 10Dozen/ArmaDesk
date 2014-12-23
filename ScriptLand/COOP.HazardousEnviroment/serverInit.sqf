@@ -33,6 +33,9 @@ publicVariable "dzn_task_specialistsCount";
 dzn_task_specialistsDeadCount = 0;
 publicVariable "dzn_task_specialistsAreDead";
 
+dzn_task_players = [];
+publicVariable "publicVariable";
+
 // Деактивация не удалась, ставим ГПС передатчик
 dzn_task_addDestroyObjectTask = false;
 dzn_task_destroyed = false;
