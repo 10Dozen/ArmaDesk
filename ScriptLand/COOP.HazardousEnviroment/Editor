@@ -4,6 +4,6 @@ this setVariable ["dzn_isSpecialist", true, true];
 // Ученых сделать CIVILIAN в белых комбезах.
 
 // Имя "объекта" = dzn_bioweaponItem
-// Имя "Пусковой установки" = dzn_launchPod
+// Имя "Пусковой установки" = dzn_launchPod_1 и dzn_launchPod_2
 
 // "Зараженная зона"?
