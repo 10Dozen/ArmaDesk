@@ -1,2 +1,4 @@
 // Вставить в init юнитов-специалистов
 this setVariable ["dzn_isSpecialist", true, true];
+
+// Ученых сделать CIVILIAN в белых комбезах.
