@@ -30,6 +30,20 @@ dzn_gm_sendMessage = {
 	true
 };
 
+// Completes given task
+dzn_client_completeTaskNotif = {
+	/* 	Will show complete task notification
+		[ task, taskText ] call dzn_gm_completeTaskNotif
+		0: TASK NAME	- task name: STRING
+		1: TEXT			- text of notification, STRING
+
+		OUTPUT: True
+	*/
+	if (isNil {_task}) exitWith { };	
+	['TaskSucceeded',['',(_this select 1)]] call BIS_fnc_showNotification;
+	(call compile (_this select 0)) setTaskState 'Succeeded';
+};
+
 // Global MP task completer: [ taskNameSTR, taskTextSTR ] call dzn_gm_completeTaskNotif
 dzn_gm_completeTaskNotif = {
 	/* 	Will show complete task notification via BIS_fnc_MP
@@ -43,16 +57,10 @@ dzn_gm_completeTaskNotif = {
 	_task = _this select 0;
 	_text = _this select 1;		
 	
-	if (isNil {_task}) exitWith { hintSilent "No task" };	
+	if (isNil {_task}) exitWith {  };	
 	[
-		[
-			[_task, _text],
-			{
-				['TaskSucceeded',['',(_this select 1)]] call BIS_fnc_showNotification;
-				(call compile (_this select 0)) setTaskState 'Succeeded';
-			}
-		],
-		"BIS_fnc_spawn",
+		[_task, _text],
+		"dzn_client_completeTaskNotif",
 		nil
 	] spawn BIS_fnc_MP;
 	
