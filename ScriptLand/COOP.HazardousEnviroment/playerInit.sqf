@@ -107,7 +107,7 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable "dzn_placingGPS") && (dzn_task_addDestroyObjectTask) }"
+	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable 'dzn_placingGPS') && (dzn_task_addDestroyObjectTask) }"
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -120,7 +120,7 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable "dzn_placingGPS") && (dzn_task_addDestroyObjectTask) }"
+	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable 'dzn_placingGPS') && (dzn_task_addDestroyObjectTask) }"
 	];
 	
 };
