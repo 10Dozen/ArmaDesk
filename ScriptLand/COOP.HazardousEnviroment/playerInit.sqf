@@ -80,7 +80,13 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') && (_this getVariable 'dzn_isSpecialist') }"
+	   	"(_targer distance _this < 3) 
+			&& { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') 
+	   		&& (_this getVariable 'dzn_isSpecialist') 
+	   		&& !dzn_task_deactivated
+	   		&& !dzn_task_addDestroyObjectTask
+	   		&& !dzn_task_deactivationCancelled
+	   	}"
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -93,7 +99,12 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	   	"(_targer distance _this < 3) 
+	   		&& { (dzn_bioweaponItem getVariable 'dzn_isDeactivating')
+	   		&& !dzn_task_deactivated
+	   		&& !dzn_task_addDestroyObjectTask
+	   		&& !dzn_task_deactivationCancelled
+	   	} "
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -107,7 +118,12 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable 'dzn_placingGPS') && (dzn_task_addDestroyObjectTask) }"
+	   	"(_targer distance _this < 3) && { 
+	   		!(dzn_bioweaponItem getVariable 'dzn_placingGPS') 
+	   		&& dzn_task_addDestroyObjectTask
+	   		&& !dzn_task_gpsPlaced
+	   		&& !dzn_task_gpsPlacingCancelled
+	   	}"
 	];
 	
 	dzn_bioweaponItem addAction [
@@ -120,7 +136,13 @@ waitUntil { !isNil "dzn_c_delayTime" };
 		true, 
 	   	true,
 	   	"", 
-	   	"(_targer distance _this < 3) && { !(dzn_bioweaponItem setVariable 'dzn_placingGPS') && (dzn_task_addDestroyObjectTask) }"
+	   	"(_targer distance _this < 3) && { 
+	   		(dzn_bioweaponItem getVariable 'dzn_placingGPS') 
+	   		&& (dzn_task_addDestroyObjectTask) 
+	   		&& dzn_task_addDestroyObjectTask
+	   		&& !dzn_task_gpsPlaced
+	   		&& !dzn_task_gpsPlacingCancelled
+	   	}"
 	];
 	
 };
