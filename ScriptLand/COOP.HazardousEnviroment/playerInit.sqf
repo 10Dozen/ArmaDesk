@@ -183,3 +183,26 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	dzn_task_specialistsDeadCount = dzn_task_specialistsDeadCount + 1;
 	publicVariable "dzn_task_specialistsDeadCount";
 };
+
+
+[] spawn {
+	waitUntil { time > dzn_c_delayTime };
+	waitUntil { !isNil "dzn_task_gpsPlaced" };
+	waitUntil { dzn_task_gpsPlaced };
+	
+	private ["_trg", "_islandTrgParam"];
+	
+	_islandTrgParam = triggerArea TRIGGER_X; // result is [200, 120, 45, false]
+	
+	_trg = createTrigger ["EmptyDetector",getPosASL(dzn_bioweaponItem)];
+	_trg setTriggerArea _islandTrgParam;
+	_trg setTriggerActivation ["WEST","PRESENT",false];
+	_trg setTriggerStatements [
+	"this && (player in thisList)",
+	"player setVariable ['dzn_playerSurvived', true, true];",
+	""
+	];
+	
+	dzn_task_players = dzn_task_players + [player];
+	publicVariable "dzn_task_players";
+};
