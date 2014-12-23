@@ -13,7 +13,9 @@ dzn_task_deactivationCancelled = false;
 
 // Деактивация
 dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
+dzn_bioweaponItem setVariable ["dzn_placingGPS", false, true];
 dzn_task_deactivated = false;
+dzn_task_gpsPlaced = false;
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
@@ -84,9 +86,14 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Установка на образец ГПС передатчика
 	waitUntil { time > dzn_c_delayTime + 120 };
-	// Все специалисты убиты
-	waitUntil { dzn_task_specialistsCount <= dzn_task_specialistsDeadCount };
+	// Все специалисты убиты и не начата дезактивация
+	waitUntil { (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount)
+		&& { !dzn_bioweaponItem getVariable 'dzn_isDeactivating' } };
+		
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
+	
+	// Устанавливаем ГПС маркер
+	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
 };
