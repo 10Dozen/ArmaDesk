@@ -1,24 +1,30 @@
 // Будет запущено только на сервере
 waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
 
-// Условия победы и поражения
+// Пусковая установка
 dzn_task_launchPodDestroyed = false;
+// Деактивация
 dzn_task_deactivated = false;
-dzn_task_destroyed = false;
-dzn_task_extracted = false;
-
+// Отмена деактивации врагами
 dzn_task_deactivationCancelled = false;
 
-// Жиовсть специалистов
-dzn_task_specialistsAreDead = 0;
+// Живость специалистов
+dzn_task_specialistsCount = -1;
+publicVariable "dzn_task_specialistsCount";
+dzn_task_specialistsDeadCount = 0;
 publicVariable "dzn_task_specialistsAreDead";
 
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
-
 dzn_task_deactivationTime = dzn_task_deactivationLimit * 60;
 publicVariable "dzn_task_deactivationTime";
+
+// Деактивация не удалась, ставим ГПС передатчик
+dzn_task_addDestroyObjectTask = true;
+dzn_task_destroyed = false;
+dzn_task_extracted = false;
+
 
 [] spawn {
 	// Проверяем условия для завершения миски
@@ -71,9 +77,6 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Установка на образец ГПС передатчика
+	waitUntil { time > 120 };
 	
-	waitUntil { time > 0 };
-	dzn_s_getAliveSpecialists = [];
-	
-	waitUntil { 
 };
