@@ -18,3 +18,10 @@ publicVariable "dzn_task_deactivationLimit";
 	dzn_task_launchPodDestroyed = true;
 	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
 };
+
+[] spawn {
+	// Образец
+	waitUntil { time > 0 };
+	
+
+};
