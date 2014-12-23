@@ -69,7 +69,7 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	//dzn_bioweaponItem
 	waitUntil { time > dzn_c_delayTime };
 	
-	dzn_bioweaponItem setVariable ["dzn_isDeactivating", false, true];
+	
 	
 	dzn_bioweaponItem addAction [
 		"<t color='#FF852E'>Начать деактивацию образца</t>",
@@ -98,6 +98,22 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	   	"", 
 	    "(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
 	];
+	
+	/*	
+	dzn_bioweaponItem addAction [
+		"<t color='#8AD2FF'>Установить GPS-маркер</t>",
+		{
+			dzn_bioweaponItem setVariable ["dzn_isDeactivating", true, true];
+			hint format ["Деактивация завершится через:\n%1", dzn_task_deactivationTime];
+		}, 
+		"", 
+		6, 
+		true, 
+	   	true,
+	   	"", 
+	    "(_targer distance _this < 3) && { (dzn_bioweaponItem getVariable 'dzn_isDeactivating') }"
+	];
+	*/
 };
 
 // Вешаем действия на Ученых-крученых
@@ -110,7 +126,10 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	_men = entities "CAManBase"; 
 	{
 	    	if (side _x == "CIVILIAN") then {
-		    	_x setVariable ["dzn_asked", false, true];
+	    		if (isNil { _x getVariable "dzn_asked" }) then {
+		    		_x setVariable ["dzn_asked", false, true];
+		    	};
+		    	
 		    	_x addAction ["<t color='#FF852E'>Допросить</t>", {
 		    			if (!isNil { (_this select 1) getVariable "dzn_isSpecialist" } ) then {
 		    				if ( (_this select 0) getVariable "dzn_asked" ) then {
