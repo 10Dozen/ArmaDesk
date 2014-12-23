@@ -1,5 +1,49 @@
 // В playerInit.sqf (запуститься только на игроке)
 
+// Создаем таски
+[] spawn {
+	briefingCreateTasks = {
+		{
+			_task = _x select 0;
+			_taskDesc = _x select 1;
+			_taskTitle = _x select 2;
+			_taskPointDesc = _x select 3;
+			_taskPointPos = _x select 4;
+			
+			call compile format [
+				"dzn_plrTask%1 = player createSimpleTask [_task];
+				dzn_plrTask%1 setSimpleTaskDescription [_taskDesc, _taskTitle, _taskPointDesc];
+				dzn_plrTask%1 setSimpleTaskDestination _taskPointPos;",
+				_forEachIndex
+			];
+		} forEach _this;	
+	};
+	
+	_briefingTasks = [
+		[	
+			"Уничтожить ПУ",
+			"Обнаружить и уничтожить пусковую установку.",
+			"Уничтожить Пусковую установку",
+			"Пусковая установка", getPosASL(dzn_launchPod_1)
+		],
+		[
+			"Обезвредить образец", 
+			"Найти и обезвредить образец биооружия, расположенный на территории аэродрома.",
+			"Обезвердить образец",
+			"Лаборатория", 
+			position(baseLoc)
+		]
+	];
+	
+	_briefingTasks call briefingCreateTasks;
+};
+
+// Вешаем действие на образце
+[] spawn {
+	//dzn_bioweaponItem
+};
+
+// Вешаем действия на Ученых-крученых
 [] spawn {
 	// Ждем когда миска начнется (т.е. все проинициализируются)
 	waitUntil { time > 0 };
@@ -38,39 +82,4 @@
 	} forEach _men;
 };
 
-[] spawn {
-	briefingCreateTasks = {
-		{
-			_task = _x select 0;
-			_taskDesc = _x select 1;
-			_taskTitle = _x select 2;
-			_taskPointDesc = _x select 3;
-			_taskPointPos = _x select 4;
-			
-			call compile format [
-				"dzn_plrTask%1 = player createSimpleTask [_task];
-				dzn_plrTask%1 setSimpleTaskDescription [_taskDesc, _taskTitle, _taskPointDesc];
-				dzn_plrTask%1 setSimpleTaskDestination _taskPointPos;",
-				_forEachIndex
-			];
-		} forEach _this;	
-	};
-	
-	_briefingTasks = [
-		[	
-			"Уничтожить ПУ",
-			"Обнаружить и уничтожить пусковую установку.",
-			"Уничтожить Пусковую установку",
-			"Пусковая установка", getPosASL(dzn_launchPod_1)
-		],
-		[
-			"Обезвредить образец", 
-			"Найти и обезвредить образец биооружия, расположенный на территории аэродрома.",
-			"Обезвердить образец",
-			"Лаборатория", 
-			position(baseLoc)
-		]
-	];
-	
-	_briefingTasks call briefingCreateTasks;
-};
+
