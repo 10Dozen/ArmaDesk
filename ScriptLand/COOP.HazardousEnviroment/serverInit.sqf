@@ -6,6 +6,9 @@ dzn_task_deactivated = false;
 dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
+dzn_task_deactivationCancelled = false;
+
+
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
 publicVariable "dzn_task_deactivationLimit";
@@ -13,6 +16,12 @@ publicVariable "dzn_task_deactivationLimit";
 dzn_task_deactivationTime = dzn_c_desactivationTimeLimit * 60;
 publicVariable "dzn_task_deactivationTime";
 
+[] spawn {
+	// Проверяем условия
+	
+};
+
+// Time to string function
 dzn_fnc_convertToTimestring = {
 	// time
 	private [];
@@ -44,7 +53,7 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
 	_time = 0;
-	while { _time < (dzn_task_deactivationLimit * 60) } then {
+	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } then {
 		sleep 1;
 		_time = _time + 1;
 		
@@ -52,5 +61,10 @@ dzn_fnc_convertToTimestring = {
 		publicVariable "dzn_task_deactivationTime";
 	};
 	
-	[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
+	if !(dzn_task_deactivationCancelled) then {
+		dzn_task_deactivated = true;
+		[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
+	} else {
+		// Отключили враги деактивацию
+	};
 };
