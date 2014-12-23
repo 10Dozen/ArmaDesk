@@ -10,3 +10,19 @@ this setVariable ["dzn_isSpecialist", true, true];
 // Накидать триггеров повторяющихся на ВЕСТ ПРЕСЕНТ 
 // в OnAct:
 {[_x, thisTrigger] spawn dzn_deathZone;} forEach thisList;
+
+
+// Триггеры окончания игры
+theEndWin1
+OnAct: 
+Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win1" }
+OnAct: "end1" call BIS_fnc_endMission;
+
+theEndWin2
+OnAct: 
+Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win2" }
+OnAct: "end2" call BIS_fnc_endMission;
+
+theEndFail
+Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Failed" }
+OnAct: "loser" call BIS_fnc_endMission;
