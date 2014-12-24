@@ -207,8 +207,9 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 		dzn_task_specialistsCount = dzn_task_specialistsCount + 1;
 	};
 	publicVariable "dzn_task_specialistsCount";
-		
-	waitUntil { (!alive player) || !(isPlayer) };
+	private ["_unit"];
+	_unit = player;
+	waitUntil { (!alive _unit) || !(isPlayer _unit) };
 	
 	dzn_task_specialistsDeadCount = dzn_task_specialistsDeadCount + 1;
 	publicVariable "dzn_task_specialistsDeadCount";
