@@ -244,7 +244,7 @@ dzn_deathZone = {
 		hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
 	};
 	
-	if (getPosATL _unit > 10) exitWith {};
+	if ((getPosATL _unit select 2) > 10) exitWith {};
 	if (_unit getVariable "dzn_plagued") exitWith {};
 	_dist = (triggerArea _trg) select 0;
 	
