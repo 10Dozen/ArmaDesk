@@ -163,7 +163,7 @@ dzn_fnc_convertToTimestring = {
 	
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!" ] call dzn_gm_sendMessage;
 	_time = 0;
-	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } then {
+	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } do {
 		sleep 1;
 		_time = _time + 1;
 		dzn_task_deactivationTime = ((dzn_task_deactivationLimit * 60) - _time) call dzn_fnc_convertToTimestring;
@@ -212,7 +212,7 @@ dzn_fnc_convertToTimestring = {
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинает уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим." ] call dzn_gm_sendMessage;
 	private ["_time"];
 	_time = 0;
-	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } then {
+	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } do {
 		sleep 1;
 		_time = _time + 1;
 		dzn_task_gpsPlacingTime = ((dzn_c_gpsPlacingTimeLimit * 60) - _time) call dzn_fnc_convertToTimestring;
