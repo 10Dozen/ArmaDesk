@@ -3,11 +3,12 @@ if !(isNil "dzn_plr_missionStarted") exitWith {};
 dzn_plr_missionStarted = true;
 
 waitUntil { !isNil "dzn_c_delayTime" };
-waitUntil { !isNil "dzn_task_addDestroyObjectTask" };
 waitUntil { !isNil "dzn_task_deactivated"};
 waitUntil { !isNil "dzn_task_deactivationCancelled" };
+waitUntil { !isNil "dzn_task_addDestroyObjectTask" };
 waitUntil { !isNil "dzn_task_gpsPlaced" };
 waitUntil { !isNil "dzn_task_gpsPlacingCancelled" };
+waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 
 // Создаем таски
 [] spawn {
@@ -236,6 +237,7 @@ waitUntil { !isNil "dzn_task_gpsPlacingCancelled" };
 player setVariable ["dzn_plagued", false, false];
 //Смертельная зона
 dzn_deathZone = {
+	private ["_unit", "_trg", "_dist"];
 	_unit = _this select 0;
 	_trg = _this select 1;
 	
