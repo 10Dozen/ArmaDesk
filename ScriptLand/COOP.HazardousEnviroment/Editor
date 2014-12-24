@@ -11,6 +11,8 @@ this setVariable ["dzn_isSpecialist", true, true];
 // в OnAct:
 {[_x, thisTrigger] spawn dzn_deathZone;} forEach thisList;
 
+// Создать "говоруна" в рацию от лица штаба. Имя "говоруна" вписать в Init.sqf в константу dzn_c_radioMan = ""; //"голос" штаба
+
 
 // Триггеры окончания игры
 theEndWin1
