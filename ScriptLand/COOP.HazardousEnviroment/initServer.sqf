@@ -184,7 +184,7 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { time > dzn_c_delayTime + 120 };
 	// Все специалисты убиты и не начата дезактивация
 	waitUntil { (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount)
-		&& { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') };
+		&& { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') } };
 		
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
