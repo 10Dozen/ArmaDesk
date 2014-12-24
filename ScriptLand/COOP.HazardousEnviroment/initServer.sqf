@@ -238,7 +238,7 @@ dzn_fnc_convertToTimestring = {
 		sleep 1;
 		_time = _time + 1;
 		dzn_task_gpsPlacingTime = ((dzn_c_gpsPlacingTimeLimit * 60) - _time) call dzn_fnc_convertToTimestring;
-		publicVariable "dzn_task_deactivationTime";
+		publicVariable "dzn_task_gpsPlacingTime";
 	};
 	
 	if !(dzn_task_gpsPlacingCancelled) then {
