@@ -53,9 +53,19 @@ publicVariable "dzn_task_gpsPlacingCancelled";
 publicVariable "dzn_task_players";
 
 [] spawn {
+	// Сломали и дезактивацию, и гпс маркер
 	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
 	sleep 5;
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!" ] call dzn_gm_sendMessage;
+
+	[] spawn {
+		private ["_anySurvivors"];
+		_anySurvivors = false;
+		{
+			if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { dzn_task_players = true; };	
+		} forEach dzn_task_players;
+		dzn_cond_escape = 1;
+	};
 
 	sleep (dzn_c_strikeDelay);
 	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
@@ -79,6 +89,7 @@ publicVariable "dzn_task_players";
 [] spawn {
 	// Проверяем условия для завершения миски
 	waitUntil { time > dzn_c_delayTime };
+	// ПУ уничтожена
 	waitUntil {dzn_task_launchPodDestroyed};
 	dzn_cond_launchPod = 1;
 	dzn_cond_deactivate = 0;
@@ -96,7 +107,9 @@ publicVariable "dzn_task_players";
 		dzn_missionResult = "Win1";
 	} else {
 		dzn_cond_gps = 1;
+		// Рактеы пошли
 		waitUntil { dzn_task_destroyed };
+		// Ракеты пришли и пацаны должны были убижать
 		waitUntil { dzn_task_extracted };
 		if (dzn_task_players) then {
 			sleep 5;
@@ -130,6 +143,7 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Уничтожение ПУ
 	waitUntil { time > dzn_c_delayTime };
+	// Уничтожена
 	waitUntil { !alive dzn_launchPod_1 };
 	
 	sleep 3;
@@ -143,6 +157,7 @@ dzn_fnc_convertToTimestring = {
 	// Дезактивация Образца
 	private ["_time"];
 	waitUntil { time > dzn_c_delayTime };
+	// Начали дезактивацию
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
 	// Проверка набигания врагов с целью сломать дезактивацию
@@ -157,6 +172,7 @@ dzn_fnc_convertToTimestring = {
 			""
 		];
 		
+		// Враги таки сломали дезактивацию
 		waitUntil { dzn_task_deactivationCancelled };
 		dzn_bioweaponItem getVariable ['dzn_isDeactivating',false,true];
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
@@ -192,7 +208,7 @@ dzn_fnc_convertToTimestring = {
 	
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!" ] call dzn_gm_sendMessage;
 	
-	// Устанавливаем ГПС маркер
+	// Начата установка ГПС маркера
 	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
 	// Проверка набигания врагов с целью сломать GPS-маркер
@@ -206,6 +222,7 @@ dzn_fnc_convertToTimestring = {
 			"dzn_task_gpsPlacingCancelled = true; publicVariable 'dzn_task_gpsPlacingCancelled';",
 			""
 		];
+		// Враги таки набижали
 		waitUntil { dzn_task_gpsPlacingCancelled };
 		dzn_bioweaponItem getVariable ['dzn_placingGPS',false,true];
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
@@ -242,6 +259,7 @@ dzn_fnc_convertToTimestring = {
 		
 		dzn_task_extracted = true;
 		[] spawn {
+			private ["_anySurvivors"];
 			_anySurvivors = false;
 			{
 				if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { dzn_task_players = true; };	
@@ -252,5 +270,3 @@ dzn_fnc_convertToTimestring = {
 		// Отключили враги деактивацию
 	};
 };
-
-
