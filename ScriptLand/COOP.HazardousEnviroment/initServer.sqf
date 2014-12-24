@@ -165,7 +165,7 @@ dzn_fnc_convertToTimestring = {
 	[] spawn {
 		private ["_trg"];
 		_trg = createTrigger ["EmptyDetector",getPosASL(dzn_bioweaponItem)];
-		_trg setTriggerArea [20,20,0,false];
+		_trg setTriggerArea [6,6,0,false];
 		_trg setTriggerActivation ["EAST","PRESENT",false];
 		_trg setTriggerStatements [
 			"this && (dzn_bioweaponItem getVariable 'dzn_isDeactivating') && !dzn_task_deactivated && !dzn_task_deactivationCancelled", 
@@ -201,8 +201,10 @@ dzn_fnc_convertToTimestring = {
 	// Установка на образец ГПС передатчика
 	waitUntil { time > dzn_c_delayTime + 120 };
 	// Все специалисты убиты и не начата дезактивация
-	waitUntil { (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount)
-		&& { !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') } };
+	waitUntil { 
+		( (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount) && !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') )
+		|| ( dzn_task_deactivationCancelled )
+	};
 		
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
