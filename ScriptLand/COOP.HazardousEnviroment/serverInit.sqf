@@ -207,6 +207,13 @@ dzn_fnc_convertToTimestring = {
 		sleep (dzn_c_strikeDelay);
 		// Тут авиаудар
 		
+		for "_i" from 0 to 4 do {
+			private ["_strikePos", "_mssl"];
+			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor 30) - random(floor 30), +100];
+			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
+			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
+			_mssl setVectorUp [0,7,7];
+		}
 		
 		dzn_task_extracted = true;
 		[] spawn {
