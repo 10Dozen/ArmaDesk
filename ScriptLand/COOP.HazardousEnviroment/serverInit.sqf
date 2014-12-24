@@ -145,14 +145,13 @@ dzn_fnc_convertToTimestring = {
 		_trg setTriggerArea [20,20,0,false];
 		_trg setTriggerActivation ["EAST","PRESENT",false];
 		_trg setTriggerStatements [
-			"this", 
+			"this && (dzn_bioweaponItem getVariable 'dzn_isDeactivating') && !dzn_task_deactivated && !dzn_task_deactivationCancelled", 
 			"dzn_task_deactivationCancelled = true; publicVariable 'dzn_task_deactivationCancelled';",
 			""
 		];
 		
+		waitUntil { dzn_task_deactivationCancelled };
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
-	
-	
 	};
 	
 	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!" ] call dzn_gm_sendMessage;
@@ -195,11 +194,11 @@ dzn_fnc_convertToTimestring = {
 		_trg setTriggerArea [20,20,0,false];
 		_trg setTriggerActivation ["EAST","PRESENT",false];
 		_trg setTriggerStatements [
-			"this", 
+			"this && !(dzn_bioweaponItem getVariable 'dzn_placingGPS') && !dzn_task_gpsPlacingCancelled && !dzn_task_destroyed", 
 			"dzn_task_gpsPlacingCancelled = true; publicVariable 'dzn_task_gpsPlacingCancelled';",
 			""
 		];
-		
+		waitUntil { dzn_task_gpsPlacingCancelled };
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
 	};
 	
@@ -219,8 +218,8 @@ dzn_fnc_convertToTimestring = {
 		[ "dzn_plrTask2", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!" ] call dzn_gm_sendMessage;
 		
+		dzn_task_destroyed = true;
 		sleep (dzn_c_strikeDelay);
-		
 		// Тут авиаудар
 		for "_i" from 0 to random(floor 6) do {
 			private ["_strikePos", "_mssl"];
@@ -231,7 +230,6 @@ dzn_fnc_convertToTimestring = {
 			
 			sleep 3;
 		}
-		dzn_task_destroyed = true;
 		
 		dzn_task_extracted = true;
 		[] spawn {
