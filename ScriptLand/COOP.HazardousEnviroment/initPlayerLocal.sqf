@@ -252,6 +252,7 @@ dzn_deathZone = {
 	if (_unit distance _trg < _dist) exitWith {
 		player setVariable ["dzn_plagued", true, false];
 		_unit spawn {
+			if !(local _this) exitWith {};
 			hint "Химический детектор завис на максимальном показателе.\nКажется, что это конец.";
 			sleep 10;
 			_this setDamage ((damage _this) + 0.8);
