@@ -9,7 +9,7 @@ dzn_client_sendMessage = {
 		OUTPUT: True
 	*/	
 	if ( (_this select 1) == 0 ) then {
-		(_this select 0) sideChat (	_this select 2);
+		(_this select 0) sideChat (_this select 2);
 	};
 };
 
