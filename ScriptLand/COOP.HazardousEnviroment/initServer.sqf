@@ -27,12 +27,9 @@ dzn_task_gpsPlacingTime = str(dzn_c_gpsPlacingTimeLimit * 60);
 
 // Живость специалистов
 dzn_task_specialistsCount = -1;
-publicVariable "dzn_task_specialistsCount";
 dzn_task_specialistsDeadCount = 0;
-publicVariable "dzn_task_specialistsAreDead";
-
 dzn_task_players = [];
-publicVariable "dzn_task_players";
+
 
 // Деактивация не удалась, ставим ГПС передатчик
 dzn_task_addDestroyObjectTask = false;
@@ -44,13 +41,16 @@ dzn_task_extracted = false;
 // dzn_task_runaway = false;
 
 //Публикуем переменные
-publicVariable "dzn_task_addDestroyObjectTask";
 publicVariable "dzn_task_deactivated";
 publicVariable "dzn_task_deactivationCancelled";
-publicVariable "dzn_task_gpsPlaced";
-publicVariable "dzn_task_gpsPlacingCancelled";
 publicVariable "dzn_task_deactivationTime";
 publicVariable "dzn_task_deactivationLimit";
+publicVariable "dzn_task_specialistsCount";
+publicVariable "dzn_task_specialistsAreDead";
+publicVariable "dzn_task_addDestroyObjectTask";
+publicVariable "dzn_task_gpsPlaced";
+publicVariable "dzn_task_gpsPlacingCancelled";
+publicVariable "dzn_task_players";
 
 [] spawn {
 	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
