@@ -3,6 +3,11 @@ if !(isNil "dzn_plr_missionStarted") exitWith {};
 dzn_plr_missionStarted = true;
 
 waitUntil { !isNil "dzn_c_delayTime" };
+waitUntil { !isNil "dzn_task_addDestroyObjectTask" };
+waitUntil { !isNil "dzn_task_deactivated"};
+waitUntil { !isNil "dzn_task_deactivationCancelled" };
+waitUntil { !isNil "dzn_task_gpsPlaced" };
+waitUntil { !isNil "dzn_task_gpsPlacingCancelled" };
 
 // Создаем таски
 [] spawn {
@@ -69,6 +74,8 @@ waitUntil { !isNil "dzn_c_delayTime" };
 [] spawn {
 	//dzn_bioweaponItem
 	waitUntil { time > dzn_c_delayTime };
+
+	
 	
 	dzn_bioweaponItem addAction [
 		"<t color='#FF852E'>Начать деактивацию образца</t>",
@@ -139,7 +146,6 @@ waitUntil { !isNil "dzn_c_delayTime" };
 	   	"", 
 	   	"(_target distance _this < 3) && { 
 	   		(dzn_bioweaponItem getVariable 'dzn_placingGPS') 
-	   		&& (dzn_task_addDestroyObjectTask) 
 	   		&& dzn_task_addDestroyObjectTask
 	   		&& !dzn_task_gpsPlaced
 	   		&& !dzn_task_gpsPlacingCancelled
