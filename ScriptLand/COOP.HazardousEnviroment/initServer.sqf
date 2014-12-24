@@ -236,7 +236,7 @@ dzn_fnc_convertToTimestring = {
 			_mssl setVectorUp [0,7,7];
 			
 			sleep 3;
-		}
+		};
 		
 		dzn_task_extracted = true;
 		[] spawn {
