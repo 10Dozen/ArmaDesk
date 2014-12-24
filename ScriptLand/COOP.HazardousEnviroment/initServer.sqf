@@ -18,9 +18,7 @@ dzn_task_deactivated = false;
 
 // Максимум времени который нужно чтобы деактивировать образец
 dzn_task_deactivationLimit = dzn_c_desactivationTimeLimit;
-publicVariable "dzn_task_deactivationLimit";
 dzn_task_deactivationTime = str(dzn_task_deactivationLimit * 60);
-publicVariable "dzn_task_deactivationTime";
 
 //GPS Маркер
 dzn_bioweaponItem setVariable ["dzn_placingGPS", false, true];
@@ -34,7 +32,7 @@ dzn_task_specialistsDeadCount = 0;
 publicVariable "dzn_task_specialistsAreDead";
 
 dzn_task_players = [];
-publicVariable "publicVariable";
+publicVariable "dzn_task_players";
 
 // Деактивация не удалась, ставим ГПС передатчик
 dzn_task_addDestroyObjectTask = false;
@@ -43,7 +41,16 @@ dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
 // Убегание после бомбежки
-dzn_task_runaway = false;
+// dzn_task_runaway = false;
+
+//Публикуем переменные
+publicVariable "dzn_task_addDestroyObjectTask";
+publicVariable "dzn_task_deactivated";
+publicVariable "dzn_task_deactivationCancelled";
+publicVariable "dzn_task_gpsPlaced";
+publicVariable "dzn_task_gpsPlacingCancelled";
+publicVariable "dzn_task_deactivationTime";
+publicVariable "dzn_task_deactivationLimit";
 
 [] spawn {
 	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
