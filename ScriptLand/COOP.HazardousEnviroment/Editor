@@ -1,30 +1,33 @@
-// Вставить в init юнитов-специалистов
+A // Вставить в init юнитов-специалистов
 this setVariable ["dzn_isSpecialist", true, true];
 
-// Ученых сделать CIVILIAN в белых комбезах.
+B // Ученых сделать CIVILIAN в белых комбезах.
 
-// Имя "объекта" = dzn_bioweaponItem
-// Имя "Пусковой установки" = dzn_launchPod_1
+C // Имя "объекта" = dzn_bioweaponItem
+D // Имя "Пусковой установки" = dzn_launchPod_1
 
-// "Зараженная зона"?
+E // "Зараженная зона"?
 // Накидать триггеров повторяющихся на ВЕСТ ПРЕСЕНТ 
 // в OnAct:
 {[_x, thisTrigger] spawn dzn_deathZone;} forEach thisList;
 
-// Создать "говоруна" в рацию от лица штаба. Имя "говоруна" вписать в Init.sqf в константу dzn_c_radioMan = ""; //"голос" штаба
+F // Создать "говоруна" в рацию от лица штаба. Имя "говоруна" вписать в Init.sqf в константу dzn_c_radioMan = ""; //"голос" штаба
 
 
-// Триггеры окончания игры
+G // Триггеры окончания игры
 theEndWin1
 OnAct: 
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win1" }
-OnAct: "end1" call BIS_fnc_endMission;
+OnAct: [] spawn { sleep 18; "end1" call BIS_fnc_endMission; }
 
 theEndWin2
 OnAct: 
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win2" }
-OnAct: "end2" call BIS_fnc_endMission;
+OnAct:  [] spawn { sleep 18; "end2" call BIS_fnc_endMission;  }
 
 theEndFail
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Failed" }
-OnAct: "loser" call BIS_fnc_endMission;
+OnAct:  [] spawn { sleep 18; "loser" call BIS_fnc_endMission;  }
+
+// Для красоты, можно кстати на них музыук повесить. Тогда в Эффектах выбери музыкальный трек, а в OnAct заключи строки в споун, типа так: [] spawn { sleep 18; "loser" call BIS_fnc_endMission; };
+// Sleep настрой сам
