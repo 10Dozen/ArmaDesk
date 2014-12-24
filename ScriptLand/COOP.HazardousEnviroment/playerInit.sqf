@@ -231,7 +231,10 @@ player setVariable ["dzn_plagued", false, false];
 dzn_deathZone = {
 	_unit = _this select 0;
 	_trg = _this select 1;
-	hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
+	
+	if !(_unit getVariable "dzn_plagued") then {
+		hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
+	};
 	
 	if (getPosATL _unit > 10) exitWith {};
 	if (_unit getVariable "dzn_plagued") exitWith {};
