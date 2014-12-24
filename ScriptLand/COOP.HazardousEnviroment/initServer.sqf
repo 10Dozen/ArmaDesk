@@ -158,6 +158,7 @@ dzn_fnc_convertToTimestring = {
 		];
 		
 		waitUntil { dzn_task_deactivationCancelled };
+		dzn_bioweaponItem getVariable ['dzn_isDeactivating',false,true];
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
 	};
 	
@@ -206,6 +207,7 @@ dzn_fnc_convertToTimestring = {
 			""
 		];
 		waitUntil { dzn_task_gpsPlacingCancelled };
+		dzn_bioweaponItem getVariable ['dzn_placingGPS',false,true];
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
 	};
 	
