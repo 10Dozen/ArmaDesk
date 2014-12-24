@@ -69,7 +69,7 @@ publicVariable "dzn_task_players";
 			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
 			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
 			_mssl setVectorUp [0,7,7];
-		}
+		};
 		sleep 4;
 	};
 	
