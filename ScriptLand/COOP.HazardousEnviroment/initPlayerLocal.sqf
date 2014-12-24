@@ -164,7 +164,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	// вернет всех человеков на карте - ученым лучше стоять простыми тушками, а не в машинах.
 	_men = entities "CAManBase"; 
 	{
-	    	if (side _x == "CIVILIAN") then {
+	    	if (side _x == civilian) then {
 	    		if (isNil { _x getVariable "dzn_asked" }) then {
 		    		_x setVariable ["dzn_asked", false, true];
 		    	};
