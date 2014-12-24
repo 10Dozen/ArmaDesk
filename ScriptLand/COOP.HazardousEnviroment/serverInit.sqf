@@ -201,19 +201,22 @@ dzn_fnc_convertToTimestring = {
 	if !(dzn_task_gpsPlacingCancelled) then {
 		dzn_task_gpsPlaced = true;
 		publicVariable "dzn_task_gpsPlaced";
-		[ "dzn_plrTask3", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
+		[ "dzn_plrTask2", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!" ] call dzn_gm_sendMessage;
 		
 		sleep (dzn_c_strikeDelay);
-		// Тут авиаудар
 		
-		for "_i" from 0 to 4 do {
+		// Тут авиаудар
+		for "_i" from 0 to random(floor 6) do {
 			private ["_strikePos", "_mssl"];
-			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor 30) - random(floor 30), +100];
+			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (5 * _i)) - random(floor (5 * _i)), +100];
 			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
 			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
 			_mssl setVectorUp [0,7,7];
+			
+			sleep 3;
 		}
+		dzn_task_destroyed = true;
 		
 		dzn_task_extracted = true;
 		[] spawn {
