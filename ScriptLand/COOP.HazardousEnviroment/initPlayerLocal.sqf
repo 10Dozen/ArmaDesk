@@ -32,14 +32,15 @@ waitUntil { !isNil "dzn_c_delayTime" };
 			"Уничтожить ПУ",
 			"Обнаружить и уничтожить пусковую установку.",
 			"Уничтожить Пусковую установку",
-			"Пусковая установка", getPosASL(dzn_launchPod_1)
+			"Пусковая установка", 
+			dzn_launchPod_1 modelToWorld [(random 100 - random 100), (random 100 - random 100), 0]
 		],
 		[
 			"Обезвредить образец", 
 			"Найти и обезвредить образец биооружия, расположенный на территории аэродрома.",
 			"Обезвердить образец",
 			"Лаборатория", 
-			position(baseLoc)
+			dzn_bioweaponItem modelToWorld [(random 100 - random 100), 15 + random ( 20), 0]
 		]
 	];
 	
