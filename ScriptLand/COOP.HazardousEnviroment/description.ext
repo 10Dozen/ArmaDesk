@@ -1,0 +1,24 @@
+// Добавить
+
+class CfgDebriefing
+{  
+	class End1
+	{
+		title = "Биооружие дезактивированл";
+		subtitle = "Acceptance Test ended with positive result";
+		description = "All tasks have been completed. The new combat system has proven its excellent and the U.S. military officials were satisfied.";
+	};
+	class End2
+	{
+		title = "Биооружие уничтожено";
+		subtitle = "Acceptance Test ended with positive result";
+		description = "All tasks have been completed. The new combat system has proven its excellent and the U.S. military officials were satisfied.";
+	};
+	class loser
+	{
+		title = "Неудача";
+		subtitle = "Acceptance Test ended with negative result";
+		description = "All units have been wiped out. U.S. military officials were extremely unsatisfied.";
+	};
+	
+};
