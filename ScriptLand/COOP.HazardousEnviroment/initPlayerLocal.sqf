@@ -223,9 +223,9 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	private ["_trg"];
 	_trg = createTrigger ["EmptyDetector", [3605,3642,0]];
 	_trg setTriggerArea [1200, 800, -139.84, false];
-	_trg setTriggerActivation ["WEST","PRESENT",false];
+	_trg setTriggerActivation ["WEST","NOT PRESENT",true];
 	_trg setTriggerStatements [
-		"this && (player in thisList)",
+		"this && !(player in thisList)",
 		"player setVariable ['dzn_playerSurvived', true, true];",
 		""
 	];
