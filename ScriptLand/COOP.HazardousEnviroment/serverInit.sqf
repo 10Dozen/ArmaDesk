@@ -48,9 +48,29 @@ dzn_task_runaway = false;
 [] spawn {
 	// Проверяем условия для завершения миски
 	waitUntil { time > dzn_c_delayTime };
+	waitUntil {dzn_task_launchPodDestroyed};
+	dzn_cond_launchPod = 1;
+	dzn_cond_deactivate = 0;
+	dzn_cond_gps = 0;
+	dzn_cond_escape = 0;
 	
-	waitUntil {};
-	
+	waitUntil { dzn_task_deactivated || dzn_task_gpsPlaced };
+	if ( dzn_task_deactivated ) then {
+		dzn_cond_deactivate = 1;
+		sleep 15;
+		dzn_missionResult = "Win1";
+	} else {
+		dzn_cond_gps = 1;
+		waitUntil { dzn_task_destroyed };
+		waitUntil { dzn_task_extracted };
+		if (dzn_task_players) then {
+			sleep 15;
+			dzn_missionResult = "Win2";
+		} else {
+			sleep 15;
+			dzn_missionResult = "Failed";
+		};
+	};
 };
 
 // Time to string function
@@ -168,6 +188,16 @@ dzn_fnc_convertToTimestring = {
 		
 		sleep (dzn_c_strikeDelay);
 		// Тут авиаудар
+		
+		
+		dzn_task_extracted = true;
+		[] spawn {
+			_anySurvivors = false;
+			{
+				if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { dzn_task_players = true; };	
+			} forEach dzn_task_players;
+			dzn_cond_escape = 1;
+		};
 	} else {
 		// Отключили враги деактивацию
 	};
