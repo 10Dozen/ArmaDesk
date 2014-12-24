@@ -46,6 +46,15 @@ dzn_task_extracted = false;
 dzn_task_runaway = false;
 
 [] spawn {
+	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
+	sleep 5;
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!" ] call dzn_gm_sendMessage;
+
+	sleep 25;
+	dzn_missionResult = "Failed";
+};
+
+[] spawn {
 	// Проверяем условия для завершения миски
 	waitUntil { time > dzn_c_delayTime };
 	waitUntil {dzn_task_launchPodDestroyed};
@@ -57,6 +66,10 @@ dzn_task_runaway = false;
 	waitUntil { dzn_task_deactivated || dzn_task_gpsPlaced };
 	if ( dzn_task_deactivated ) then {
 		dzn_cond_deactivate = 1;
+	
+		sleep 5;
+		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Это успех! Все задачи выполнены, поздравляю!" ] call dzn_gm_sendMessage;
+
 		sleep 15;
 		dzn_missionResult = "Win1";
 	} else {
@@ -64,9 +77,14 @@ dzn_task_runaway = false;
 		waitUntil { dzn_task_destroyed };
 		waitUntil { dzn_task_extracted };
 		if (dzn_task_players) then {
+			sleep 5;
+			[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Цель уничтожена! Повторяю, объект уничтожен! Всем выжившим - возвращайтесь на борт!" ] call dzn_gm_sendMessage;
 			sleep 15;
 			dzn_missionResult = "Win2";
 		} else {
+			sleep 5;
+			[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Кто-нибудь меня слышит? Всем попавшим в облако заражения - запрещено покидать пределы острова! Остров под карантином!" ] call dzn_gm_sendMessage;
+
 			sleep 15;
 			dzn_missionResult = "Failed";
 		};
