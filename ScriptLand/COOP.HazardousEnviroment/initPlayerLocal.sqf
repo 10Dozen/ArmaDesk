@@ -75,8 +75,6 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 [] spawn {
 	//dzn_bioweaponItem
 	waitUntil { time > dzn_c_delayTime };
-
-	
 	
 	dzn_bioweaponItem addAction [
 		"<t color='#FF852E'>Начать деактивацию образца</t>",
