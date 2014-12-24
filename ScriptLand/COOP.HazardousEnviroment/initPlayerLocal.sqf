@@ -171,7 +171,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 		    	
 		    	_x addAction ["<t color='#FF852E'>Допросить</t>", {
 		    			if (!isNil { (_this select 1) getVariable "dzn_isSpecialist" } ) then {
-		    				if ( (_this select 0) getVariable "dzn_asked" ) then {
+		    				if !( (_this select 0) getVariable "dzn_asked" ) then {
 		    					hint "Ученый объяснет Вам как дезактивировать образец";
 		    					dzn_task_deactivationLimit = dzn_task_deactivationLimit - dzn_c_desactivationTimeReducer;
 								publicVariable "dzn_task_deactivationLimit";
