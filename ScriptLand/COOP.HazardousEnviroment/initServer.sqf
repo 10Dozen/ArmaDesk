@@ -46,6 +46,7 @@ publicVariable "dzn_task_deactivationCancelled";
 publicVariable "dzn_task_deactivationTime";
 publicVariable "dzn_task_deactivationLimit";
 publicVariable "dzn_task_specialistsCount";
+publicVariable "dzn_task_specialistsDeadCount";
 publicVariable "dzn_task_specialistsAreDead";
 publicVariable "dzn_task_addDestroyObjectTask";
 publicVariable "dzn_task_gpsPlaced";
