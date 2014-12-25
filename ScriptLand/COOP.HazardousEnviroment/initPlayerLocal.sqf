@@ -240,10 +240,21 @@ dzn_deathZone = {
 	_unit = _this select 0;
 	_trg = _this select 1;
 	
+	// Если в зоне не человечки, а техника то вызываем функцию для экипажа и выходим
+	if !(typeOf _unit == "CAManBase") exitWith {
+		private ["_crew"];
+		_crew = crew _unit;
+		{
+			[_x, _trg] spawn dzn_deathZone;
+		} forEach _crew;
+	};
+	
+	// Если пацан не заражен (и у него все еще работает химдетектор), то выводим сообщение
 	if !(_unit getVariable "dzn_plagued") then {
 		hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
 	};
 	
+	// 
 	if ((getPosATL _unit select 2) > 10) exitWith {};
 	if (_unit getVariable "dzn_plagued") exitWith {};
 	_dist = (triggerArea _trg) select 0;
