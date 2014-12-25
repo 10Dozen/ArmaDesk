@@ -56,7 +56,7 @@ publicVariable "dzn_task_players";
 [] spawn {
 	// Сломали и дезактивацию, и гпс маркер
 	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
-	sleep 5
+	sleep 5;
 	
 	// Радио сообщение
 	dzn_msg_destroyAll = true; publicVariable "dzn_msg_destroyAll";
