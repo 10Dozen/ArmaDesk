@@ -253,10 +253,9 @@ dzn_deathZone = {
 	if !(_unit getVariable "dzn_plagued") then {
 		hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
 	};
-	
-	// 
-	if ((getPosATL _unit select 2) > 10) exitWith {};
-	if (_unit getVariable "dzn_plagued") exitWith {};
+
+	if ((getPosATL _unit select 2) > dzn_c_plagueZoneHeight) exitWith {};	// Проверяем, что товарищ не слишком высоко
+	if (_unit getVariable "dzn_plagued") exitWith {};	// Проверяем, что товарищ еще не заражен
 	_dist = (triggerArea _trg) select 0;
 	
 	sleep 10;
