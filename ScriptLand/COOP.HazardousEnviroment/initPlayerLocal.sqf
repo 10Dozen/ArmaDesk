@@ -251,7 +251,7 @@ dzn_deathZone = {
 	
 	// Если пацан не заражен (и у него все еще работает химдетектор), то выводим сообщение
 	if !(_unit getVariable "dzn_plagued") then {
-		hint "Химический детектор показывает резкое повышение опасных материалов!\n\nПокиньте опасную зону!";
+		hint parseText "Химический детектор показывает резкое повышение опасных материалов!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
 	};
 
 	if ((getPosATL _unit select 2) > dzn_c_plagueZoneHeight) exitWith {};	// Проверяем, что товарищ не слишком высоко
@@ -263,7 +263,7 @@ dzn_deathZone = {
 		_unit setVariable ["dzn_plagued", true, false];
 		_unit spawn {
 			if !(local _this) exitWith {};
-			hint "Химический детектор завис на максимальном показателе.\nКажется, что это конец.";
+			hint parseText "<t color='#ff0000'>Химический детектор завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
 			sleep 10;
 			_this setDamage ((damage _this) + 0.8);
 			sleep 5;
