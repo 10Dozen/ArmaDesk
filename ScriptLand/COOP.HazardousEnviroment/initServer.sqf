@@ -65,9 +65,9 @@ publicVariable "dzn_task_players";
 		private ["_anySurvivors"];
 		_anySurvivors = false;
 		{
-			if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { dzn_task_players = true; };	
+			if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { _anySurvivors = true; };	
 		} forEach dzn_task_players;
-		dzn_cond_escape = 1;
+		dzn_cond_escape = if (_anySurvivors) then { 1 } else { -1 };
 	};
 
 	sleep (dzn_c_strikeDelay);
@@ -115,7 +115,7 @@ publicVariable "dzn_task_players";
 		waitUntil { dzn_task_destroyed };
 		// Ракеты пришли и пацаны должны были убижать
 		waitUntil { dzn_task_extracted };
-		if (dzn_task_players) then {
+		if (dzn_cond_escape > 0) then {
 			sleep 5;
 			// Радио сообщение
 			dzn_msg_missionWin2 = true; publicVariable "dzn_msg_missionWin2";
@@ -283,9 +283,10 @@ dzn_fnc_convertToTimestring = {
 			private ["_anySurvivors"];
 			_anySurvivors = false;
 			{
-				if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { dzn_task_players = true; };	
+				if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { _anySurvivors = true; };	
 			} forEach dzn_task_players;
-			dzn_cond_escape = 1;
+			
+			dzn_cond_escape = if (_anySurvivors) then { 1 } else { -1 };
 		};
 	} else {
 		// Отключили враги деактивацию
