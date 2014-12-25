@@ -300,7 +300,7 @@ dzn_deathZone = {
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!";
 };
 [] spawn {
-	waitUntil {(!isNil "dzn_msg_bioDeactivationStarted"};
+	waitUntil {!isNil "dzn_msg_bioDeactivationStarted"};
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!";
 };
 [] spawn {
