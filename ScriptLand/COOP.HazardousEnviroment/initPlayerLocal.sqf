@@ -296,7 +296,7 @@ dzn_deathZone = {
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!";
 };
 [] spawn {
-	waitUntil (!isNil "dzn_msg_bioDeactivationCancelled");
+	waitUntil (!isNil "dzn_msg_bioDeactivationFailed");
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!";
 };
 [] spawn {
