@@ -7,5 +7,6 @@ dzn_c_delayTime = 2;  // Дефолтное значения для waitUntil { 
 dzn_c_specialistsDelayTime = 120; // Дефолтное значение перед проверкой наличия специалистов в секундах
 dzn_c_strikeDelay = 3 * 60; //Дефолтное значение для удара по объекту
 dzn_c_radioMan = [West, 'HQ']; //"голос" штаба
+dzn_c_plagueZoneHeight = 25; // Высота воздействия "зараженной зоны"
 
 [] execVM "dzn_commonFnc.sqf";
