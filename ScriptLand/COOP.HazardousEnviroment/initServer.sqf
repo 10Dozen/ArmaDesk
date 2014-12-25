@@ -56,8 +56,10 @@ publicVariable "dzn_task_players";
 [] spawn {
 	// Сломали и дезактивацию, и гпс маркер
 	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
-	sleep 5;
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!" ] call dzn_gm_sendMessage;
+	sleep 5
+	
+	// Радио сообщение
+	dzn_msg_destroyAll = true; publicVariable "dzn_msg_destroyAll";
 
 	[] spawn {
 		private ["_anySurvivors"];
@@ -71,7 +73,7 @@ publicVariable "dzn_task_players";
 	sleep (dzn_c_strikeDelay);
 	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
 	private ["_i","_j","_mssl","_strikePos"];
-	for "_i" from 0 to 50 do {
+	for "_i" from 0 to 250 do {
 		_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
 		for "_j" from 0 to 1 do {
 			if (!isNil {_mssl}) then {
@@ -102,8 +104,9 @@ publicVariable "dzn_task_players";
 		dzn_cond_deactivate = 1;
 	
 		sleep 5;
-		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Это успех! Все задачи выполнены, поздравляю!" ] call dzn_gm_sendMessage;
-
+		// Радио сообщение
+		dzn_msg_missionWin = true; publicVariable "dzn_msg_missionWin";
+		
 		sleep 15;
 		dzn_missionResult = "Win1";
 	} else {
@@ -114,12 +117,15 @@ publicVariable "dzn_task_players";
 		waitUntil { dzn_task_extracted };
 		if (dzn_task_players) then {
 			sleep 5;
-			[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Цель уничтожена! Повторяю, объект уничтожен! Всем выжившим - возвращайтесь на борт!" ] call dzn_gm_sendMessage;
+			// Радио сообщение
+			dzn_msg_missionWin2 = true; publicVariable "dzn_msg_missionWin2";
+			
 			sleep 15;
 			dzn_missionResult = "Win2";
 		} else {
 			sleep 5;
-			[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Кто-нибудь меня слышит? Всем попавшим в облако заражения - запрещено покидать пределы острова! Остров под карантином!" ] call dzn_gm_sendMessage;
+			// Радио сообщение
+			dzn_msg_missionFailed = true; publicVariable "dzn_msg_missionFailed";
 
 			sleep 15;
 			dzn_missionResult = "Failed";
@@ -151,7 +157,8 @@ dzn_fnc_convertToTimestring = {
 	
 	dzn_task_launchPodDestroyed = true;
 	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!" ] call dzn_gm_sendMessage;
+	// Радио сообщение
+	dzn_msg_launchPodDestroyed = true; publicVariable "dzn_msg_launchPodDestroyed";
 };
 
 [] spawn {
@@ -176,10 +183,13 @@ dzn_fnc_convertToTimestring = {
 		// Враги таки сломали дезактивацию
 		waitUntil { dzn_task_deactivationCancelled };
 		dzn_bioweaponItem getVariable ['dzn_isDeactivating',false,true];
-		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!" ] call dzn_gm_sendMessage;
+		// Радио сообщение
+		dzn_msg_bioDeactivationCancelled = true; publicVariable "dzn_msg_bioDeactivationCancelled";
 	};
 	
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!" ] call dzn_gm_sendMessage;
+	// Радио сообщение
+	dzn_msg_bioDeactivationStarted = true; publicVariable "dzn_msg_bioDeactivationStarted";
+	
 	_time = 0;
 	while { (_time < (dzn_task_deactivationLimit * 60)) && { !dzn_task_deactivationCancelled } } do {
 		sleep 1;
@@ -191,7 +201,8 @@ dzn_fnc_convertToTimestring = {
 	if !(dzn_task_deactivationCancelled) then {
 		dzn_task_deactivated = true;
 		[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
-		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Отлично, систем полностью под нашим контролем. Образец больше не представляет опасности." ] call dzn_gm_sendMessage;
+		// Радио сообщение
+		dzn_msg_bioDeactivationSuccessful = true; publicVariable "dzn_msg_bioDeactivationSuccessful";
 	} else {
 		// Отключили враги деактивацию
 	};
@@ -209,8 +220,9 @@ dzn_fnc_convertToTimestring = {
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
 	
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!" ] call dzn_gm_sendMessage;
-	
+	// Радио сообщение
+	dzn_msg_gpsTaskAdded = true; publicVariable "dzn_msg_bioDeactivationSuccessful";
+
 	// Начата установка ГПС маркера
 	waitUntil { dzn_bioweaponItem getVariable "dzn_placingGPS" };
 	
@@ -228,10 +240,14 @@ dzn_fnc_convertToTimestring = {
 		// Враги таки набижали
 		waitUntil { dzn_task_gpsPlacingCancelled };
 		dzn_bioweaponItem getVariable ['dzn_placingGPS',false,true];
-		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
+		
+		// Радио сообщение
+		dzn_msg_gpsTaskFailed = true; publicVariable "dzn_msg_gpsTaskFailed";
 	};
-	
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинаем уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим." ] call dzn_gm_sendMessage;
+
+	// Радио сообщение
+	dzn_msg_gpsTaskStarted = true; publicVariable "dzn_msg_gpsTaskStarted";
+
 	private ["_time"];
 	_time = 0;
 	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } do {
@@ -245,8 +261,10 @@ dzn_fnc_convertToTimestring = {
 		dzn_task_gpsPlaced = true;
 		publicVariable "dzn_task_gpsPlaced";
 		[ "dzn_plrTask2", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
-		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!" ] call dzn_gm_sendMessage;
 		
+		// Радио сообщение
+		dzn_msg_gpsTaskSuccessful = true; publicVariable "dzn_msg_gpsTaskSuccessful";
+
 		dzn_task_destroyed = true;
 		sleep (dzn_c_strikeDelay);
 		// Тут авиаудар
