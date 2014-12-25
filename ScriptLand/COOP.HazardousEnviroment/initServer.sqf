@@ -268,6 +268,7 @@ dzn_fnc_convertToTimestring = {
 		dzn_task_destroyed = true;
 		sleep (dzn_c_strikeDelay);
 		// Тут авиаудар
+		[] spawn { sleep 10; dzn_bioweaponItem hideObjectGlobal true; };
 		for "_i" from 0 to (6 + random(floor 5)) do {
 			private ["_strikePos", "_mssl"];
 			_strikePos = dzn_bioweaponItem modelToWorld [-80, random(floor (8 * _i)) - random(floor (8 * _i))+180 , +200]; 
@@ -277,6 +278,7 @@ dzn_fnc_convertToTimestring = {
 			
 			sleep 3;
 		};
+		deleteVehicle dzn_bioweaponItem;
 		
 		dzn_task_extracted = true;
 		[] spawn {
