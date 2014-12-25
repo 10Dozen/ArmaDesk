@@ -241,7 +241,7 @@ dzn_deathZone = {
 	_trg = _this select 1;
 	
 	// Если в зоне не человечки, а техника то вызываем функцию для экипажа и выходим
-	if !(typeOf _unit == "CAManBase") exitWith {
+	if (isKindOf _unit != "Man") exitWith {
 		private ["_crew"];
 		_crew = crew _unit;
 		{
