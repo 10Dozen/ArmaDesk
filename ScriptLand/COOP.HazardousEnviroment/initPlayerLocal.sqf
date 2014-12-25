@@ -231,6 +231,11 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	
 	dzn_task_players = dzn_task_players + [player];
 	publicVariable "dzn_task_players";
+	
+	waitUntil { !isNil "dzn_task_extracted" };
+	if ( (!isNil { player setVariable 'dzn_playerSurvived'}) && { !(player setVariable 'dzn_playerSurvived') } ) then {
+		player spawn dzn_killSwitchForLost;
+	};
 };
 
 player setVariable ["dzn_plagued", false, false];
