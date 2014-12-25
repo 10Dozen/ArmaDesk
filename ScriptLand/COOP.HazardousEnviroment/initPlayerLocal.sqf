@@ -136,7 +136,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	dzn_bioweaponItem addAction [
 		"<t color='#8AD2FF'>Проверить получение координат</t>",
 		{
-			hint format ["Деактивация завершится через:\n%1", dzn_task_gpsPlacingTime];
+			hint format ["Наведение ракет завершится через:\n%1", dzn_task_gpsPlacingTime];
 		}, 
 		"", 
 		6, 
