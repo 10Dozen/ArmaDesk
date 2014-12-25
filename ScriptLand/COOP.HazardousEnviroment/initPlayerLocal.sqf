@@ -260,18 +260,29 @@ dzn_deathZone = {
 	
 	sleep 10;
 	if (_unit distance _trg < _dist) exitWith {
-		_unit setVariable ["dzn_plagued", true, false];
-		_unit spawn {
-			if !(local _this) exitWith {};
-			hint parseText "<t color='#ff0000'>Химический детектор завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
-			sleep 10;
-			_this setDamage ((damage _this) + 0.8);
-			sleep 5;
-			_this setDamage ((damage _this) + 0.1);
-			sleep 5;
-			_this setDamage 1;
-		};
+		_unit spawn dzn_killSwitch;
 	};
+};
+
+// Убиваем товарищей на выбросе
+dzn_killSwitchForLost = {
+	if !(local _this) exitWith {};
+	hint parseText "Химический детектор показывает резкое повышение опасных материалов!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
+	sleep 3;
+	_this spawn dzn_killSwitch;
+};
+
+// Убиваем товарищей в килл зоне
+dzn_killSwitch = {
+	if !(local _this) exitWith {};
+	_this setVariable ["dzn_plagued", true, false];
+	hint parseText "<t color='#ff0000'>Химический детектор завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
+	sleep 10;
+	_this setDamage ((damage _this) + 0.8);
+	sleep 5;
+	_this setDamage ((damage _this) + 0.1);
+	sleep 5;
+	_this setDamage 1;
 };
 
 // Радио сообщения и их условия
