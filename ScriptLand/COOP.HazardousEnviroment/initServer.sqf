@@ -115,6 +115,7 @@ publicVariable "dzn_task_players";
 		waitUntil { dzn_task_destroyed };
 		// Ракеты пришли и пацаны должны были убижать
 		waitUntil { dzn_task_extracted };
+		sleep 3;
 		if (dzn_cond_escape > 0) then {
 			sleep 5;
 			// Радио сообщение
@@ -281,6 +282,7 @@ dzn_fnc_convertToTimestring = {
 		deleteVehicle dzn_bioweaponItem;
 		
 		dzn_task_extracted = true;
+		publicVariable "dzn_task_extracted";
 		[] spawn {
 			private ["_anySurvivors"];
 			_anySurvivors = false;
