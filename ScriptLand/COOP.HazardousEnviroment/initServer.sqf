@@ -199,7 +199,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Установка на образец ГПС передатчика
-	waitUntil { time > dzn_c_delayTime + 120 };
+	waitUntil { time > dzn_c_delayTime + dzn_c_specialistsDelayTime };
 	// Все специалисты убиты и не начата дезактивация
 	waitUntil { 
 		( (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount) && !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') )
@@ -231,7 +231,7 @@ dzn_fnc_convertToTimestring = {
 		[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее." ] call dzn_gm_sendMessage;
 	};
 	
-	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинает уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим." ] call dzn_gm_sendMessage;
+	[ dzn_c_radioMan, 0, "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинаем уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим." ] call dzn_gm_sendMessage;
 	private ["_time"];
 	_time = 0;
 	while { (_time < (dzn_c_gpsPlacingTimeLimit * 60)) && { !dzn_task_gpsPlacingCancelled } } do {
