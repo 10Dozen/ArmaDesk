@@ -184,7 +184,7 @@ dzn_fnc_convertToTimestring = {
 		waitUntil { dzn_task_deactivationCancelled };
 		dzn_bioweaponItem getVariable ['dzn_isDeactivating',false,true];
 		// Радио сообщение
-		dzn_msg_bioDeactivationCancelled = true; publicVariable "dzn_msg_bioDeactivationCancelled";
+		dzn_msg_bioDeactivationFailed = true; publicVariable "dzn_msg_bioDeactivationFailed";
 	};
 	
 	// Радио сообщение
