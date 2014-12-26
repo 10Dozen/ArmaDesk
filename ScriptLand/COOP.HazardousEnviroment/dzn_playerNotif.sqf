@@ -59,27 +59,58 @@
 	];
 };
 
+dzn_client_completeTaskNotif = {
+	/* Will show complete task notification
+		[ task, taskText, type ] call dzn_client_completeTaskNotif
+		0: TASK NAME - task name: STRING
+		1: TEXT - text of notification, STRING
+		2: TYPE - 'Add', 'Assign', 'Complete', 'Fail', 'Cancel'
+		OUTPUT: True
+	*/
+	
+	_task = call compile (_this select 0);
+	if (isNil { _task }) exitWith {};
+	
+	_taskAction = "";
+	_taskState = "";
+	
+	switch (_this select 2) do {
+		case 'Add': { 
+			_taskAction = "TaskCreated";
+			_taskState = "Created";
+		};
+		case 'Assign': { 
+			_taskAction = "TaskAssigned";
+			_taskState = "Assigned";
+		};
+		case 'Complete': { 
+			_taskAction = "TaskSucceeded";
+			_taskState = "Succeeded";
+		};
+		case 'Cancel': { 
+			_taskAction = "TaskCanceled";
+			_taskState = "Canceled";
+		};
+		case 'Fail': { 
+			_taskAction = "TaskFailed";
+			_taskState = "Failed";
+		};
+		case 'Update': { 
+			_taskAction = "TaskUpdated";
+			_taskState = "";
+		};
+	};
+	
+	[_taskAction,['',(_this select 1)]] call BIS_fnc_showNotification;
+	if (_taskState != "") then { _task setTaskState _taskState; };
+};
+
 
 // Радио сообщения и их условия
 [] spawn {
-	waitUntil {!isNil "dzn_msg_destroyAll"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
-};
-[] spawn {
-	waitUntil {!isNil "dzn_msg_missionWin"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Это успех! Все задачи выполнены, поздравляю!";
-};
-[] spawn {
-	waitUntil {!isNil "dzn_msg_missionWin2"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Цель уничтожена! Повторяю, объект уничтожен! Всем выжившим - возвращайтесь на борт!";
-};
-[] spawn {
-	waitUntil {!isNil "dzn_msg_missionFailed"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Кто-нибудь меня слышит? Всем попавшим в облако заражения - запрещено покидать пределы острова! Остров под карантином!";
-};
-[] spawn {
 	waitUntil {!isNil "dzn_msg_launchPodDestroyed"};
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!";
+	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_client_completeTaskNotif;
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationFailed"};
@@ -108,4 +139,24 @@
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskSuccessful"};
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!";
+};
+
+
+[] spawn {
+	waitUntil {!isNil "dzn_msg_destroyAll"};
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
+};
+
+[] spawn {
+	waitUntil {!isNil "dzn_msg_missionWin"};
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Это успех! Все задачи выполнены, поздравляю!";
+	
+};
+[] spawn {
+	waitUntil {!isNil "dzn_msg_missionWin2"};
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Цель уничтожена! Повторяю, объект уничтожен! Всем выжившим - возвращайтесь на борт!";
+};
+[] spawn {
+	waitUntil {!isNil "dzn_msg_missionFailed"};
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Кто-нибудь меня слышит? Всем попавшим в облако заражения - запрещено покидать пределы острова! Остров под карантином!";
 };
