@@ -244,8 +244,11 @@ dzn_fnc_convertToTimestring = {
 		
 		dzn_task_extracted = true;
 		publicVariable "dzn_task_extracted";
+		
 		[] spawn {
 			private ["_anySurvivors"];
+			sleep 5;
+			
 			_anySurvivors = false;
 			{
 				if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { _anySurvivors = true; };	
