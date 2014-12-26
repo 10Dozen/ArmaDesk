@@ -53,41 +53,6 @@ publicVariable "dzn_task_gpsPlaced";
 publicVariable "dzn_task_gpsPlacingCancelled";
 publicVariable "dzn_task_players";
 
-[] spawn {
-	// Сломали и дезактивацию, и гпс маркер
-	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
-	sleep 5;
-	
-	// Радио сообщение
-	dzn_msg_destroyAll = true; publicVariable "dzn_msg_destroyAll";
-
-	[] spawn {
-		private ["_anySurvivors"];
-		_anySurvivors = false;
-		{
-			if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { _anySurvivors = true; };	
-		} forEach dzn_task_players;
-		dzn_cond_escape = if (_anySurvivors) then { 1 } else { -1 };
-	};
-
-	sleep (dzn_c_strikeDelay);
-	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
-	private ["_i","_j","_mssl","_strikePos"];
-	for "_i" from 0 to 250 do {
-		_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
-		for "_j" from 0 to 1 do {
-			if (!isNil {_mssl}) then {
-				_strikePos =  _mssl modelToWorld [2,2,0];
-			};
-			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
-			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
-			_mssl setVectorUp [0,7,7];
-		};
-		sleep 4;
-	};
-	
-	dzn_missionResult = "Failed";
-};
 
 [] spawn {
 	// Проверяем условия для завершения миски
@@ -155,9 +120,7 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { !alive dzn_launchPod_1 };
 	
 	sleep 3;
-	
 	dzn_task_launchPodDestroyed = true;
-	[ "dzn_plrTask0", "Уничтожить ПУ" ] call dzn_gm_completeTaskNotif;
 	// Радио сообщение
 	dzn_msg_launchPodDestroyed = true; publicVariable "dzn_msg_launchPodDestroyed";
 };
@@ -201,7 +164,6 @@ dzn_fnc_convertToTimestring = {
 	
 	if !(dzn_task_deactivationCancelled) then {
 		dzn_task_deactivated = true;
-		[ "dzn_plrTask1", "Обезвредить образец" ] call dzn_gm_completeTaskNotif;
 		// Радио сообщение
 		dzn_msg_bioDeactivationSuccessful = true; publicVariable "dzn_msg_bioDeactivationSuccessful";
 	} else {
@@ -259,9 +221,8 @@ dzn_fnc_convertToTimestring = {
 	};
 	
 	if !(dzn_task_gpsPlacingCancelled) then {
-		dzn_task_gpsPlaced = true;
+		dzn_task_gpsPlaced = true; 
 		publicVariable "dzn_task_gpsPlaced";
-		[ "dzn_plrTask2", "Установить GPS-маркер" ] call dzn_gm_completeTaskNotif;
 		
 		// Радио сообщение
 		dzn_msg_gpsTaskSuccessful = true; publicVariable "dzn_msg_gpsTaskSuccessful";
@@ -295,4 +256,41 @@ dzn_fnc_convertToTimestring = {
 	} else {
 		// Отключили враги деактивацию
 	};
+};
+
+
+[] spawn {
+	// Сломали и дезактивацию, и гпс маркер
+	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
+	sleep 5;
+	
+	// Радио сообщение
+	dzn_msg_destroyAll = true; publicVariable "dzn_msg_destroyAll";
+
+	[] spawn {
+		private ["_anySurvivors"];
+		_anySurvivors = false;
+		{
+			if (!isNil { _x getVariable "dzn_playerSurvived" } ) then { _anySurvivors = true; };	
+		} forEach dzn_task_players;
+		dzn_cond_escape = if (_anySurvivors) then { 1 } else { -1 };
+	};
+
+	sleep (dzn_c_strikeDelay);
+	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
+	private ["_i","_j","_mssl","_strikePos"];
+	for "_i" from 0 to 250 do {
+		_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
+		for "_j" from 0 to 1 do {
+			if (!isNil {_mssl}) then {
+				_strikePos =  _mssl modelToWorld [2,2,0];
+			};
+			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
+			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
+			_mssl setVectorUp [0,7,7];
+		};
+		sleep 4;
+	};
+	
+	dzn_missionResult = "Failed";
 };
