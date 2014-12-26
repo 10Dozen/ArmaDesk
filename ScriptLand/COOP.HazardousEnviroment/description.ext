@@ -4,21 +4,20 @@ class CfgDebriefing
 {  
 	class End1
 	{
-		title = "Биооружие дезактивированл";
-		subtitle = "Acceptance Test ended with positive result";
-		description = "All tasks have been completed. The new combat system has proven its excellent and the U.S. military officials were satisfied.";
+		title = "Неудача";
+		subtitle = "";
+		description = "Нашим силам не удалось гарантировано уничтожить образец и весь остров был подвергнут бомабардировке. Остров закрыт на карантин.";
 	};
 	class End2
 	{
-		title = "Биооружие уничтожено";
-		subtitle = "Acceptance Test ended with positive result";
-		description = "All tasks have been completed. The new combat system has proven its excellent and the U.S. military officials were satisfied.";
+		title = "Биооружие дезактивировано";
+		subtitle = "";
+		description = "Биооружие было нейтрализовано без уничтожения. Образцы отправились в биолаборатории для создания защитных средств. Отличная работа!";
 	};
-	class loser
+	class End3
 	{
-		title = "Неудача";
-		subtitle = "Acceptance Test ended with negative result";
-		description = "All units have been wiped out. U.S. military officials were extremely unsatisfied.";
+		title = "Биооружие уничтожено";
+		subtitle = "";
+		description = "Биоружие было уничтожено. Остров закрыт на карантин, весь персонал находившийся на острове во время уничтожения образца - отправлен в карантин до выяснения уровня биоопасности.";
 	};
-	
 };
