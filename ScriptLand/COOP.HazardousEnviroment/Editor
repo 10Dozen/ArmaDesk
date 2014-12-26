@@ -18,16 +18,16 @@ G // Триггеры окончания игры
 theEndWin1
 OnAct: 
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win1" }
-OnAct: [] spawn { sleep 18; "end1" call BIS_fnc_endMission; }
+OnAct: [] spawn { sleep 18; "end2" call BIS_fnc_endMission; }
 
 theEndWin2
 OnAct: 
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Win2" }
-OnAct:  [] spawn { sleep 18; "end2" call BIS_fnc_endMission;  }
+OnAct:  [] spawn { sleep 18; "end3" call BIS_fnc_endMission;  }
 
 theEndFail
 Cond: !(isNil "dzn_missionResult") && { dzn_missionResult == "Failed" }
-OnAct:  [] spawn { sleep 18; "loser" call BIS_fnc_endMission;  }
+OnAct:  [] spawn { sleep 18; "end1" call BIS_fnc_endMission;  }
 
 // Для красоты, можно кстати на них музыук повесить. Тогда в Эффектах выбери музыкальный трек, а в OnAct заключи строки в споун, типа так: [] spawn { sleep 18; "loser" call BIS_fnc_endMission; };
 // Sleep настрой сам
