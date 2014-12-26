@@ -29,3 +29,6 @@
 10) JTAC
 
 11) Spotter / Artillery
+
+12) Pathfinding Training
+
