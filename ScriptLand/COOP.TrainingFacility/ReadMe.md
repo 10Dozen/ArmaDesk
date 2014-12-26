@@ -12,14 +12,20 @@
 	+ Программа стрельбы
 	
 3) Heavy Weapons Firing Range
+
 4) Heavy Weapons Firing Range - Moving Targets
 	Статики и гранатометы по пехоте и технике.
 	
 5) Vehicle Drive Range
+
 6) Vehicle Firing Range
+
 7) Sea Operations Driving
+
 8) Helicopter Flying and Landing
+
 9) Aircraft Flying
 
 10) JTAC
+
 11) Spotter / Artillery
