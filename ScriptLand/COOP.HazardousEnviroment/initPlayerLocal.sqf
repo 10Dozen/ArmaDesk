@@ -233,7 +233,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	publicVariable "dzn_task_players";
 	
 	waitUntil { !isNil "dzn_task_extracted" };
-	if ( (!isNil { player setVariable 'dzn_playerSurvived'}) && { !(player setVariable 'dzn_playerSurvived') } ) then {
+	if ( (!isNil { player getVariable 'dzn_playerSurvived'}) && { !(player setVariable 'dzn_playerSurvived') } ) then {
 		player spawn dzn_killSwitchForLost;
 	};
 };
