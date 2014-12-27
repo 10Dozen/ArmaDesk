@@ -145,6 +145,7 @@ dzn_client_updateTask = {
 //	2 ГПС Маркер
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskAdded"};
+	sleep 3;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Оба специалиста погибли, дезактивация образца невозможна. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
 	sleep 4;
 	[ "dzn_plrTask1", "Обезвердить образец", "Cancel" ] call dzn_client_updateTask;
