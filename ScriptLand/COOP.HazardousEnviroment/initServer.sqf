@@ -311,7 +311,7 @@ dzn_fnc_convertToTimestring = {
 					_strikePos =  _mssl modelToWorld [2,2,0];
 				};
 				_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
-				_mssl hideObjectGlabal true;
+				_mssl hideObjectGlobal true;
 				_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
 				_mssl setVectorUp [0,7,7];
 			};
