@@ -152,7 +152,7 @@ dzn_client_updateTask = {
 	sleep 4;
 	[ "dzn_plrTask1", "Обезвредить образец", "Fail" ] call dzn_client_updateTask;
 	waitUntil {!isNil { dzn_plrTask2 }};
-	[ "dzn_plrTask2", "Установить GPS-маркер", "Add" ] call dzn_client_updateTask;
+	[ "dzn_plrTask2", "Установить GPS-маркер", "Assign" ] call dzn_client_updateTask;
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskStarted"};
@@ -173,7 +173,7 @@ dzn_client_updateTask = {
 	waitUntil {!isNil "dzn_msg_gpsTaskFailed"};
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Fail" ] call dzn_client_updateTask;
 	sleep 4;
-	// dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее.";
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал GPS-маркера!";
 };
 
 
