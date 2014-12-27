@@ -137,7 +137,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 // Считаем игроков в мисске
 [] spawn {
 	waitUntil { time > dzn_c_delayTime + 20 };
-	wautuntil { !isNil "dzn_totalPlayersCount" };
+	waitUntil { !isNil "dzn_totalPlayersCount" };
 	
 	// Записываемся
 	dzn_totalPlayersCount = dzn_totalPlayersCount + 1;
