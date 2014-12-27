@@ -127,6 +127,7 @@ dzn_client_updateTask = {
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationStarted"};
 	sleep 3;
+	if !(isNil "dzn_msg_bioDeactivationFailed") exitWith {};
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!";
 };
 [] spawn {
@@ -137,8 +138,7 @@ dzn_client_updateTask = {
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationFailed"};
-	[ "dzn_plrTask1", "Обезвредить образец", "Fail" ] call dzn_client_updateTask;
-	sleep 4;
+	sleep 1;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!";
 };
 
@@ -148,17 +148,16 @@ dzn_client_updateTask = {
 	sleep 3;
 	if (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount) then {
 		dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Оба специалиста погибли, дезактивация образца невозможна. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
-	} else {
-	//	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Специалисты облажались, дезактивация образца невозможна. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
 	};
 	sleep 4;
-	[ "dzn_plrTask1", "Обезвердить образец", "Cancel" ] call dzn_client_updateTask;
+	[ "dzn_plrTask1", "Обезвредить образец", "Fail" ] call dzn_client_updateTask;
 	waitUntil {!isNil { dzn_plrTask2 }};
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Add" ] call dzn_client_updateTask;
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskStarted"};
 	sleep 3;
+	if !(isNil "dzn_msg_gpsTaskFailed") exitWith {};
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинаем уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим.";
 };
 [] spawn {
