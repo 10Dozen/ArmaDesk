@@ -157,6 +157,9 @@ dzn_client_updateTask = {
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Complete" ] call dzn_client_updateTask;
 	sleep 4;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!";
+	sleep 3;
+	waitUntil {!isNil {dzn_plrTask99}};
+	[ "dzn_plrTask99", "Покинуть остров", "Add" ] call dzn_client_updateTask;
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskFailed"};
@@ -164,6 +167,7 @@ dzn_client_updateTask = {
 	sleep 4;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее.";
 };
+
 
 //	3 Полное уничтожение
 [] spawn {
