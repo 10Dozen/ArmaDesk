@@ -318,7 +318,11 @@ dzn_fnc_convertToTimestring = {
 	dzn_massiveStrike = {
 		private ["_i","_mssl","_strikePos"];
 		for "_i" from 0 to 200 do {
-			_strikePos = dzn_bioweaponItem modelToWorld [25 + random(floor (6 * _i)) - random(floor (6 * _i)), -100 + random(floor (6 * _i)) - random(floor (6 * _i)), +100];
+			_strikePos = [
+				(_this select 0) + random(floor (6 * _i)) - random(floor (6 * _i)),
+				(_this select 1) + random(floor (6 * _i)) - random(floor (6 * _i)),
+				300
+			];
 			_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
 			_mssl hideObjectGlobal true;
 			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
@@ -333,11 +337,11 @@ dzn_fnc_convertToTimestring = {
 		sleep 30;
 		dzn_bioweaponItem setVariable ["dzn_isDestroyed", true, true];
 	};
-	[] spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [floor(random 100), floor(random 100), 0] ) spawn dzn_massiveStrike;
 	sleep random(3);
-	[] spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [-(floor(random 100)), -(floor(random 100)), 0]) spawn dzn_massiveStrike;
 	sleep random(3);
-	[] spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [-250 + floor(random 100), -250 + floor(random 100), 0]) spawn dzn_massiveStrike;
 	sleep 90;
 	
 	dzn_missionResult = "Failed";
