@@ -168,7 +168,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	
 	if (dzn_task_gpsPlaced) then {
 		waitUntil { !isNil "dzn_task_extracted" };
-
+	};
 	if (player in dzn_impactDeathZone) then {
 		player setVariable ['dzn_playerSurvived', false, true];
 		player spawn dzn_killSwitchForLost;
