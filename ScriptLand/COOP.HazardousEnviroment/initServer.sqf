@@ -146,6 +146,7 @@ dzn_fnc_convertToTimestring = {
 	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	// Уничтожена
 	waitUntil { !alive dzn_launchPod_1 };
+	if (!isNil "dzn_msg_destroyAll") exitWith {};
 	
 	sleep 3;
 	dzn_task_launchPodDestroyed = true;
@@ -158,7 +159,8 @@ dzn_fnc_convertToTimestring = {
 	private ["_time"];
 	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	// Начали дезактивацию
-	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
+	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating"};
+	if (!isNil "dzn_msg_destroyAll") exitWith {};
 	
 	// Проверка набигания врагов с целью сломать дезактивацию
 	[] spawn {
@@ -207,7 +209,8 @@ dzn_fnc_convertToTimestring = {
 		( (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount) && !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') )
 		|| ( dzn_task_deactivationCancelled )
 	};
-		
+	if (!isNil "dzn_msg_destroyAll") exitWith {};
+	
 	dzn_task_addDestroyObjectTask = true;
 	publicVariable "dzn_task_addDestroyObjectTask";
 	
@@ -337,11 +340,11 @@ dzn_fnc_convertToTimestring = {
 		sleep 30;
 		dzn_bioweaponItem setVariable ["dzn_isDestroyed", true, true];
 	};
-	(dzn_bioweaponItem modelToWorld [floor(random 100), floor(random 100), 0] ) spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [floor(random 150), floor(random 150), 0] ) spawn dzn_massiveStrike;
 	sleep random(3);
-	(dzn_bioweaponItem modelToWorld [-(floor(random 100)), -(floor(random 100)), 0]) spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [-(floor(random 150)), -(floor(random 150)), 0]) spawn dzn_massiveStrike;
 	sleep random(3);
-	(dzn_bioweaponItem modelToWorld [-300 + floor(random 100), 300 + floor(random 100), 0]) spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [0 + (floor (random 50)), 0 + (floor (random 50)), 0]) spawn dzn_massiveStrike;
 	sleep 90;
 	
 	dzn_missionResult = "Failed";
