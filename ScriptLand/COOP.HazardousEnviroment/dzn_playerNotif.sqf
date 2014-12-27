@@ -172,7 +172,11 @@ dzn_client_updateTask = {
 //	3 Полное уничтожение
 [] spawn {
 	waitUntil {!isNil "dzn_msg_destroyAll"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
+	if (dzn_totalPlayersCount < dzn_c_playerLostLimit) then {
+		dzn_c_radioMan sideChat "Всем кто меня слышит, это Папаша-Медведь. Наши потери слишком велики, всем выжившим - отступайте!";
+		sleep 4;
+	}
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - операция провалилась! Всем отрядам приказано покинуть остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
 	sleep 4;
 	waitUntil {!isNil {dzn_plrTask99}};
 	[ "dzn_plrTask99", "Покинуть остров", "Add" ] call dzn_client_updateTask;
