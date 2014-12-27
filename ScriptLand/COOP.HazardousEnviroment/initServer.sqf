@@ -55,6 +55,21 @@ publicVariable "dzn_task_players";
 
 
 [] spawn {
+	// Создаем локации зон смерти после выброса
+	private ["_pos", "_dir", "_a", "_b"];
+	_pos = [3605,3642,0];
+	_dir = -139.84;
+	_a = 1200;
+	_b = 800;
+	
+	dzn_impactDeathZone = createLocation ["NameVillage", _pos, _a / 3, _b / 3];
+	dzn_impactZone = createLocation ["NameVillage", _pos, _a, _b];
+	
+	
+	
+};
+
+[] spawn {
 	// Проверяем условия для завершения миски
 	waitUntil { time > dzn_c_delayTime };
 	// ПУ уничтожена
