@@ -4,6 +4,7 @@ dzn_srv_missionStarted = true;
 waitUntil { !isNil "dzn_c_delayTime" };
 waitUntil { !isNil "dzn_c_desactivationTimeLimit"};
 waitUntil { !isNil "dzn_c_gpsPlacingTimeLimit"};
+waitUntil { !isNil "dzn_c_playerLostLimit"};
 
 // Пусковая установка
 dzn_task_launchPodDestroyed = false;
@@ -29,7 +30,7 @@ dzn_task_gpsPlacingTime = str(dzn_c_gpsPlacingTimeLimit * 60);
 dzn_task_specialistsCount = -1;
 dzn_task_specialistsDeadCount = 0;
 dzn_task_players = [];
-
+dzn_totalPlayersCount = 0;
 
 // Деактивация не удалась, ставим ГПС передатчик
 dzn_task_addDestroyObjectTask = false;
@@ -52,7 +53,7 @@ publicVariable "dzn_task_addDestroyObjectTask";
 publicVariable "dzn_task_gpsPlaced";
 publicVariable "dzn_task_gpsPlacingCancelled";
 publicVariable "dzn_task_players";
-
+publicVariable "dzn_totalPlayersCount";
 
 [] spawn {
 	// Создаем локации зон смерти после выброса
@@ -288,8 +289,9 @@ dzn_fnc_convertToTimestring = {
 
 
 [] spawn {
-	// Сломали и дезактивацию, и гпс маркер
-	waitUntil { dzn_task_gpsPlacingCancelled };
+	// Сломали и дезактивацию, и гпс маркер ИЛИ убили слишком много народу
+	waitUntil { time > dzn_c_specialistsDelayTime };
+	waitUntil { dzn_task_gpsPlacingCancelled || (dzn_totalPlayersCount < dzn_c_playerLostLimit) };
 	sleep 5;
 	
 	// Радио сообщение
