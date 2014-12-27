@@ -166,7 +166,7 @@ dzn_fnc_convertToTimestring = {
 		
 		// Враги таки сломали дезактивацию
 		waitUntil { dzn_task_deactivationCancelled };
-		dzn_bioweaponItem getVariable ['dzn_isDeactivating',false,true];
+		dzn_bioweaponItem setVariable ['dzn_isDeactivating',false,true];
 		// Радио сообщение
 		dzn_msg_bioDeactivationFailed = true; publicVariable "dzn_msg_bioDeactivationFailed";
 	};
@@ -222,7 +222,7 @@ dzn_fnc_convertToTimestring = {
 		];
 		// Враги таки набижали
 		waitUntil { dzn_task_gpsPlacingCancelled };
-		dzn_bioweaponItem getVariable ['dzn_placingGPS',false,true];
+		dzn_bioweaponItem setVariable ['dzn_placingGPS',false,true];
 		
 		// Радио сообщение
 		dzn_msg_gpsTaskFailed = true; publicVariable "dzn_msg_gpsTaskFailed";
