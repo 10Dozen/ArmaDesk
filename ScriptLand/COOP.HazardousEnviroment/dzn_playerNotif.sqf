@@ -87,6 +87,19 @@ dzn_client_updateTask = {
 	
 	_briefingTasksInit call briefingCreateTasks;
 	
+	[] spawn {
+		waitUntil { dzn_task_addDestroyObjectTask || (dzn_totalPlayersCount < dzn_c_playerLostLimit) };
+		sleep 4;
+		_briefingTasksToDestroy call briefingCreateTasks;
+	
+		dzn_plrTask99 = player createSimpleTask ["Покинуть остров"];
+		dzn_plrTask99 setSimpleTaskDescription [
+			"Покиньте остров до нанесения удара! После уничтожения образца существует критическая вероятность заражения территории! Все кто будут в пределах зоны заражения - погибнут!",
+			"Покинуть остров",
+			"Покинуть остров"
+		];
+	};
+	
 	waitUntil { dzn_task_addDestroyObjectTask };
 	sleep 4;
 	
@@ -98,17 +111,8 @@ dzn_client_updateTask = {
 			"Образец", getPosASL(dzn_bioweaponItem)
 		]
 	];
-	_briefingTasksToDestroy call briefingCreateTasks;
 	
-	dzn_plrTask99 = player createSimpleTask ["Покинуть остров"];
-	dzn_plrTask99 setSimpleTaskDescription [
-		"Покиньте остров до нанесения удара! После уничтожения образца существует критическая вероятность заражения территории! Все кто будут в пределах зоны заражения - погибнут!",
-		"Покинуть остров",
-		"Покинуть остров"
-	];
 };
-
-
 
 
 // Радио сообщения и их условия
