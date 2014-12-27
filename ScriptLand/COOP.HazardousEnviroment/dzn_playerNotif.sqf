@@ -130,7 +130,7 @@ dzn_client_updateTask = {
 	waitUntil {!isNil "dzn_msg_bioDeactivationSuccessful"};
 	[ "dzn_plrTask1", "Обезвредить образец", "Complete" ] call dzn_client_updateTask;
 	sleep 4;
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Отлично, систем полностью под нашим контролем. Образец больше не представляет опасности.";
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Отлично, система полностью под нашим контролем. Образец больше не представляет опасности.";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationFailed"};
