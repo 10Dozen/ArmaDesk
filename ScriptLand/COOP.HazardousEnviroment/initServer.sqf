@@ -311,7 +311,7 @@ dzn_fnc_convertToTimestring = {
 	dzn_massiveStrike = {
 		private ["_i","_mssl","_strikePos"];
 		for "_i" from 0 to 200 do {
-			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
+			_strikePos = dzn_bioweaponItem modelToWorld [25 + random(floor (20 * _i)) - random(floor (29 * _i)), -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
 			_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
 			_mssl hideObjectGlobal true;
 			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
