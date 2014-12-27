@@ -82,16 +82,14 @@ publicVariable "dzn_totalPlayersCount";
 	dzn_cond_gps = 0;
 	dzn_cond_escape = 0;
 
-	// ПУ уничтожена
-	[] spawn {
-		waitUntil {dzn_task_launchPodDestroyed};
-		dzn_cond_launchPod = 1;
-	};
-	
 	waitUntil { dzn_task_deactivated || dzn_task_gpsPlaced };
-	if ( dzn_task_deactivated && (dzn_cond_launchPod == 1)  ) then {
+	if ( dzn_task_deactivated  ) then {
 		dzn_cond_deactivate = 1;
-	
+		
+		// ПУ уничтожена
+		waitUntil { dzn_task_launchPodDestroyed };
+		dzn_cond_launchPod = 1;
+		
 		sleep 5;
 		// Радио сообщение
 		dzn_msg_missionWin = true; publicVariable "dzn_msg_missionWin";
