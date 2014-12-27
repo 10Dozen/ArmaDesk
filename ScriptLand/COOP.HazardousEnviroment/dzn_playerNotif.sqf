@@ -88,6 +88,8 @@ dzn_client_updateTask = {
 	_briefingTasksInit call briefingCreateTasks;
 	
 	waitUntil { dzn_task_addDestroyObjectTask };
+	sleep 4;
+	
 	_briefingTasksToDestroy = [
 		[	
 			"Установить GPS-маркер",
@@ -113,64 +115,76 @@ dzn_client_updateTask = {
 // 	0 Уничтожение ПУ
 [] spawn {
 	waitUntil {!isNil "dzn_msg_launchPodDestroyed"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!";
 	[ "dzn_plrTask0", "Уничтожить ПУ", "Complete" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. На картинке с разведчика остатки пусковой установке. Отличная работа!";
 };
 
 //	1 Дезактивация Объекта
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationStarted"};
+	sleep 3;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Подключились к их системе. Взлом и деактивация потребует времени. Не подпускайте противника к образцу пока мы не завершим работу!";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationSuccessful"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Отлично, систем полностью под нашим контролем. Образец больше не представляет опасности.";
 	[ "dzn_plrTask1", "Обезвредить образец", "Complete" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Отлично, систем полностью под нашим контролем. Образец больше не представляет опасности.";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_bioDeactivationFailed"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!";
 	[ "dzn_plrTask1", "Обезвредить образец", "Fail" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Дезактивация прервана, нас отрезали от доступа к системе. Мы не можем больше ждать - необходимо дать целеуказание нашим ракетам!";
 };
 
 //	2 ГПС Маркер
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskAdded"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Assign" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskStarted"};
+	sleep 3;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Получаем сигнал, начинаем уточнение. Держите противника подальше от устройства, но будьте готовы быстро уйти после того как мы закончим.";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskSuccessful"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!";
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Complete" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Координаты получены, удар последует менее, чем через 5 минут! Мы ожидаем биоопасный выброс, поэтому немедленно покиньте остров!";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskFailed"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее.";
 	[ "dzn_plrTask2", "Установить GPS-маркер", "Fail" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Мы потеряли сигнал! Сожалею, но нам придется нанести массированный удар по острову. Попытайтесь покинуть остров как можно быстрее.";
 };
 
 //	3 Полное уничтожение
 [] spawn {
 	waitUntil {!isNil "dzn_msg_destroyAll"};
-	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
 	[ "dzn_plrTask99", "Покинуть остров", "Assign" ] call dzn_client_updateTask;
+	sleep 4;
+	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
 };
 
 //	Конец миссии
 [] spawn {
 	waitUntil {!isNil "dzn_msg_missionWin"};
+	sleep 2;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Это успех! Все задачи выполнены, поздравляю!";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_missionWin2"};
+	sleep 2;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Цель уничтожена! Повторяю, объект уничтожен! Всем выжившим - возвращайтесь на борт!";
 };
 [] spawn {
 	waitUntil {!isNil "dzn_msg_missionFailed"};
+	sleep 2;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Кто-нибудь меня слышит? Всем попавшим в облако заражения - запрещено покидать пределы острова! Остров под карантином!";
 };
