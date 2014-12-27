@@ -1,4 +1,4 @@
-// В playerInit.sqf (запуститься только на игроке)
+//(запуститься только на игроке)
 if !(isNil "dzn_plr_missionStarted") exitWith {};
 dzn_plr_missionStarted = true;
 
@@ -169,11 +169,11 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	if (dzn_task_gpsPlaced) then {
 		waitUntil { !isNil "dzn_task_extracted" };
 	};
-	if (player in dzn_impactDeathZone) then {
+	if ((getPosASL player) in dzn_impactDeathZone) then {
 		player setVariable ['dzn_playerSurvived', false, true];
 		player spawn dzn_killSwitchForLost;
 	} else {
-		if (player in dzn_impactZone) then {
+		if ((getPosASL player) in dzn_impactZone) then {
 			hint parseText "Химический детектор показывает повышение опасных материалов!<br/><br/>Тем не менее, уровень в безопасных пределах.";
 		};
 		player setVariable ['dzn_playerSurvived', true, true];
