@@ -142,7 +142,7 @@ dzn_client_updateTask = {
 //	2 ГПС Маркер
 [] spawn {
 	waitUntil {!isNil "dzn_msg_gpsTaskAdded"};
-	[ "dzn_plrTask2", "Установить GPS-маркер", "Assign" ] call dzn_client_updateTask;
+	[ "dzn_plrTask2", "Установить GPS-маркер", "Add" ] call dzn_client_updateTask;
 	sleep 4;
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Разместите GPS-маркер на объекте и мы попробуем получить точные координаты цели. Не допускайте противника к устройству!";
 };
