@@ -331,7 +331,7 @@ dzn_fnc_convertToTimestring = {
 	[] spawn dzn_massiveStrike;
 	sleep random(3);
 	[] spawn dzn_massiveStrike;
-	sleep random(3);
+	sleep 90;
 	
 	dzn_missionResult = "Failed";
 };
