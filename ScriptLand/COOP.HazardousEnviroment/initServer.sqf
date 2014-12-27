@@ -38,7 +38,7 @@ dzn_task_destroyed = false;
 dzn_task_extracted = false;
 
 // Убегание после бомбежки
-// dzn_task_runaway = false;
+dzn_task_ranaway = false;
 
 //Публикуем переменные
 publicVariable "dzn_task_deactivated";
@@ -56,6 +56,7 @@ publicVariable "dzn_task_players";
 
 [] spawn {
 	// Создаем локации зон смерти после выброса
+	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	private ["_pos", "_dir", "_a", "_b"];
 	_pos = [3605,3642,0];
 	_dir = -139.84;
@@ -65,13 +66,16 @@ publicVariable "dzn_task_players";
 	dzn_impactDeathZone = createLocation ["NameVillage", _pos, _a / 3, _b / 3];
 	dzn_impactZone = createLocation ["NameVillage", _pos, _a, _b];
 	
+	dzn_impactDeathZone setDirection _dir;
+	dzn_impactZone setDirection _dir;
 	
-	
+	publicVariable "dzn_impactDeathZone";
+	publicVariable "dzn_impactZone";
 };
 
 [] spawn {
 	// Проверяем условия для завершения миски
-	waitUntil { time > dzn_c_delayTime };
+	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	// ПУ уничтожена
 	waitUntil {dzn_task_launchPodDestroyed};
 	dzn_cond_launchPod = 1;
@@ -95,7 +99,8 @@ publicVariable "dzn_task_players";
 		waitUntil { dzn_task_destroyed };
 		// Ракеты пришли и пацаны должны были убижать
 		waitUntil { dzn_task_extracted };
-		sleep 3;
+		sleep 5;
+		waitUntil { dzn_task_ranaway };
 		if (dzn_cond_escape > 0) then {
 			sleep 5;
 			// Радио сообщение
@@ -130,7 +135,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Уничтожение ПУ
-	waitUntil { time > dzn_c_delayTime };
+	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	// Уничтожена
 	waitUntil { !alive dzn_launchPod_1 };
 	
@@ -143,7 +148,7 @@ dzn_fnc_convertToTimestring = {
 [] spawn {
 	// Дезактивация Образца
 	private ["_time"];
-	waitUntil { time > dzn_c_delayTime };
+	waitUntil { time > dzn_c_delayTime + floor(random 5) };
 	// Начали дезактивацию
 	waitUntil { dzn_bioweaponItem getVariable "dzn_isDeactivating" };
 	
@@ -188,7 +193,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Установка на образец ГПС передатчика
-	waitUntil { time > dzn_c_delayTime + dzn_c_specialistsDelayTime };
+	waitUntil { time > dzn_c_delayTime + floor(random 5) + dzn_c_specialistsDelayTime };
 	// Все специалисты убиты и не начата дезактивация
 	waitUntil { 
 		( (dzn_task_specialistsCount <= dzn_task_specialistsDeadCount) && !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') )
@@ -262,7 +267,7 @@ dzn_fnc_convertToTimestring = {
 		
 		[] spawn {
 			private ["_anySurvivors"];
-			sleep 5;
+			sleep 3;
 			
 			_anySurvivors = false;
 			{
@@ -270,6 +275,7 @@ dzn_fnc_convertToTimestring = {
 			} forEach dzn_task_players;
 			
 			dzn_cond_escape = if (_anySurvivors) then { 1 } else { -1 };
+			dzn_task_ranaway = true;
 		};
 	} else {
 		// Отключили враги деактивацию
