@@ -171,7 +171,7 @@ dzn_client_updateTask = {
 	dzn_c_radioMan sideChat "Всем отрядам, это Папаша-Медведь. Всем кто меня слышит - покиньте остров немедленно! На остров будут сброшены термобарический бомбы для зачистки!";
 	sleep 4;
 	waitUntil {!isNil {dzn_plrTask99}};
-	[ "dzn_plrTask99", "Покинуть остров", "Assign" ] call dzn_client_updateTask;
+	[ "dzn_plrTask99", "Покинуть остров", "Add" ] call dzn_client_updateTask;
 };
 
 //	Конец миссии
