@@ -289,7 +289,7 @@ dzn_fnc_convertToTimestring = {
 
 [] spawn {
 	// Сломали и дезактивацию, и гпс маркер
-	waitUntil { dzn_task_deactivationCancelled  && dzn_task_gpsPlacingCancelled };
+	waitUntil { dzn_task_gpsPlacingCancelled };
 	sleep 5;
 	
 	// Радио сообщение
