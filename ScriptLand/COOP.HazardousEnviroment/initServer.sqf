@@ -341,7 +341,7 @@ dzn_fnc_convertToTimestring = {
 	sleep random(3);
 	(dzn_bioweaponItem modelToWorld [-(floor(random 100)), -(floor(random 100)), 0]) spawn dzn_massiveStrike;
 	sleep random(3);
-	(dzn_bioweaponItem modelToWorld [-300 + floor(random 100), +300 + floor(random 100), 0]) spawn dzn_massiveStrike;
+	(dzn_bioweaponItem modelToWorld [-300 + floor(random 100), 300 + floor(random 100), 0]) spawn dzn_massiveStrike;
 	sleep 90;
 	
 	dzn_missionResult = "Failed";
