@@ -216,7 +216,7 @@ dzn_fnc_convertToTimestring = {
 		_trg setTriggerArea [20,20,0,false];
 		_trg setTriggerActivation ["EAST","PRESENT",false];
 		_trg setTriggerStatements [
-			"this && !(dzn_bioweaponItem getVariable 'dzn_placingGPS') && !dzn_task_gpsPlacingCancelled && !dzn_task_destroyed", 
+			"this && (dzn_bioweaponItem getVariable 'dzn_placingGPS') && !(dzn_bioweaponItem getVariable 'dzn_isDeactivating') && !dzn_task_gpsPlacingCancelled && !dzn_task_destroyed", 
 			"dzn_task_gpsPlacingCancelled = true; publicVariable 'dzn_task_gpsPlacingCancelled';",
 			""
 		];
@@ -305,26 +305,21 @@ dzn_fnc_convertToTimestring = {
 	};
 
 	sleep (dzn_c_strikeDelay);
-	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
+	// Тут авиаудар (200 залпов) по расширяющемуся радиусу
 	dzn_massiveStrike = {
-		private ["_i","_j","_mssl","_strikePos"];
-		for "_i" from 0 to 250 do {
+		private ["_i","_mssl","_strikePos"];
+		for "_i" from 0 to 200 do {
 			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
-			for "_j" from 0 to 1 do {
-				if (!isNil {_mssl}) then {
-					_strikePos =  _mssl modelToWorld [2,2,0];
-				};
-				_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
-				_mssl hideObjectGlobal true;
-				_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
-				_mssl setVectorUp [0,7,7];
-			};
-			sleep 4;
+			_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
+			_mssl hideObjectGlobal true;
+			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
+			_mssl setVectorUp [0,7,7];
+			sleep floor(random 4);
 		};
 	};
 
 	[] spawn {
-		sleep 15; 
+		sleep 30; 
 		dzn_bioweaponItem hideObjectGlobal true; 
 		dzn_bioweaponItem setVariable ["dzn_isDestroyed", true, true];
 	};
