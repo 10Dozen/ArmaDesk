@@ -155,13 +155,11 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	publicVariable "dzn_task_specialistsDeadCount";
 };
 
-
-
 [] spawn {
 	//Проверка нахождения товарищей в зоне смерти при выбросах
 	waitUntil { time > dzn_c_delayTime };
 
-	waitUntil { (!isNil "dzn_task_gpsPlaced" && {dzn_task_gpsPlaced}) || (!isNil "dzn_msg_destroyAll" && {dzn_msg_destroyAll}) };
+	waitUntil {!isNil { dzn_bioweaponItem getVariable "dzn_isDestroyed" }};
 	
 	dzn_task_players = dzn_task_players + [player];
 	publicVariable "dzn_task_players";
@@ -179,6 +177,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 		player setVariable ['dzn_playerSurvived', true, true];
 	};
 };
+
 
 player setVariable ["dzn_plagued", false, false];
 //Смертельная зона
