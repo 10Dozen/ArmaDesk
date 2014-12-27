@@ -322,7 +322,12 @@ dzn_fnc_convertToTimestring = {
 			sleep 4;
 		};
 	};
-	
+
+	[] spawn {
+		sleep 15; 
+		dzn_bioweaponItem hideObjectGlobal true; 
+		dzn_bioweaponItem setVariable ["dzn_isDestroyed", true, true];
+	};
 	[] spawn dzn_massiveStrike;
 	sleep random(3);
 	[] spawn dzn_massiveStrike;
