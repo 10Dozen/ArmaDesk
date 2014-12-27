@@ -156,15 +156,19 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 };
 
 
+
 [] spawn {
+	//Проверка нахождения товарищей в зоне смерти при выбросах
 	waitUntil { time > dzn_c_delayTime };
-	waitUntil { !isNil "dzn_task_gpsPlaced" };
-	waitUntil { dzn_task_gpsPlaced };
+
+	waitUntil { (!isNil "dzn_task_gpsPlaced" && {dzn_task_gpsPlaced}) || (!isNil "dzn_msg_destroyAll" && {dzn_msg_destroyAll}) };
 	
 	dzn_task_players = dzn_task_players + [player];
 	publicVariable "dzn_task_players";
 	
-	waitUntil { !isNil "dzn_task_extracted" };
+	if (dzn_task_gpsPlaced) then {
+		waitUntil { !isNil "dzn_task_extracted" };
+
 	if (player in dzn_impactDeathZone) then {
 		player setVariable ['dzn_playerSurvived', false, true];
 		player spawn dzn_killSwitchForLost;
