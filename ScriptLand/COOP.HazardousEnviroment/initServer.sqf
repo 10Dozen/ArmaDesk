@@ -77,15 +77,19 @@ publicVariable "dzn_totalPlayersCount";
 [] spawn {
 	// Проверяем условия для завершения миски
 	waitUntil { time > dzn_c_delayTime + floor(random 5) };
-	// ПУ уничтожена
-	waitUntil {dzn_task_launchPodDestroyed};
-	dzn_cond_launchPod = 1;
+	dzn_cond_launchPod = 0;
 	dzn_cond_deactivate = 0;
 	dzn_cond_gps = 0;
 	dzn_cond_escape = 0;
+
+	// ПУ уничтожена
+	[] spawn {
+		waitUntil {dzn_task_launchPodDestroyed};
+		dzn_cond_launchPod = 1;
+	};
 	
 	waitUntil { dzn_task_deactivated || dzn_task_gpsPlaced };
-	if ( dzn_task_deactivated ) then {
+	if ( dzn_task_deactivated && (dzn_cond_launchPod == 1)  ) then {
 		dzn_cond_deactivate = 1;
 	
 		sleep 5;
@@ -118,6 +122,9 @@ publicVariable "dzn_totalPlayersCount";
 			dzn_missionResult = "Failed";
 		};
 	};
+	
+	
+	
 };
 
 // Time to string function
