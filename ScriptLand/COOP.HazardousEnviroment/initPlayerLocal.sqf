@@ -224,7 +224,7 @@ dzn_killSwitchForLost = {
 dzn_killSwitch = {
 	if !(local _this) exitWith {};
 	_this setVariable ["dzn_plagued", true, false];
-	hint parseText "<t color='#ff0000'>Химический детектор завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
+	hint parseText "Химический детектор <t color='#ff0000'>завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
 	sleep 10;
 	_this setDamage ((damage _this) + 0.8);
 	sleep 5;
