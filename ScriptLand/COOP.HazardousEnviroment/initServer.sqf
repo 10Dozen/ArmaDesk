@@ -322,7 +322,7 @@ dzn_fnc_convertToTimestring = {
 			_strikePos = [
 				(_this select 0) + random(floor (6 * _i)) - random(floor (6 * _i)),
 				(_this select 1) + random(floor (6 * _i)) - random(floor (6 * _i)),
-				300
+				0
 			];
 			_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
 			_mssl hideObjectGlobal true;
