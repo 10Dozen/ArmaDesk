@@ -189,7 +189,7 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 		player spawn dzn_killSwitchForLost;
 	} else {
 		if ((getPosASL player) in dzn_impactZone) then {
-			hint parseText "Химический детектор показывает повышение опасных материалов!<br/><br/>Тем не менее, уровень в безопасных пределах.";
+			hint parseText "<t color='#ff0000' size='1.3'>HazMatID Elite</t><br/><br/>Повышение уровня опасных материалов в воздухе!";
 		};
 		player setVariable ['dzn_playerSurvived', true, true];
 	};
@@ -203,6 +203,8 @@ dzn_deathZone = {
 	_unit = _this select 0;
 	_trg = _this select 1;
 	
+	// Проверяем, что товарищ не слишком высоко
+	if ((getPosATL _unit select 2) > dzn_c_plagueZoneHeight) exitWith {};	
 	// Если в зоне не человечки, а техника то вызываем функцию для экипажа и выходим
 	if !(_unit isKindOf "Man") exitWith {
 		private ["_crew"];
@@ -211,14 +213,11 @@ dzn_deathZone = {
 			[_x, _trg] spawn dzn_deathZone;
 		} forEach _crew;
 	};
+	// Проверяем, что товарищ еще не заражен
+	if (_unit getVariable "dzn_plagued") exitWith {};	
 	
 	// Если пацан не заражен (и у него все еще работает химдетектор), то выводим сообщение
-	if !(_unit getVariable "dzn_plagued") then {
-		hint parseText "Химический детектор показывает резкое повышение опасных материалов!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
-	};
-
-	if ((getPosATL _unit select 2) > dzn_c_plagueZoneHeight) exitWith {};	// Проверяем, что товарищ не слишком высоко
-	if (_unit getVariable "dzn_plagued") exitWith {};	// Проверяем, что товарищ еще не заражен
+	hint parseText "<t color='#ff0000' size='1.3'>HazMatID Elite</t><br/><br/>ПРЕВЫШЕНИЕ уровня опасных материалов в воздухе!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
 	_dist = (triggerArea _trg) select 0;
 	
 	sleep 10;
@@ -230,7 +229,7 @@ dzn_deathZone = {
 // Убиваем товарищей на выбросе
 dzn_killSwitchForLost = {
 	if !(local _this) exitWith {};
-	hint parseText "Химический детектор показывает резкое повышение опасных материалов!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
+	hint parseText "<t color='#ff0000' size='1.3'>HazMatID Elite</t><br/><br/>ПРЕВЫШЕНИЕ уровня опасных материалов в воздухе!<br/><br/><t color='#ff0000'>Покиньте опасную зону!</t>";
 	sleep 3;
 	_this spawn dzn_killSwitch;
 };
@@ -239,7 +238,7 @@ dzn_killSwitchForLost = {
 dzn_killSwitch = {
 	if !(local _this) exitWith {};
 	_this setVariable ["dzn_plagued", true, false];
-	hint parseText "Химический детектор <t color='#ff0000'>завис на максимальном показателе.</t><br/><br/>Кажется, что это конец.";
+	hint parseText "<t color='#ff0000' size='1.3'>HazMatID Elite</t><br/><br/>Внимание!<br/><br/><t color='#ff0000'>Превышена критическая концентрация опасных материалов на накопителе!</t><br/>Немедленно произвести обеззараживание и госпитализацию!";
 	sleep 10;
 	_this setDamage ((damage _this) + 0.8);
 	sleep 5;
