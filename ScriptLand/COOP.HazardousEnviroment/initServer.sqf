@@ -302,19 +302,29 @@ dzn_fnc_convertToTimestring = {
 
 	sleep (dzn_c_strikeDelay);
 	// Тут авиаудар (50 залпов по 2 ракеты) по расширяющемуся радиусу
-	private ["_i","_j","_mssl","_strikePos"];
-	for "_i" from 0 to 250 do {
-		_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
-		for "_j" from 0 to 1 do {
-			if (!isNil {_mssl}) then {
-				_strikePos =  _mssl modelToWorld [2,2,0];
+	dzn_massiveStrike = {
+		private ["_i","_j","_mssl","_strikePos"];
+		for "_i" from 0 to 250 do {
+			_strikePos = dzn_bioweaponItem modelToWorld [0, -100 + random(floor (20 * _i)) - random(floor (29 * _i)), +100];
+			for "_j" from 0 to 1 do {
+				if (!isNil {_mssl}) then {
+					_strikePos =  _mssl modelToWorld [2,2,0];
+				};
+				_mssl = "Bo_Mk82_MI08" createVehicle _strikePos; 
+				_mssl hideObjectGlabal true;
+				_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
+				_mssl setVectorUp [0,7,7];
 			};
-			_mssl = "Missile_AGM_02_F" createVehicle _strikePos; 
-			_mssl setDir ([_mssl,_strikePos] call BIS_fnc_dirTo); 
-			_mssl setVectorUp [0,7,7];
+			sleep 4;
 		};
-		sleep 4;
 	};
+	
+	[] spawn dzn_massiveStrike;
+	sleep random(3);
+	[] spawn dzn_massiveStrike;
+	sleep random(3);
+	[] spawn dzn_massiveStrike;
+	sleep random(3);
 	
 	dzn_missionResult = "Failed";
 };
