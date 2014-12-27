@@ -134,13 +134,30 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	} forEach _men;
 };
 
+// Считаем игроков в мисске
+[] spawn {
+	waitUntil { time > dzn_c_delayTime + 20 };
+	wautuntil { !isNil "dzn_totalPlayersCount" };
+	
+	// Записываемся
+	dzn_totalPlayersCount = dzn_totalPlayersCount + 1;
+	publicVariable "dzn_totalPlayersCount";
+	
+	// Удаляемся после смерти
+	private ["_unit"];
+	_unit = player;
+	waitUntil { !alive _unit || !isPlayer _unit };
+	dzn_totalPlayersCount = dzn_totalPlayersCount - 1;
+	publicVariable "dzn_totalPlayersCount";
+};
+
 // Специалисты записываются в список и сообщают в случае своей смерти
 [] spawn {
+	waitUntil { time > dzn_c_delayTime };
+	
+	waitUntil { !isNil "dzn_task_specialistsCount" };
 	if (isNil { player getVariable "dzn_isSpecialist" }) exitWith {};
 	
-	waitUntil { time > dzn_c_delayTime };
-	waitUntil { !isNil "dzn_task_specialistsCount" };
-		
 	if (dzn_task_specialistsCount == -1) then {
 		dzn_task_specialistsCount = 1;
 	} else {
