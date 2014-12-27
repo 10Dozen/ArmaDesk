@@ -165,19 +165,14 @@ waitUntil { !isNil "dzn_task_specialistsDeadCount" };
 	publicVariable "dzn_task_players";
 	
 	waitUntil { !isNil "dzn_task_extracted" };
-	
-	private ["_trg"];
-	_trg = createTrigger ["EmptyDetector", [3605,3642,0]];
-	_trg setTriggerArea [1200, 800, -139.84, false];
-	_trg setTriggerActivation ["WEST","PRESENT",true];
-	_trg setTriggerStatements [
-		"this && !(player in thisList)",
-		"player setVariable ['dzn_playerSurvived', true, true];",
-		""
-	];
-	
-	if ( (!isNil { player getVariable 'dzn_playerSurvived'}) && { !(player getVariable 'dzn_playerSurvived') } ) then {
+	if (player in dzn_impactDeathZone) then {
+		player setVariable ['dzn_playerSurvived', false, true];
 		player spawn dzn_killSwitchForLost;
+	} else {
+		if (player in dzn_impactZone) then {
+			hint parseText "Химический детектор показывает повышение опасных материалов!<br/><br/>Тем не менее, уровень в безопасных пределах.";
+		};
+		player setVariable ['dzn_playerSurvived', true, true];
 	};
 };
 
