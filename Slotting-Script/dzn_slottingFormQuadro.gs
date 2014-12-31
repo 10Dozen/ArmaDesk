@@ -58,6 +58,66 @@ function dzn_preInitialize() {
 	Logger.log("Pre-initialized!");
 }
 
+//
+// After form creator entered SIDE and SLOTS names for every SIDE, calling dzn_initialize
+// INPUT: none | OUTPUT: none (write to ScriptProperties)
+function dzn_initialize() {
+	Logger.log("Intialization...");
+	
+	var debug = false;
+	if (debug) {Logger.log('Debugging!');}
+	
+	var form = FormApp.getActiveForm();
+	var properties = PropertiesService.getScriptProperties();	
+	
+	var ids = properties.getProperty("ids");
+	ids = dzn_convert(ids, "toList");
+	
+	var mode	// mode of form - true - 2 sections, false - 1 section
+	switch (form.getItemById(ids[0]).getHelpText().toLowerCase()) {
+		case "coop":
+			mode = "C";
+			break;
+		case "tvt":
+			mode = "T";
+			break
+	}
 
-
-
+	// Get edited SIDE and SLOTS names from preinitialized form
+	var sidesNames = dzn_convert(form.getItemById(ids[1]).getHelpText(), "toList");
+	if (debug) {Logger.log('Side names: %s', sidesNames);}
+	
+	// Saving SIDE and SLOTS names
+	var sectionNamesMasks
+	if (mode == "T") {
+		sectionNamesMasks = [
+			"iИзображение к миссии",
+			"tМиссия",
+			"oИгроки",
+			"pНик в игре",
+			"cСторона",
+			"bSIDEA",
+			"sSIDEA: Слоттинг",
+			"cSIDEA: Роль",       
+			"bSIDEB",
+			"sSIDEB: Слоттинг",
+			"cSIDEB: Роль"
+		];
+		
+		if (sidesNames.length > 1) {
+			sectionNamesMasks.push("sSIDEC: Слоттинг");
+			sectionNamesMasks.push("сSIDEC: Роль");
+			if (sidesNames.length > 2) {
+				sectionNamesMasks.push("sSIDED: Слоттинг");
+				sectionNamesMasks.push("сSIDED: Роль");	
+			}
+		};
+	} else {
+		sectionNamesMasks = [
+			"iИзображение к миссии",
+			"tМиссия",
+			"sSIDEA: Слоттинг",			
+			"pНик в игре",			
+			"cSIDEA: Роль"
+		];
+	}
