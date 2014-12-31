@@ -197,7 +197,29 @@ function dzn_initialize() {
 				if (debug) {Logger.log('Overall players info item');}
 				break;
 		}
-		
-		
-		
+	}
+	
+	//Linking 'Side choosing' to page break	
+	if (mode == "T") {
+		var sideChoice = form.getItemById(slottingChoices[0]).asMultipleChoiceItem();
+		if (debug) {Logger.log('\n Side choice item id is %s',  slottingChoices[0]);}
+		var choiceSideA, choiceSideB, choiceSideC, choiceSideD
+		choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
+		choiceSideB = sideChoice.createChoice(sidesNames[1], form.getItemById(breakToSides[1]).asPageBreakItem());
+		if (breakToSides.length > 1) {
+			choiceSideC = sideChoice.createChoice(sidesNames[2], form.getItemById(breakToSides[2]).asPageBreakItem());
+			if (breakToSides.length > 2) {
+				choiceSideD = sideChoice.createChoice(sidesNames[3], form.getItemById(breakToSides[3]).asPageBreakItem());	
+				sideChoice.setChoices([choiceSideA, choiceSideB, choiceSideC, choiceSideD]);
+			} else {
+				sideChoice.setChoices([choiceSideA, choiceSideB, choiceSideC]);
+			}
+		} else {
+			sideChoice.setChoices([choiceSideA, choiceSideB]);
+		}
 	}	
+
+
+		
+		
+	
