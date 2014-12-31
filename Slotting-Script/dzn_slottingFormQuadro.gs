@@ -39,10 +39,10 @@ function dzn_preInitialize() {
 	Logger.log("Adding items to enter sides and slots names.");
 	var mode = form.addSectionHeaderItem().setTitle("dzn_MODE").setHelpText('COOP'); // COOP or TVT
 	var sides = form.addSectionHeaderItem().setTitle("dzn_sides").setHelpText("BLUFOR | OPFOR | INDEP | CIV");
-	var slots0 = form.addSectionHeaderItem().setTitle("dzn_slotsA").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
-	var slots1 = form.addSectionHeaderItem().setTitle("dzn_slotsB").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
-	var slots2 = form.addSectionHeaderItem().setTitle("dzn_slotsC").setHelpText("!ECHO | [Echo] SL | [Echo] Rifleman | !FOXTROT | [Foxtrot] Operator | [Foxtrot] Rifleman");
-	var slots3 = form.addSectionHeaderItem().setTitle("dzn_slotsD").setHelpText("!GOLF | [Golf] SL | [Golf] Rifleman | !INDIA | [India] Operator | [India] Rifleman");
+	var slotsA = form.addSectionHeaderItem().setTitle("dzn_slotsA").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
+	var slotsB = form.addSectionHeaderItem().setTitle("dzn_slotsB").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
+	var slotsC = form.addSectionHeaderItem().setTitle("dzn_slotsC").setHelpText("!ECHO | [Echo] SL | [Echo] Rifleman | !FOXTROT | [Foxtrot] Operator | [Foxtrot] Rifleman");
+	var slotsD = form.addSectionHeaderItem().setTitle("dzn_slotsD").setHelpText("!GOLF | [Golf] SL | [Golf] Rifleman | !INDIA | [India] Operator | [India] Rifleman");
 
 	var ids = mode.getId().toString() 
 	  + " | " + sides.getId().toString() 
@@ -105,9 +105,11 @@ function dzn_initialize() {
 		];
 		
 		if (sidesNames.length > 1) {
+			sectionNamesMasks.push("bSIDEC");
 			sectionNamesMasks.push("sSIDEC: Слоттинг");
 			sectionNamesMasks.push("сSIDEC: Роль");
 			if (sidesNames.length > 2) {
+				sectionNamesMasks.push("bSIDED");
 				sectionNamesMasks.push("sSIDED: Слоттинг");
 				sectionNamesMasks.push("сSIDED: Роль");	
 			}
@@ -218,7 +220,7 @@ function dzn_initialize() {
 			sideChoice.setChoices([choiceSideA, choiceSideB]);
 		}
 	}	
-
+}
 
 		
 		
