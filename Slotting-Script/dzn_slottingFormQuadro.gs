@@ -85,6 +85,7 @@ function dzn_initialize() {
 
 	// Get edited SIDE and SLOTS names from preinitialized form
 	var sidesNames = dzn_convert(form.getItemById(ids[1]).getHelpText(), "toList");
+	var sidesCount = sidesNames.length;
 	if (debug) {Logger.log('Side names: %s', sidesNames);}
 	
 	// Saving SIDE and SLOTS names
@@ -104,11 +105,11 @@ function dzn_initialize() {
 			"cSIDEB: Роль"
 		];
 		
-		if (sidesNames.length > 1) {
+		if (sidesCount > 2) {
 			sectionNamesMasks.push("bSIDEC");
 			sectionNamesMasks.push("sSIDEC: Слоттинг");
 			sectionNamesMasks.push("сSIDEC: Роль");
-			if (sidesNames.length > 2) {
+			if (sidesCount > 3) {
 				sectionNamesMasks.push("bSIDED");
 				sectionNamesMasks.push("sSIDED: Слоттинг");
 				sectionNamesMasks.push("сSIDED: Роль");	
@@ -205,12 +206,14 @@ function dzn_initialize() {
 	if (mode == "T") {
 		var sideChoice = form.getItemById(slottingChoices[0]).asMultipleChoiceItem();
 		if (debug) {Logger.log('\n Side choice item id is %s',  slottingChoices[0]);}
+		
 		var choiceSideA, choiceSideB, choiceSideC, choiceSideD
 		choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
 		choiceSideB = sideChoice.createChoice(sidesNames[1], form.getItemById(breakToSides[1]).asPageBreakItem());
-		if (breakToSides.length > 1) {
+		
+		if (sidesCount > 2) {
 			choiceSideC = sideChoice.createChoice(sidesNames[2], form.getItemById(breakToSides[2]).asPageBreakItem());
-			if (breakToSides.length > 2) {
+			if (sidesCount > 3) {
 				choiceSideD = sideChoice.createChoice(sidesNames[3], form.getItemById(breakToSides[3]).asPageBreakItem());	
 				sideChoice.setChoices([choiceSideA, choiceSideB, choiceSideC, choiceSideD]);
 			} else {
@@ -219,7 +222,98 @@ function dzn_initialize() {
 		} else {
 			sideChoice.setChoices([choiceSideA, choiceSideB]);
 		}
+	}
+	
+	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
+	var slotsSideA, slotsSideB, slotsSideC, slotsSideD
+	slotsSideA = form.getItemById(ids[2]).getHelpText();
+	slotsSideB = slotsSideC = slotsSideD = '0';
+	
+	if (mode == "T") { 
+		slotsSideB = form.getItemById(ids[3]).getHelpText(); 
+		if (sidesCount > 2) {
+			slotsSideC = form.getItemById(ids[4]).getHelpText(); 
+			if (sidesCount > 3) {
+				slotsSideD = form.getItemById(ids[5]).getHelpText(); 
+			}	
+		} 
 	}	
+	
+	function dzn_getHeaderSlotsIds(names) {
+		var output = [];
+		var names = names.split(" | ");
+		for (var i = 0; i < names.length; i++) {
+			if (names[i].substring(0,1) == "!") {
+				names[i] = "\n" + names[i].substring(1,names[i].length) + "\n";
+				output.push(i.toString());
+			}		
+		}		
+		return [dzn_convert(names, "toString"), dzn_convert(output, "toString")]	
+	}
+	
+	var slotsParts, slotsHeadsSideA, slotsHeadsSideB, slotsHeadsSideC, slotsHeadsSideD
+	slotsHeadsSideB = slotsHeadsSideC = slotsHeadsSideD = '0';
+	slotsParts = dzn_getHeaderSlotsIds(slotsSideA);
+	slotsSideA = slotsParts[0];
+	slotsHeadsSideA = slotsParts[1];
+	if (mode == "T") {
+		slotsParts = dzn_getHeaderSlotsIds(slotsSideB);
+		slotsSideB = slotsParts[0];
+		slotsHeadsSideB = slotsParts[1];
+		if (sidesCount > 2) {
+			slotsParts = dzn_getHeaderSlotsIds(slotsSideC);
+			slotsSideC = slotsParts[0];
+			slotsHeadsSideC = slotsParts[1];
+			if (sidesCount > 3) {
+				slotsParts = dzn_getHeaderSlotsIds(slotsSideD);
+				slotsSideD = slotsParts[0];
+				slotsHeadsSideD = slotsParts[1]; 
+			}	
+		} 
+	}
+	
+	// WRITE TO PROPERTIES
+	if (debug) {Logger.log('Writing properties');}
+	
+	properties.setProperties({
+		"idName" : idName.toString(),								// 0 ID of Name item
+		"idSections" : dzn_convert(slottingSections, "toString"),	// 1 IDs of Section for every side
+		"idChoices" : dzn_convert(slottingChoices, "toString"),		// 2 IDs of Choices for every side		
+		
+		"usedSlotsSideA" : "0",										// 3 Used slots for side A
+		"usedSlotsSideB" : "0",										// 4 Used slots for side B
+		"usedSlotsSideC" : "0",										// 5 Used slots for side C
+		"usedSlotsSideD" : "0",										// 6 Used slots for side D
+		
+		"usedNicksSideA" : "0",										// 7 Used nicknames for side A
+		"usedNicksSideB" : "0",										// 8 Used nicknames for side B
+		"usedNicksSideC" : "0",										// 9 Used nicknames for side C
+		"usedNicksSideD" : "0",										// 10 Used nicknames for side D		
+		
+		"sides" : dzn_convert(sidesNames, "toString"), 				// 11 Names of sides
+		
+		"slotsSideA" : slotsSideA,									// 12 Original names of slots for side A
+		"slotsSideB" : slotsSideB,									// 13 Original names of slots for side B
+		"slotsSideC" : slotsSideC,									// 14 Original names of slots for side C
+		"slotsSideD" : slotsSideD,									// 15 Original names of slots for side D
+		
+		"slotsHeadsSideA" : slotsHeadsSideA,						// 16 IDs of headers in slots names for side A
+		"slotsHeadsSideB" : slotsHeadsSideB,						// 17 IDs of headers in slots names for side B
+		"slotsHeadsSideC" : slotsHeadsSideC,						// 18 IDs of headers in slots names for side C
+		"slotsHeadsSideD" : slotsHeadsSideD,						// 19 IDs of headers in slots names for side D
+		
+		"idOverall" : idOverall,									// 20 ID of Overall players names section
+		"mode" : mode  												// 21 mode
+	}, true);
+
+	// Deleting blocks with SIDE and SLOTS settings
+	if (debug) {Logger.log('Deleting service sections');}
+	for (var i = 0; i < ids.length; i++) {
+		form.deleteItem(form.getItemById(ids[i]).getIndex());
+	}
+	Logger.log("Initialized");
+	// Running save trigger to update form
+	
 }
 
 		
