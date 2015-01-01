@@ -37,12 +37,12 @@ function dzn_preInitialize() {
 	form.deleteAllResponses();
   
 	Logger.log("Adding items to enter sides and slots names.");
-	var mode = form.addSectionHeaderItem().setTitle("dzn_MODE").setHelpText('COOP'); // COOP or TVT
-	var sides = form.addSectionHeaderItem().setTitle("dzn_sides").setHelpText("BLUFOR | OPFOR | INDEP | CIV");
-	var slotsA = form.addSectionHeaderItem().setTitle("dzn_slotsA").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
-	var slotsB = form.addSectionHeaderItem().setTitle("dzn_slotsB").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
-	var slotsC = form.addSectionHeaderItem().setTitle("dzn_slotsC").setHelpText("!ECHO | [Echo] SL | [Echo] Rifleman | !FOXTROT | [Foxtrot] Operator | [Foxtrot] Rifleman");
-	var slotsD = form.addSectionHeaderItem().setTitle("dzn_slotsD").setHelpText("!GOLF | [Golf] SL | [Golf] Rifleman | !INDIA | [India] Operator | [India] Rifleman");
+	var mode = form.addSectionHeaderItem().setTitle("FORM MODE").setHelpText('COOP'); // COOP or TVT
+	var sides = form.addSectionHeaderItem().setTitle("AVAILABLE SIDES").setHelpText("BLUFOR | OPFOR | INDEP | CIV");
+	var slotsA = form.addSectionHeaderItem().setTitle("SLOTS FOR SIDE 1").setHelpText("!ALPHA | [Alpha] SL | [Alpha] Rifleman | !BRAVO | [Bravo] SL | [Bravo] Rifleman");
+	var slotsB = form.addSectionHeaderItem().setTitle("SLOTS FOR SIDE 2").setHelpText("!CHARLIE | [Charlie] SL | [Charlie] Rifleman | !DELTA | [Delta] Operator | [Delta] Rifleman");
+	var slotsC = form.addSectionHeaderItem().setTitle("SLOTS FOR SIDE 3").setHelpText("!ECHO | [Echo] SL | [Echo] Rifleman | !FOXTROT | [Foxtrot] Operator | [Foxtrot] Rifleman");
+	var slotsD = form.addSectionHeaderItem().setTitle("SLOTS FOR SIDE 4").setHelpText("!GOLF | [Golf] SL | [Golf] Rifleman | !INDIA | [India] Operator | [India] Rifleman");
 
 	var ids = mode.getId().toString() 
 	  + " | " + sides.getId().toString() 
@@ -105,14 +105,16 @@ function dzn_initialize() {
 			"cSIDEB: Роль"
 		];
 		
+		function dzn_init_addSections(sideName) {
+			sectionNamesMasks.push("b" + sideName);
+			sectionNamesMasks.push("s" + sideName + ": Слоттинг");
+			sectionNamesMasks.push("с" + sideName + ": Роль");
+		}
+		
 		if (sidesCount > 2) {
-			sectionNamesMasks.push("bSIDEC");
-			sectionNamesMasks.push("sSIDEC: Слоттинг");
-			sectionNamesMasks.push("сSIDEC: Роль");
+			dzn_init_addSections("SIDEC");
 			if (sidesCount > 3) {
-				sectionNamesMasks.push("bSIDED");
-				sectionNamesMasks.push("sSIDED: Слоттинг");
-				sectionNamesMasks.push("сSIDED: Роль");	
+				dzn_init_addSections("SIDED");
 			}
 		};
 	} else {
@@ -224,22 +226,9 @@ function dzn_initialize() {
 		}
 	}
 	
-	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
-	var slotsSideA, slotsSideB, slotsSideC, slotsSideD
-	slotsSideA = form.getItemById(ids[2]).getHelpText();
-	slotsSideB = slotsSideC = slotsSideD = '0';
+
 	
-	if (mode == "T") { 
-		slotsSideB = form.getItemById(ids[3]).getHelpText(); 
-		if (sidesCount > 2) {
-			slotsSideC = form.getItemById(ids[4]).getHelpText(); 
-			if (sidesCount > 3) {
-				slotsSideD = form.getItemById(ids[5]).getHelpText(); 
-			}	
-		} 
-	}	
-	
-	function dzn_getHeaderSlotsIds(names) {
+	function dzn_init_getHeaderSlotsIds(names) {
 		var output = [];
 		var names = names.split(" | ");
 		for (var i = 0; i < names.length; i++) {
@@ -251,25 +240,16 @@ function dzn_initialize() {
 		return [dzn_convert(names, "toString"), dzn_convert(output, "toString")]	
 	}
 	
-	var slotsParts, slotsHeadsSideA, slotsHeadsSideB, slotsHeadsSideC, slotsHeadsSideD
-	slotsHeadsSideB = slotsHeadsSideC = slotsHeadsSideD = '0';
-	slotsParts = dzn_getHeaderSlotsIds(slotsSideA);
-	slotsSideA = slotsParts[0];
-	slotsHeadsSideA = slotsParts[1];
-	if (mode == "T") {
-		slotsParts = dzn_getHeaderSlotsIds(slotsSideB);
-		slotsSideB = slotsParts[0];
-		slotsHeadsSideB = slotsParts[1];
-		if (sidesCount > 2) {
-			slotsParts = dzn_getHeaderSlotsIds(slotsSideC);
-			slotsSideC = slotsParts[0];
-			slotsHeadsSideC = slotsParts[1];
-			if (sidesCount > 3) {
-				slotsParts = dzn_getHeaderSlotsIds(slotsSideD);
-				slotsSideD = slotsParts[0];
-				slotsHeadsSideD = slotsParts[1]; 
-			}	
-		} 
+	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
+	var slotsNames = ["0","0","0","0"];
+	var slotsHeads = ["0","0","0","0"];
+	var slotList, slotParsed;
+	
+	for (var i = 0; i < sidesCount; i++) {
+		slotList = form.getItemById(ids[i + 2]).getHelpText();
+		slotParsed = dzn_init_getHeaderSlotsIds(slotsNames[i]);
+		slotsNames[i] = slotParsed[0];
+		slotsHeads[i] = slotParsed[1];
 	}
 	
 	// WRITE TO PROPERTIES
@@ -292,15 +272,15 @@ function dzn_initialize() {
 		
 		"sides" : dzn_convert(sidesNames, "toString"), 				// 11 Names of sides
 		
-		"slotsSideA" : slotsSideA,									// 12 Original names of slots for side A
-		"slotsSideB" : slotsSideB,									// 13 Original names of slots for side B
-		"slotsSideC" : slotsSideC,									// 14 Original names of slots for side C
-		"slotsSideD" : slotsSideD,									// 15 Original names of slots for side D
+		"slotsSideA" : slotsNames[0],									// 12 Original names of slots for side A
+		"slotsSideB" : slotsNames[1],									// 13 Original names of slots for side B
+		"slotsSideC" : slotsNames[2],									// 14 Original names of slots for side C
+		"slotsSideD" : slotsNames[3],									// 15 Original names of slots for side D
 		
-		"slotsHeadsSideA" : slotsHeadsSideA,						// 16 IDs of headers in slots names for side A
-		"slotsHeadsSideB" : slotsHeadsSideB,						// 17 IDs of headers in slots names for side B
-		"slotsHeadsSideC" : slotsHeadsSideC,						// 18 IDs of headers in slots names for side C
-		"slotsHeadsSideD" : slotsHeadsSideD,						// 19 IDs of headers in slots names for side D
+		"slotsHeadsSideA" : slotsHeads[0],						// 16 IDs of headers in slots names for side A
+		"slotsHeadsSideB" : slotsHeads[1],						// 17 IDs of headers in slots names for side B
+		"slotsHeadsSideC" : slotsHeads[2],						// 18 IDs of headers in slots names for side C
+		"slotsHeadsSideD" : slotsHeads[3],						// 19 IDs of headers in slots names for side D
 		
 		"idOverall" : idOverall,									// 20 ID of Overall players names section
 		"mode" : mode  												// 21 mode
