@@ -96,7 +96,7 @@ function dzn_initialize() {
 		function dzn_init_addSections(sideName) {
 			sectionNamesMasks.push("b" + sideName);
 			sectionNamesMasks.push("s" + sideName + ": Слоттинг");
-			sectionNamesMasks.push("с" + sideName + ": Роль");
+			sectionNamesMasks.push("c" + sideName + ": Роль");
 			if (debug) {Logger.log('sideName: %s :: sectionNamesMasks: %s', sideName, sectionNamesMasks);}
 		}
 		
