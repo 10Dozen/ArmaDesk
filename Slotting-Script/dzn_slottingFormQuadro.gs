@@ -319,7 +319,7 @@ function dzn_onSave() {
 		}
 		
 		function dzn_assignSlot(nick, slot, precense) {
-			var nickIndex = usedNicks.indexOf(nick); // Id of NICK at the side's usedNick/Slot array
+			var nickIndex = data.usedNicks[sideIndex].indexOf(nick); // Id of NICK at the side's usedNick/Slot array
 			if (duplicates.indexOf(nick) == -1) {
 				duplicates.push(nick);
 				
@@ -328,41 +328,49 @@ function dzn_onSave() {
 					// Change Nickname-Slot
 					if (slot != 'Без слота') {
 						// Change slot
-						usedSlots[nickIndex] = slot;
-						precenseList[nickIndex] = [nick, precense];
+						data.usedSlots[sideIndex][nickIndex] = slot;
+						data.precense[dzn_getPrecense(nick)] = [nick, precense];
 					} else {
 						// Remove from any slot
-						usedNicks.splice(nickIndex,1);
-						usedSlots.splice(nickIndex,1);
-						precenseList.splice(dzn_getPrecense(nick),1);
+						data.usedNicks[sideIndex].splice(nickIndex,1);
+						data.usedSlots[sideIndex].splice(nickIndex,1);
+						data.precense.splice(dzn_getPrecense(nick),1);
 					}
 				} else {
 					// Add Nickname and Slot
-					usedNicks.push(nick);
-					usedSlots.push(slot);
-					precenseList.push([nick, precense]);
-				
+					data.usedNicks[sideIndex].push(nick);
+					data.usedSlots[sideIndex].push(slot);
+					data.precense.push([nick, precense]);
+
 					// If TVT - remove nick/slot from opposite side's arrays (if had been added earlier)
 					if (data.mode == "T") {
 						var idToRemove
 						for (var k = 0; k < data.sides.length; k++) {
 							if (k != sideIndex) {
-								idToRemove = data.usedNicks.indexOf(nick);
+								idToRemove = data.usedNicks[sideIndex].indexOf(nick);
 								if ( idToRemove > -1 ) {
-								//	usedNicksOpposite.splice(idToRemove,1);
-								//	usedSlotsOpposite.splice(idToRemove,1);
-								//	precenseListOpposite.splice(idToRemove,1);
+									data.usedNicks[k].splice(idToRemove,1);
+									data.usedSlots[k].splice(idToRemove,1);
+									data.precense.splice(dzn_getPrecense(nick),1);
 								}
 							}
 						}
 					}
 				}
-				
 			}
 		}
 		
 		function dzn_unassignMultipleSlots() {
-		
+			// There is NO SLOT chosen
+			var nickRE = new RegExp (nick + "-sq\\\d{1,2}$");
+			for (var k = 0; k < data.usedNicks[sideIndex].length; k++) {
+				if (nickRE.test(data.usedNicks[sideIndex][k])) {
+					var numeredNick = data.usedNicks[sideIndex][k];
+					Logger.log(numeredNick);
+					dzn_assignSlot(numeredNick, 'Без слота', precense);
+					k--;
+				}
+			}
 		}
 		
 		// Checking response
@@ -376,22 +384,16 @@ function dzn_onSave() {
 			var precenseResponse = response.getResponseForItem(form.getItemById(data.idPrecense));
 			var passcodeResponse = response.getResponseForItem(form.getItemById(data.idPasscode));
 			
-			var sideResponse, sideIndex, slotResponse, usedSlots, usedNicks, precenseList
+			var sideResponse, sideIndex, slotResponse
 			if (data.mode == "T") {
 				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
 				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));
 				sideIndex = data.sides.indexOf(sideResponse.getResponse());
 				slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[sideIndex]));
-				
-				usedSlots = data.usedSlots[sideIndex];
-				usedNicks = data.usedNicks[sideIndex];
-				precenseList = = data.precense;
 			} else {
 				// if NOT TVT: assign slots and nicks
 				slotResponse = response.getResponseForItem(form.getItemById(data.idChoices));
-				usedSlots = data.usedSlots[0];
-				usedNicks = data.usedNicks[0];
-				precenseList = data.precense;
+				sideIndex = 0;
 			}
 			
 			// Get actual values of response NICK and SLOT
@@ -413,10 +415,10 @@ function dzn_onSave() {
 				var passcode;
 				if ((passcodeResponse != null)
 					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
-					// dzn_unassignMultipleSlots();
+					dzn_unassignMultipleSlots();
 				} else {
 					// Passcode Not given -- e.g. single man
-					// dzn_assignSlot(nick, slot[0], precense);
+					dzn_assignSlot(nick, slot[0], precense);
 				}
 			} else {
 				// Multiple slots were chosen
@@ -426,12 +428,12 @@ function dzn_onSave() {
 					// Passcode confirmed
 					if (slot.indexOf('Без слота') > -1) {
 						// Unassign multiple slots
-						// dzn_unassignMultipleSlots();
+						dzn_unassignMultipleSlots();
 					} else {
 						// Slots chosen
 						for (var j = 0; j < slot.length; j++) {
 							var numeredNick = nick + "-sq" + j.toString();
-							//dzn_assignSlot(numeredNick, slot[j], precense);
+							dzn_assignSlot(numeredNick, slot[j], precense);
 						}
 					}
 				}
