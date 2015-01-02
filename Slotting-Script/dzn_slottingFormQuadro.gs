@@ -272,6 +272,7 @@ function dzn_initialize() {
 		"slotsHeadsSideD" : 	slotsHeads[3], 	// IDs of headers in slots names for side D
 		
 		"passcodes" : 		passcodes, 	// List of Allowed passcodes
+		"precense" :		"0",		// Precenses of users
 		
 		"usedSlotsSideA" : 	"0", 		// Used slots for side A
 		"usedNicksSideA" : 	"0", 		// Used nicknames for side A
@@ -316,13 +317,103 @@ function dzn_onSave() {
 			while (ws.test(str.charAt(--i)));
 			return str.slice(0, i + 1);
 		}
+		
+		var formResponses = form.getResponses();
+		var duplicates = [];
+		var response = formResponses[formResponses.length-1];	// Get last responce
+		
+		if (response != null) {
+			// Get form response
+			var nickResponse = response.getResponseForItem(form.getItemById(data.idName));
+			var precenseResponse = response.getResponseForItem(form.getItemById(data.idPrecense));
+			var passcodeResponse = response.getResponseForItem(form.getItemById(data.idPasscode));
+			
+			if (data.mode == "T") {
+				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
+				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));	
+			
+			
+			
+
+
+
+
+if (data.sides.indexOf(sideResponse.getResponse()) == 0) {
+	slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[0]));
+	usedSlots = data.usedSlotsSideA;
+	usedNicks = data.usedNicksSideA;
+	usedSlotsOpposite = data.usedSlotsSideB;
+	usedNicksOpposite = data.usedNicksSideB;
+	precenseList = data.precenseSideA;
+	precenseListOpposite = data.precenseSideB;
+} else {
+	slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[1]));
+	usedSlots = data.usedSlotsSideB;
+	usedNicks = data.usedNicksSideB;
+	usedSlotsOpposite = data.usedSlotsSideA;
+	usedNicksOpposite = data.usedNicksSideA;
+	precenseList = data.precenseSideB;
+	precenseListOpposite = data.precenseSideA;
+}	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			} else {
+				// if NOT TVT: assign slots and nicks
+				slotResponse = response.getResponseForItem(form.getItemById(data.idChoices));
+				usedSlots = data.usedSlotsSideA;
+				usedNicks = data.usedNicksSideA;
+				precenseList = data.precense;
+			}
+			
+			function dzn_assignSlot(nick, slot, precense) {
+				
+			}
+			
+			// Get actual values of response NICK and SLOT
+			var nick = dzn_trim(nickResponse.getResponse()); 	// string
+			var slot = slotResponse.getResponse(); 			// array
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
 	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
 		
 	}
+	
+	
+	
 	
 	// ****************
 	// Flow starts here
@@ -351,9 +442,29 @@ function dzn_onSave() {
 		}
 		data[key] = value; // A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"
 	}
-	Logger.log(data);
+	
+	//	Data values
+	// idName, idSections, idChoices, idPrecense, idPasscode, idSidechoice, idOverall
+	// , mode , sides, passcodes, precense
+	// , slotsSideA, slotsSideB, slotsSideC, slotsSideD 
+	// , slotsHeadsSideA, slotsHeadsSideB, slotsHeadsSideC, slotsHeadsSideD
+	// , usedSlotsSideA, usedSlotsSideB, usedSlotsSideC, usedSlotsSideD 
+	// , usedNicksSideA, usedNicksSideB, usedNicksSideC, usedNicksSideD 
 
+	// Stringtable
+	var str = dzn_setStringtable();
+	
+	// Get Mode of form
+	var roleItem
+	if (data.mode == "C") {
+		roleItem = form.getItemById(data.idChoices).setHelpText(str.slotsLoading);
+	}
 
+	// Get Responses
+	dzn_checkResponses(); 
+	
+	// Get Updated Info and Update
+	var overallInfo = '';
 }
 
 
