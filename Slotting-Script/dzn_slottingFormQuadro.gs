@@ -303,11 +303,66 @@ function dzn_onSave() {
 			ws = /\s/,
 			i = str.length;
 			while (ws.test(str.charAt(--i)));
+			
 			return str.slice(0, i + 1);
 		}
 		
+		function dzn_getPrecense(nick) {
+			var precenseId
+			for (var k = 0; k < data.precense.length; k++) {
+				if (data.precense[k].indexOf(nick) > -1) {
+					precenseId = k;
+				}
+			}
+			
+			return precenseId
+		}
+		
 		function dzn_assignSlot(nick, slot, precense) {
+			var nickIndex = usedNicks.indexOf(nick); // Id of NICK at the side's usedNick/Slot array
+			if (duplicates.indexOf(nick) == -1) {
+				duplicates.push(nick);
 				
+				// Update or Add nick/slot to side's usedSlot/Nick array
+				if (nickIndex > -1) {
+					// Change Nickname-Slot
+					if (slot != 'Без слота') {
+						// Change slot
+						usedSlots[nickIndex] = slot;
+						precenseList[nickIndex] = [nick, precense];
+					} else {
+						// Remove from any slot
+						usedNicks.splice(nickIndex,1);
+						usedSlots.splice(nickIndex,1);
+						precenseList.splice(dzn_getPrecense(nick),1);
+					}
+				} else {
+					// Add Nickname and Slot
+					usedNicks.push(nick);
+					usedSlots.push(slot);
+					precenseList.push([nick, precense]);
+				
+					// If TVT - remove nick/slot from opposite side's arrays (if had been added earlier)
+					if (data.mode == "T") {
+						var idToRemove
+						for (var k = 0; k < data.sides.length; k++) {
+							if (k != sideIndex) {
+								idToRemove = data.usedNicks.indexOf(nick);
+								if ( idToRemove > -1 ) {
+								//	usedNicksOpposite.splice(idToRemove,1);
+								//	usedSlotsOpposite.splice(idToRemove,1);
+								//	precenseListOpposite.splice(idToRemove,1);
+								}
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		function dzn_unassignMultipleSlots() {
+		
 		}
 		
 		// Checking response
@@ -321,7 +376,7 @@ function dzn_onSave() {
 			var precenseResponse = response.getResponseForItem(form.getItemById(data.idPrecense));
 			var passcodeResponse = response.getResponseForItem(form.getItemById(data.idPasscode));
 			
-			var sideResponse, sideIndex, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
+			var sideResponse, sideIndex, slotResponse, usedSlots, usedNicks, precenseList
 			if (data.mode == "T") {
 				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
 				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));
@@ -381,7 +436,6 @@ function dzn_onSave() {
 					}
 				}
 			}
-			
 			
 			// Update ScriptProperties by new usedNick/Slot values for each side
 			var properties = PropertiesService.getScriptProperties();
