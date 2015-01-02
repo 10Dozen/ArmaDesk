@@ -280,6 +280,14 @@ function dzn_initialize() {
 		"usedSlotsSideB" : 	"0", // Used slots for side B
 		"usedNicksSideB" : 	"0", // Used nicknames for side B
 		"precenseSideB" : 	"0"	// Precenses list for sideB
+		
+		"usedSlotsSideC" : 	"0", // Used slots for side C
+		"usedNicksSideC" : 	"0", // Used nicknames for side C
+		"precenseSideC" : 	"0", // Precenses list for sideC
+		
+		"usedSlotsSideD" : 	"0", // Used slots for side D
+		"usedNicksSideD" : 	"0", // Used nicknames for side D
+		"precenseSideD" : 	"0"	// Precenses list for sideD
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -295,6 +303,58 @@ function dzn_initialize() {
 	//dzn_onSave();
 }
 
+
+// *********
+// Main flow
+// *********
+function dzn_onSave() { 
+	function dzn_checkResponses() { 
+		function dzn_trim(str) {
+			var	str = str.replace(/^\s\s*/, ''),
+			ws = /\s/,
+			i = str.length;
+			while (ws.test(str.charAt(--i)));
+			return str.slice(0, i + 1);
+		}
+	}
+
+	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
+	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
+	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
+		
+	}
+	
+	// ****************
+	// Flow starts here
+	// ****************
+	Logger.log(" Running dzn_onSave");
+	var form = FormApp.getActiveForm();
+	var properties = PropertiesService.getScriptProperties();
+	
+	// Get DATA from PropertiesService: ID values convert to single string, notIDs - into Arrays
+	var data = {};
+	var datalist = properties.getKeys();
+	for (var i = 0; i < datalist.length; i++) {
+		var key = datalist[i].toString();
+		var value = dzn_convert(properties.getProperty(key), "toList");
+		Logger.log("%s -- %s", key, value);
+		if (value.length == 1) {
+			// Property isn't array or array with only one item
+			if (key.substring(0,2) == "id") {
+				// If property is "id" property - then should be used as single item
+				value = value[0];
+			} else {
+				if (value[0] == 0) {
+					value = [];
+				}
+			}
+		}
+		data[key] = value; // A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"
+	}
+	Logger.log(data);
+
+
+}
 
 
 
