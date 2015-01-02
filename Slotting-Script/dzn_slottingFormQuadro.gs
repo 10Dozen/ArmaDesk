@@ -438,9 +438,16 @@ function dzn_onSave() {
 					}
 				}
 			}
-			
-			// Update ScriptProperties by new usedNick/Slot values for each side
-			var properties = PropertiesService.getScriptProperties();
+		}
+		
+		// Update ScriptProperties by new usedNick/Slot values for each side
+		var properties = PropertiesService.getScriptProperties();
+		var propertyList = ["usedSlots", "usedNicks", "precense"];
+		for (var i = 0; i < propertyList.length; i++) {
+			var property = data[propertyList[i]];
+			if (property.length == 0) { property = [0] };
+			property = dzn_convert(property, "toString");
+			properties.setProperty(propertyList[i], property);
 		}
 	}	
 		
