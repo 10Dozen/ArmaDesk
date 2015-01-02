@@ -199,8 +199,8 @@ function dzn_initialize() {
 	
 	//Linking 'Side choosing' to page break	
 	if (mode == "T") {
-		var sideChoice = form.getItemById(slottingChoices[0]).asMultipleChoiceItem();
-		if (debug) {Logger.log('\n Side choice item id is %s',  slottingChoices[0]);}
+		var sideChoice = form.getItemById(idSidechoice).asMultipleChoiceItem();
+		if (debug) {Logger.log('\n Side choice item id is %s',  idSidechoice);}
 		
 		var choiceSideA, choiceSideB, choiceSideC, choiceSideD
 		choiceSideA = sideChoice.createChoice(sidesNames[0], form.getItemById(breakToSides[0]).asPageBreakItem());	
@@ -217,8 +217,7 @@ function dzn_initialize() {
 			sideChoice.setChoices([choiceSideA, choiceSideB]);
 		}
 	}
-	
-	
+
 	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
 	function dzn_init_getHeaderSlotsIds(names) {
 		var output = [];
