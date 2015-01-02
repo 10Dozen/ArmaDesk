@@ -247,47 +247,47 @@ function dzn_initialize() {
 	if (debug) {Logger.log('Writing properties');}
 	
 	properties.setProperties({
-		"idName" : 		idName, // ID of Name item
-		"idSections" : 		dzn_convert(slottingSections, "toString"), // IDs of Section for every side
-		"idChoices" : 		dzn_convert(slottingChoices, "toString"), // IDs of Choices for every side
-		"idPrecense" : 		idPrecense, // ID of PrecenseItem
-		"idPasscode" : 		idPasscode, // ID of Passcode item
-		"idSidechoice" : 	idSidechoice, // ID of Side choice item
-		"idOverall" : 		idOverall, // ID of Overall players names section
+		"idName" : 		idName, 	// ID of Name item
+		"idSections" : 		dzn_convert(slottingSections, "toString"), 	// IDs of Section for every side
+		"idChoices" : 		dzn_convert(slottingChoices, "toString"), 	// IDs of Choices for every side
+		"idPrecense" : 		idPrecense, 	// ID of PrecenseItem
+		"idPasscode" : 		idPasscode, 	// ID of Passcode item
+		"idSidechoice" : 	idSidechoice, 	// ID of Side choice item
+		"idOverall" : 		idOverall, 	// ID of Overall players names section
 		
 		"mode" : 		mode, // form mode
 		
-		"sides" : 		dzn_convert(sidesNames, "toString"), // Names of sides
+		"sides" : 		dzn_convert(sidesNames, "toString"), 	// Names of sides
 		
-		"slotsSideA" : 		slotsNames[0], // Original names of slots for side A
-		"slotsHeadsSideA" : 	slotsHeads[0], // IDs of headers in slots names for side A
+		"slotsSideA" : 		slotsNames[0], 	// Original names of slots for side A
+		"slotsHeadsSideA" : 	slotsHeads[0], 	// IDs of headers in slots names for side A
 		
-		"slotsSideB" : 		slotsNames[1], // Original names of slots for side B
-		"slotsHeadsSideB" : 	slotsHeads[1], // IDs of headers in slots names for side B
+		"slotsSideB" : 		slotsNames[1], 	// Original names of slots for side B
+		"slotsHeadsSideB" : 	slotsHeads[1], 	// IDs of headers in slots names for side B
 		
-		"slotsSideC" : 		slotsNames[2], // Original names of slots for side C
-		"slotsHeadsSideC" : 	slotsHeads[2], // IDs of headers in slots names for side C
+		"slotsSideC" : 		slotsNames[2], 	// Original names of slots for side C
+		"slotsHeadsSideC" : 	slotsHeads[2], 	// IDs of headers in slots names for side C
 		
-		"slotsSideD" : 		slotsNames[3], // Original names of slots for side D
-		"slotsHeadsSideD" : 	slotsHeads[3], // IDs of headers in slots names for side D
+		"slotsSideD" : 		slotsNames[3], 	// Original names of slots for side D
+		"slotsHeadsSideD" : 	slotsHeads[3], 	// IDs of headers in slots names for side D
 		
-		"passcodes" : 		passcodes, // List of Allowed passcodes
+		"passcodes" : 		passcodes, 	// List of Allowed passcodes
 		
-		"usedSlotsSideA" : 	"0", // Used slots for side A
-		"usedNicksSideA" : 	"0", // Used nicknames for side A
-		"precenseSideA" : 	"0", // Precenses list for sideA
+		"usedSlotsSideA" : 	"0", 		// Used slots for side A
+		"usedNicksSideA" : 	"0", 		// Used nicknames for side A
+		"precenseSideA" : 	"0", 		// Precenses list for sideA
 		
-		"usedSlotsSideB" : 	"0", // Used slots for side B
-		"usedNicksSideB" : 	"0", // Used nicknames for side B
-		"precenseSideB" : 	"0"	// Precenses list for sideB
+		"usedSlotsSideB" : 	"0", 		// Used slots for side B
+		"usedNicksSideB" : 	"0", 		// Used nicknames for side B
+		"precenseSideB" : 	"0",		// Precenses list for sideB
 		
-		"usedSlotsSideC" : 	"0", // Used slots for side C
-		"usedNicksSideC" : 	"0", // Used nicknames for side C
-		"precenseSideC" : 	"0", // Precenses list for sideC
+		"usedSlotsSideC" : 	"0", 		// Used slots for side C
+		"usedNicksSideC" : 	"0", 		// Used nicknames for side C
+		"precenseSideC" : 	"0", 		// Precenses list for sideC
 		
-		"usedSlotsSideD" : 	"0", // Used slots for side D
-		"usedNicksSideD" : 	"0", // Used nicknames for side D
-		"precenseSideD" : 	"0"	// Precenses list for sideD
+		"usedSlotsSideD" : 	"0", 		// Used slots for side D
+		"usedNicksSideD" : 	"0", 		// Used nicknames for side D
+		"precenseSideD" : 	"0"		// Precenses list for sideD
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
