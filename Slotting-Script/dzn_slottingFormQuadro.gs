@@ -274,21 +274,9 @@ function dzn_initialize() {
 		"passcodes" : 		passcodes, 	// List of Allowed passcodes
 		"precense" :		"0",		// Precenses of users
 		
-		"usedSlotsSideA" : 	"0", 		// Used slots for side A
-		"usedNicksSideA" : 	"0", 		// Used nicknames for side A
-		"precenseSideA" : 	"0", 		// Precenses list for sideA
-		
-		"usedSlotsSideB" : 	"0", 		// Used slots for side B
-		"usedNicksSideB" : 	"0", 		// Used nicknames for side B
-		"precenseSideB" : 	"0",		// Precenses list for sideB
-		
-		"usedSlotsSideC" : 	"0", 		// Used slots for side C
-		"usedNicksSideC" : 	"0", 		// Used nicknames for side C
-		"precenseSideC" : 	"0", 		// Precenses list for sideC
-		
-		"usedSlotsSideD" : 	"0", 		// Used slots for side D
-		"usedNicksSideD" : 	"0", 		// Used nicknames for side D
-		"precenseSideD" : 	"0"		// Precenses list for sideD
+		"usedSlots" : 		"0", 		// Used slots for side A
+		"usedNicks" : 		"0", 		// Used nicknames for side A
+		"precense" : 		"0", 		// Precenses list for sideA
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -318,6 +306,11 @@ function dzn_onSave() {
 			return str.slice(0, i + 1);
 		}
 		
+		function dzn_assignSlot(nick, slot, precense) {
+				
+		}
+		
+		// Checking response
 		var formResponses = form.getResponses();
 		var duplicates = [];
 		var response = formResponses[formResponses.length-1];	// Get last responce
@@ -338,63 +331,69 @@ function dzn_onSave() {
 				usedSlots = data.usedSlots[sideIndex];
 				usedNicks = data.usedNicks[sideIndex];
 				precenseList = = data.precense;
-
-
-
-
-
-if (data.sides.indexOf(sideResponse.getResponse()) == 0) {
-	slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[0]));
-	usedSlots = data.usedSlotsSideA;
-	usedNicks = data.usedNicksSideA;
-	usedSlotsOpposite = data.usedSlotsSideB;
-	usedNicksOpposite = data.usedNicksSideB;
-	precenseList = data.precenseSideA;
-	precenseListOpposite = data.precenseSideB;
-} else {
-	slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[1]));
-	usedSlots = data.usedSlotsSideB;
-	usedNicks = data.usedNicksSideB;
-	usedSlotsOpposite = data.usedSlotsSideA;
-	usedNicksOpposite = data.usedNicksSideA;
-	precenseList = data.precenseSideB;
-	precenseListOpposite = data.precenseSideA;
-}	
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			} else {
 				// if NOT TVT: assign slots and nicks
 				slotResponse = response.getResponseForItem(form.getItemById(data.idChoices));
-				usedSlots = data.usedSlotsSideA;
-				usedNicks = data.usedNicksSideA;
+				usedSlots = data.usedSlots[0];
+				usedNicks = data.usedNicks[0];
 				precenseList = data.precense;
-			}
-			
-			function dzn_assignSlot(nick, slot, precense) {
-				
 			}
 			
 			// Get actual values of response NICK and SLOT
 			var nick = dzn_trim(nickResponse.getResponse()); 	// string
 			var slot = slotResponse.getResponse(); 			// array
 			
+			var precense;
+			if (precenseResponse == null) {
+				// No response were given
+				precense = "10";
+			} else {
+				// Get value from response
+				precense = precenseResponse.getResponse();
+			}
 			
+			if (slot.length == 1) { 
+				// Single 'Unassign slot' chosen
+				// Passcode given -- e.g. squad unassigment
+				var passcode;
+				if ((passcodeResponse != null)
+					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
+					// dzn_unassignMultipleSlots();
+				} else {
+					// Passcode Not given -- e.g. single man
+					// dzn_assignSlot(nick, slot[0], precense);
+				}
+			} else {
+				// Multiple slots were chosen
+				var passcode;
+				if ((passcodeResponse != null)
+					&& (data.passcodes.indexOf(passcodeResponse.getResponse()) > -1) ) {
+					// Passcode confirmed
+					if (slot.indexOf('Без слота') > -1) {
+						// Unassign multiple slots
+						// dzn_unassignMultipleSlots();
+					} else {
+						// Slots chosen
+						for (var j = 0; j < slot.length; j++) {
+							var numeredNick = nick + "-sq" + j.toString();
+							//dzn_assignSlot(numeredNick, slot[j], precense);
+						}
+					}
+				}
+			}
+			
+			
+			// Update ScriptProperties by new usedNick/Slot values for each side
+			var properties = PropertiesService.getScriptProperties();
 		}
+	}	
 		
 		
 		
 		
 		
 		
-		
-	}
+
 
 
 
