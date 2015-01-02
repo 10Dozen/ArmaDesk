@@ -328,12 +328,17 @@ function dzn_onSave() {
 			var precenseResponse = response.getResponseForItem(form.getItemById(data.idPrecense));
 			var passcodeResponse = response.getResponseForItem(form.getItemById(data.idPasscode));
 			
+			var sideResponse, sideIndex, slotResponse, usedSlots, usedNicks, usedSlotsOpposite, usedNicksOpposite, precenseList, precenseListOpposite
 			if (data.mode == "T") {
 				// if TVT: Assign slots/nicks of the chosen side and opposite side (for removing from)
-				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));	
-			
-			
-			
+				sideResponse = response.getResponseForItem(form.getItemById(data.idSidechoice));
+				sideIndex = data.sides.indexOf(sideResponse.getResponse());
+				slotResponse = response.getResponseForItem(form.getItemById(data.idChoices[sideIndex]));
+				
+				usedSlots = data.usedSlots[sideIndex];
+				usedNicks = data.usedNicks[sideIndex];
+				precenseList = = data.precense;
+
 
 
 
