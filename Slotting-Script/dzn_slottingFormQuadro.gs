@@ -445,8 +445,46 @@ function dzn_onSave() {
 		
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
-	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
+	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slotsNames, slotsHeadsNames) {
+		// Get ids of names which are not available for choosing at the slots item// Get ids of names which are not available for choosing at the slots item
+		var excludeId = slotsHeadsNames;
+		var nickList = [];
 		
+		// Fill section info with ALL original slots name
+		var sectionInfo = [];
+		for (var i = 0; i < slotsNames.length; i++) {
+			sectionInfo.push(slotsNames[i]);
+		}
+		
+		// Update section info according to already used slots
+		for (var i = 0; i < usedSlots.length; i++) {
+			var slotIndex = sectionInfo.indexOf(usedSlots[i]);
+			if (slotIndex > -1) {
+				excludeId.push(slotIndex);
+				var nicknameToShow = usedNicks[i];
+				nicknameToShow = nicknameToShow.replace(/(([A-Za-zА-Яа-я-_0-9\[\]])+)(-sq(\d){1,2})$/, "$1");
+				if (nickList.indexOf(nicknameToShow) == -1) {
+					nickList.push(nicknameToShow);
+				}
+				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
+				if ((precenses[i] > 0) && (precenses[i] < 8)) {
+					infoString = infoString + " (" + precenses[i] + "0%)";
+				}
+				sectionInfo[slotIndex] = infoString; 
+			}
+		}
+		var sectionInfoOutput = sectionInfo.join("\n");
+		// Define of sorting conditions
+		function dzn_sortCondAsc(a,b) {
+			return (a-b);
+		};
+		
+		// Deleting used slots
+		excludeId = excludeId.sort( dzn_sortCondAsc );
+		for (var i = 0; i < excludeId.length; i++) {
+			slots.splice(excludeId[i]-i, 1);
+		}
+		return [sectionInfoOutput, slots, nickList];
 	}
 	
 
