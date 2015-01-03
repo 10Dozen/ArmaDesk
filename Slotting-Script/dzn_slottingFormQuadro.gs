@@ -231,7 +231,10 @@ function dzn_initialize() {
 	
 	// WRITE TO PROPERTIES
 	if (debug) {Logger.log('Writing properties');}
-	
+	Logger.log(slotsNames);
+	Logger.log(slotsHeads);
+	Logger.log(dzn_convert(slotsNames, "toString"));
+	Logger.log(dzn_convert(slotsHeads, "toString"));
 	properties.setProperties({
 		"idName" : 		idName, 	// ID of Name item
 		"idSections" : 		dzn_convert(slottingSections, "toString"), 	// IDs of Section for every side
@@ -244,9 +247,6 @@ function dzn_initialize() {
 		"mode" : 		mode, // form mode
 		
 		"sides" : 		dzn_convert(sidesNames, "toString"), 	// Names of sides
-		
-		"slotsSideA" : 		slotsNames[0], 	// Original names of slots for side A
-		"slotsHeadsSideA" : 	slotsHeads[0], 	// IDs of headers in slots names for side A
 		
 		"precense" :		"0",		// Precenses of users
 		
@@ -431,23 +431,23 @@ function dzn_onSave() {
 		
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
-	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slotsNames, slotsHeadsNames) {
-		// Get ids of names which are not available for choosing at the slots item// Get ids of names which are not available for choosing at the slots item
-		var excludeId = slotsHeadsNames;
+	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
+		// Get ids of names which are not available for choosing at the slots item
+		var excludeId = headers;
 		var nickList = [];
-		
 		// Fill section info with ALL original slots name
 		var sectionInfo = [];
-		for (var i = 0; i < slotsNames.length; i++) {
-			sectionInfo.push(slotsNames[i]);
-		}
 		
+		for (var i = 0; i < slots.length; i++) {
+			sectionInfo.push(slots[i]);
+		}
 		// Update section info according to already used slots
 		for (var i = 0; i < usedSlots.length; i++) {
 			var slotIndex = sectionInfo.indexOf(usedSlots[i]);
 			if (slotIndex > -1) {
 				excludeId.push(slotIndex);
 				var nicknameToShow = usedNicks[i];
+				// nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
 				nicknameToShow = nicknameToShow.replace(/(([A-Za-zА-Яа-я-_0-9\[\]])+)(-sq(\d){1,2})$/, "$1");
 				if (nickList.indexOf(nicknameToShow) == -1) {
 					nickList.push(nicknameToShow);
@@ -456,15 +456,15 @@ function dzn_onSave() {
 				if ((precenses[i] > 0) && (precenses[i] < 8)) {
 					infoString = infoString + " (" + precenses[i] + "0%)";
 				}
-				sectionInfo[slotIndex] = infoString; 
+				sectionInfo[slotIndex] = infoString;
 			}
 		}
 		var sectionInfoOutput = sectionInfo.join("\n");
 		// Define of sorting conditions
+	
 		function dzn_sortCondAsc(a,b) {
 			return (a-b);
 		};
-		
 		// Deleting used slots
 		excludeId = excludeId.sort( dzn_sortCondAsc );
 		for (var i = 0; i < excludeId.length; i++) {
@@ -472,8 +472,6 @@ function dzn_onSave() {
 		}
 		return [sectionInfoOutput, slots, nickList];
 	}
-	
-
 	
 	// ****************
 	// Flow starts here
