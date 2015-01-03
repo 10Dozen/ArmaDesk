@@ -111,7 +111,7 @@ function dzn_initialize() {
 		sectionNamesMasks = [
 			"iИзображение к миссии",
 			"tМиссия",
-			"sSIDEA: Слоттинг",
+			"sSIDE0: Слоттинг",
 			"pНик в игре",
 			"cSIDE0: Роль",
 			"xПасскод",
