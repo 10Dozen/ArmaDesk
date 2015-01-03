@@ -85,12 +85,12 @@ function dzn_initialize() {
 			"aВероятность присутствия на игре",
 			"xПасскод",
 			"oСторона",
-			"bSIDEA",
-			"sSIDEA: Слоттинг",
-			"cSIDEA: Роль",
-			"bSIDEB",
-			"sSIDEB: Слоттинг",
-			"cSIDEB: Роль"
+			"bSIDE0",
+			"sSIDE0: Слоттинг",
+			"cSIDE0: Роль",
+			"bSIDE1",
+			"sSIDE1: Слоттинг",
+			"cSIDE1: Роль"
 		];
 		
 		function dzn_init_addSections(sideName) {
@@ -101,9 +101,9 @@ function dzn_initialize() {
 		}
 		
 		if (sidesCount > 2) {
-			dzn_init_addSections("SIDEC");
+			dzn_init_addSections("SIDE2");
 			if (sidesCount > 3) {
-				dzn_init_addSections("SIDED");
+				dzn_init_addSections("SIDE3");
 			}
 		};
 		
@@ -113,7 +113,7 @@ function dzn_initialize() {
 			"tМиссия",
 			"sSIDEA: Слоттинг",
 			"pНик в игре",
-			"cSIDEA: Роль",
+			"cSIDE0: Роль",
 			"xПасскод",
 			"aВероятность присутствия на игре"
 		];
@@ -133,21 +133,7 @@ function dzn_initialize() {
 			
 		// Set name to sides
 		if (name.substring(1,5) == 'SIDE') {
-			var sideNameToReplace
-			switch (name.substring(5,6)) {
-				case "A":
-					sideNameToReplace = sidesNames[0];
-					break;
-				case "B":
-					sideNameToReplace = sidesNames[1];
-					break;
-				case "C":
-					sideNameToReplace = sidesNames[2];
-					break;
-				case "D":
-					sideNameToReplace = sidesNames[3];
-					break;
-			}
+			var sideNameToReplace = sidesNames[name.substring(5,6)];
 			itemName = sideNameToReplace + name.substring(6, name.length);  // Replace placeholder
 		} else {
 			itemName = name.substring(1,name.length);  // Name without changes
@@ -592,13 +578,13 @@ function dzn_convert(value, type) {
 	var output = '';
 	if (type == "toList") { 
 		var firstArrayDimension = value.split(" $ ");// convert into array
-	     	if (firstArrayDimension.length != 1) {
+		if (firstArrayDimension.length != 1) {
 			output = [];
 			for (var i = 0; i < firstArrayDimension.length; i++) {
 				output.push(firstArrayDimension[i].split(" | "));
 			}
 		} else {
-			output = firstArrayDimension.split(" | ");
+			output = value.split(" | ");
 		}
 	} else {
 	// "toString"
