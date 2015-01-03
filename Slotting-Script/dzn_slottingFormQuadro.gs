@@ -499,13 +499,33 @@ function dzn_onSave() {
 	// Get Updated Info and Update
 	var overallInfo = '';
 	if (data.mode == "C") {
-	var updatedSideInfo = dzn_getUpdatedInfo(
-		data.usedNicks, data.usedSlots, data.precense
-		data.slotsSideA, data.slotsHeadsSideA
+		var updatedSideInfo = dzn_getUpdatedInfo(
+			data.usedNicks[0], data.usedSlots[0], data.precense, data.slotsNames[0], data.slotsHeadsNames[0]
 		);
+		// OUT: sectionInfoOutput, slots
+		updatedSideInfo[1].push("Без слота"); 
+		form.getItemById(data.idSections).setHelpText(updatedSideInfo[0]);
+		form.getItemById(data.idChoices).asCheckboxItem().setChoiceValues(updatedSideInfo[1]);
+		roleItem.setHelpText(str.slots);
+	} else {
+		var overallInfo = "";
+		for (var i = 0; i < data.sides.length; i++) {
+			var updatedSideInfo = dzn_getUpdatedInfo(
+				data.usedNicks[i], data.usedSlots[i], data.precense, data.slotsNames[i], data.slotsHeadsNames[i]
+			);
+			// OUT: sectionInfoOutput, slots for SIDE 
+			updatedSideInfo[1].push("Без слота");
+			form.getItemById(data.idSections[i]).setHelpText(updatedSideInfo[0]);
+			form.getItemById(data.idChoices[i]).asCheckboxItem().setChoiceValues(updatedSideInfo[1]);
+			
+			overallInfo = overallInfo + data.sides[i] + "\n" + updatedSideInfo[2].join(", ") + "\n\n";
+		}
 		
+		// Update Overall info
+		form.getItemById(data.idOverall).setHelpText(overallInfo);
+	}
 		
-		
+	Logger.log(' << End of dzn_onSave');	
 }
 
 
