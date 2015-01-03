@@ -555,25 +555,43 @@ function dzn_setStringtable() {
 }
 
 // Convert List to String or String to List (type = 'toString' and 'toList')
+// Convert StringWithDelimeters2Array or Array2StringWithDelimeters
 function dzn_convert(value, type) {
 	var output = '';
-	if (type == "toList") {
-		output = value.split(" | ");
-	} else {
-		// Concetate string with delimeter
-		function dzn_writeWithDelimeter(value, string) {
-			var output = '';    
-			if (string.length > 0) {
-				output = string + " | " + value.toString();
-			} else {
-				output = value;        
+	if (type == "toList") { 
+		var firstArrayDimension = value.split(" $ ");// convert into array
+	     	if (firstArrayDimension.length != 1) {
+			output = [];
+			for (var i = 0; i < firstArrayDimension.length; i++) {
+				output.push(firstArrayDimension[i].split(" | "));
 			}
-			return output.toString();
+		} else {
+			output = firstArrayDimension.split(" | ");
 		}
-		for (var i = 0; i < value.length; i++) {
-			output = dzn_writeWithDelimeter(value[i], output);
-		} 
-	}
-    
-	return output;
+	} else {
+	// "toString"
+	// Concetate string with delimeters      
+		for (var i = 0; i < value.length; i++) {      
+			if (value[i].constructor === Array) {
+				for (var j = 0; j < value[i].length; j++) {                     
+					if (output.length > 0) {
+						if (j == 0) {
+							output = output + " $ " + value[i][j].toString();
+						} else {
+							output = output + " | " + value[i][j].toString();
+						}             
+					} else {
+						output = value[i][j].toString();        
+					} 
+				}        
+			} else {
+				if (output.length > 0) {
+					output = output + " | " + value[i].toString();
+				} else {
+					output = value[i].toString();
+				}        
+			}
+		}
+	};  
+ 	return output;
 }
