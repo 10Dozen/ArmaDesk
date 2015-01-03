@@ -262,15 +262,13 @@ function dzn_initialize() {
 		"slotsSideA" : 		slotsNames[0], 	// Original names of slots for side A
 		"slotsHeadsSideA" : 	slotsHeads[0], 	// IDs of headers in slots names for side A
 		
-	
 		"precense" :		"0",		// Precenses of users
 		
 		"slotsNames" :		dzn_convert(slotsNames, "toString"),	// Original names of slots
 		"slotsHeadsNames" :	dzn_convert(slotsHeads, "toString"),	// IDs of headers in slots names
 		
-		"usedSlots" : 		"0", 		// Used slots for side A
-		"usedNicks" : 		"0", 		// Used nicknames for side A
-		"precense" : 		"0", 		// Precenses list for sideA
+		"usedSlots" : 		"0", 		// Used slots for sides
+		"usedNicks" : 		"0", 		// Used nicknames for sides
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -484,10 +482,7 @@ function dzn_onSave() {
 	//	Data values
 	// idName, idSections, idChoices, idPrecense, idPasscode, idSidechoice, idOverall
 	// , mode , sides, passcodes, precense
-	// , slotsSideA, slotsSideB, slotsSideC, slotsSideD 
-	// , slotsHeadsSideA, slotsHeadsSideB, slotsHeadsSideC, slotsHeadsSideD
-	// , usedSlotsSideA, usedSlotsSideB, usedSlotsSideC, usedSlotsSideD 
-	// , usedNicksSideA, usedNicksSideB, usedNicksSideC, usedNicksSideD 
+	// , slotsNames, slotsHeadsNames, usedSlots, usedNicks
 
 	// Stringtable
 	var str = dzn_setStringtable();
