@@ -68,15 +68,14 @@ function dzn_initialize() {
 
 	var passcodes = form.getItemById(ids[4]).getHelpText(); // Get allowed passcodes
 	var sidesNames = dzn_convert(form.getItemById(ids[1]).getHelpText(), "toList"); // Get edited SIDE names from preinitialized form
-	var sidesCount = sidesNames.length;
+	var sidesCount = 1;
 
 	if (debug) {Logger.log('Side names: %s :: SideCount: %s', sidesNames, sideCount);}
-	
-	
 	
 	// Saving SIDE and SLOTS names
 	var sectionNamesMasks
 	if (mode == "T") {
+		sidesCount = sidesNames.length;
 		sectionNamesMasks = [
 			"iИзображение к миссии",
 			"tМиссия",
@@ -218,13 +217,13 @@ function dzn_initialize() {
 	}
 	
 	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
-	var slotsNames = ["0","0","0","0"];
-	var slotsHeads = ["0","0","0","0"];
+	var slotsNames = [ ["0"], ["0"], ["0"], ["0"] ];
+	var slotsHeads = [ ["0"], ["0"], ["0"], ["0"] ];
 	var slotList, slotParsed;
 	
 	for (var i = 0; i < sidesCount; i++) {
 		slotList = form.getItemById(ids[i + 2]).getHelpText();
-		slotParsed = dzn_init_getHeaderSlotsIds(slotsNames[i]);
+		slotParsed = dzn_init_getHeaderSlotsIds(slotList);
 		slotsNames[i] = slotParsed[0];
 		slotsHeads[i] = slotParsed[1];
 	}
