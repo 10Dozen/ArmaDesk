@@ -262,17 +262,11 @@ function dzn_initialize() {
 		"slotsSideA" : 		slotsNames[0], 	// Original names of slots for side A
 		"slotsHeadsSideA" : 	slotsHeads[0], 	// IDs of headers in slots names for side A
 		
-		"slotsSideB" : 		slotsNames[1], 	// Original names of slots for side B
-		"slotsHeadsSideB" : 	slotsHeads[1], 	// IDs of headers in slots names for side B
-		
-		"slotsSideC" : 		slotsNames[2], 	// Original names of slots for side C
-		"slotsHeadsSideC" : 	slotsHeads[2], 	// IDs of headers in slots names for side C
-		
-		"slotsSideD" : 		slotsNames[3], 	// Original names of slots for side D
-		"slotsHeadsSideD" : 	slotsHeads[3], 	// IDs of headers in slots names for side D
-		
-		"passcodes" : 		passcodes, 	// List of Allowed passcodes
+	
 		"precense" :		"0",		// Precenses of users
+		
+		"slotsNames" :		dzn_convert(slotsNames, "toString"),	// Original names of slots
+		"slotsHeadsNames" :	dzn_convert(slotsHeads, "toString"),	// IDs of headers in slots names
 		
 		"usedSlots" : 		"0", 		// Used slots for side A
 		"usedNicks" : 		"0", 		// Used nicknames for side A
@@ -451,36 +445,13 @@ function dzn_onSave() {
 		}
 	}	
 		
-		
-		
-		
-		
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
 	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
 		
 	}
 	
-	
-	
+
 	
 	// ****************
 	// Flow starts here
@@ -532,6 +503,14 @@ function dzn_onSave() {
 	
 	// Get Updated Info and Update
 	var overallInfo = '';
+	if (data.mode == "C") {
+	var updatedSideInfo = dzn_getUpdatedInfo(
+		data.usedNicks, data.usedSlots, data.precense
+		data.slotsSideA, data.slotsHeadsSideA
+		);
+		
+		
+		
 }
 
 
