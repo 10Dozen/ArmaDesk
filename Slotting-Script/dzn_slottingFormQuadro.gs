@@ -66,7 +66,7 @@ function dzn_initialize() {
 			break;
 	}
 
-	var passcodes = form.getItemById(ids[4]).getHelpText(); // Get allowed passcodes
+	var passcodes = form.getItemById(ids[6]).getHelpText(); // Get allowed passcodes
 	var sidesNames = dzn_convert(form.getItemById(ids[1]).getHelpText(), "toList"); // Get edited SIDE names from preinitialized form
 	var sidesCount;
 
@@ -230,10 +230,6 @@ function dzn_initialize() {
 	
 	// WRITE TO PROPERTIES
 	if (debug) {Logger.log('Writing properties');}
-	Logger.log(slotsNames);
-	Logger.log(slotsHeads);
-	Logger.log(dzn_convert(slotsNames, "toString"));
-	Logger.log(dzn_convert(slotsHeads, "toString"));
 	properties.setProperties({
 		"idName" : 		idName, 	// ID of Name item
 		"idSections" : 		dzn_convert(slottingSections, "toString"), 	// IDs of Section for every side
