@@ -219,7 +219,7 @@ function dzn_initialize() {
 	
 	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
 	var slotsNames = [ ["0"], ["0"], ["0"], ["0"] ];
-	var slotsHeads = [ ["0"],["0"], ["0"], ["0"] ];
+	var slotsHeads = [ ["0"], ["0"], ["0"], ["0"] ];
 	var slotList, slotParsed;
 	for (var i = 0; i < sidesCount; i++) {
 		slotList = form.getItemById(ids[i + 2]).getHelpText();	// !ALPHA | [ALPHA] Operator
