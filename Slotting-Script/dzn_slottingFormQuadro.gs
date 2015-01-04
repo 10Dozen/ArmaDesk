@@ -274,6 +274,16 @@ function dzn_initialize() {
 // Main flow
 // *********
 function dzn_onSave() { 
+	function dzn_getPrecense(nick) {
+		var precenseId
+		for (var k = 0; k < data.precense.length; k++) {
+			if (data.precense[k].indexOf(nick) > -1) {
+				precenseId = k;
+			}
+		}
+		return precenseId
+	}
+	
 	function dzn_checkResponses() { 
 		function dzn_trim(str) {
 			var	str = str.replace(/^\s\s*/, ''),
@@ -282,17 +292,6 @@ function dzn_onSave() {
 			while (ws.test(str.charAt(--i)));
 			
 			return str.slice(0, i + 1);
-		}
-		
-		function dzn_getPrecense(nick) {
-			var precenseId
-			for (var k = 0; k < data.precense.length; k++) {
-				if (data.precense[k].indexOf(nick) > -1) {
-					precenseId = k;
-				}
-			}
-			
-			return precenseId
 		}
 		
 		function dzn_assignSlot(nick, slot, precense) {
@@ -430,7 +429,7 @@ function dzn_onSave() {
 		
 	// Get updated info for SLOTTING section and AVAILABLE SLOTS for side (according given slots/usedSlots)
 	// INPUT: form, usedNicks, usedSlots, slots, headers || OUTPUT: 0 sectionInfoOutput, 1 slots
-	function dzn_getUpdatedInfo(usedNicks, usedSlots, precenses, slots, headers) {
+	function dzn_getUpdatedInfo(usedNicks, usedSlots, slots, headers) {
 		// Get ids of names which are not available for choosing at the slots item
 		var excludeId = headers;
 		var nickList = [];
@@ -452,8 +451,10 @@ function dzn_onSave() {
 					nickList.push(nicknameToShow);
 				}
 				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
-				if ((precenses[i] > 0) && (precenses[i] < 8)) {
-					infoString = infoString + " (" + precenses[i] + "0%)";
+				
+				var precenseValueId = dzn_getPrecense(usedNicks[i]);
+				if ((data.precense[precenseValueId][1] > 0) && (data.precense[precenseValueId][1] < 8)) {
+					infoString = infoString + " (" + data.precense[precenseValueId][1] + "0%)";
 				}
 				sectionInfo[slotIndex] = infoString;
 			}
@@ -521,7 +522,7 @@ function dzn_onSave() {
 	var overallInfo = '';
 	if (data.mode == "C") {
 		var updatedSideInfo = dzn_getUpdatedInfo(
-			data.usedNicks[0], data.usedSlots[0], data.precense, data.slotsNames[0], data.slotsHeadsNames[0]
+			data.usedNicks[0], data.usedSlots[0], data.slotsNames[0], data.slotsHeadsNames[0]
 		);
 		// OUT: sectionInfoOutput, slots
 		updatedSideInfo[1].push("Без слота"); 
@@ -532,7 +533,7 @@ function dzn_onSave() {
 		var overallInfo = "";
 		for (var i = 0; i < data.sides.length; i++) {
 			var updatedSideInfo = dzn_getUpdatedInfo(
-				data.usedNicks[i], data.usedSlots[i], data.precense, data.slotsNames[i], data.slotsHeadsNames[i]
+				data.usedNicks[i], data.usedSlots[i], data.slotsNames[i], data.slotsHeadsNames[i]
 			);
 			// OUT: sectionInfoOutput, slots for SIDE 
 			updatedSideInfo[1].push("Без слота");
@@ -548,13 +549,6 @@ function dzn_onSave() {
 		
 	Logger.log(' << End of dzn_onSave');	
 }
-
-
-
-
-
-
-	
 
 // String to show
 function dzn_setStringtable() {
