@@ -68,10 +68,8 @@ function dzn_initialize() {
 
 	var passcodes = form.getItemById(ids[4]).getHelpText(); // Get allowed passcodes
 	var sidesNames = dzn_convert(form.getItemById(ids[1]).getHelpText(), "toList"); // Get edited SIDE names from preinitialized form
-	var sidesCount = 1;
+	var sidesCount;
 
-	if (debug) {Logger.log('Side names: %s :: SideCount: %s', sidesNames, sideCount);}
-	
 	// Saving SIDE and SLOTS names
 	var sectionNamesMasks
 	if (mode == "T") {
@@ -107,6 +105,9 @@ function dzn_initialize() {
 		};
 		
 	} else {
+		sidesCount = 1;
+		sidesNames = [sidesNames[0]];
+		
 		sectionNamesMasks = [
 			"iИзображение к миссии",
 			"tМиссия",
@@ -207,24 +208,23 @@ function dzn_initialize() {
 	function dzn_init_getHeaderSlotsIds(names) {
 		var output = [];
 		var names = names.split(" | ");
-		for (var i = 0; i < names.length; i++) {
-			if (names[i].substring(0,1) == "!") {
-				names[i] = "\n" + names[i].substring(1,names[i].length) + "\n";
-				output.push(i.toString());
+		for (var j = 0; j < names.length; j++) {
+			if (names[j].substring(0,1) == "!") {
+				names[j] = "\n" + names[j].substring(1,names[j].length) + "\n";
+				output.push(j.toString());
 			}		
 		}		
-		return [dzn_convert(names, "toString"), dzn_convert(output, "toString")]	
+		return [dzn_convert(names, "toString"), dzn_convert(output, "toString")]
 	}
 	
 	// Update headers names and get ids of SQUADNAMES and remove SQUADNAMES ! marker
 	var slotsNames = [ ["0"], ["0"], ["0"], ["0"] ];
-	var slotsHeads = [ ["0"], ["0"], ["0"], ["0"] ];
+	var slotsHeads = [ ["0"],["0"], ["0"], ["0"] ];
 	var slotList, slotParsed;
-	
 	for (var i = 0; i < sidesCount; i++) {
-		slotList = form.getItemById(ids[i + 2]).getHelpText();
-		slotParsed = dzn_init_getHeaderSlotsIds(slotList);
-		slotsNames[i] = slotParsed[0];
+		slotList = form.getItemById(ids[i + 2]).getHelpText();	// !ALPHA | [ALPHA] Operator
+		slotParsed = dzn_init_getHeaderSlotsIds(slotList);	// [ "/nALPHA/n, [ALPHA] Operator", "0 | 3"]
+		slotsNames[i] = slotParsed[0];				// [ "/nAlpha/n", "0", "0", "0" ]
 		slotsHeads[i] = slotParsed[1];
 	}
 	
