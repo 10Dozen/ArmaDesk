@@ -334,8 +334,9 @@ function dzn_onSave() {
 		
 		function dzn_unassignMultipleSlots() {
 			// There is NO SLOT chosen
-			//var nickRE = new RegExp ("(\[)*" + nick + "(\])*-sq\\\d{1,2}$");
-			var nickRE = new RegExp (nick + "-sq\\\d{1,2}$");
+			var nickReplaced = nick.replace("\[", "");
+          		nickReplaced = nickReplaced.replace("\]", "");
+			var nickRE = new RegExp ("(\[)*" + nickReplaced + "(\])*-sq\\\d{1,2}$");
 			for (var k = 0; k < data.usedNicks[sideIndex].length; k++) {
 				if (nickRE.test(data.usedNicks[sideIndex][k])) {
 					var numeredNick = data.usedNicks[sideIndex][k];
