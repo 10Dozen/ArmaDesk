@@ -243,8 +243,8 @@ function dzn_initialize() {
 		"idSidechoice" : 	idSidechoice, 	// ID of Side choice item
 		"idOverall" : 		idOverall, 	// ID of Overall players names section
 		
-		"mode" : 		mode, // form mode
-		
+		"mode" : 		mode, 		// Form mode
+		"passcodes" :		passcodes, 	// Valid passcodes
 		"sides" : 		dzn_convert(sidesNames, "toString"), 	// Names of sides
 		
 		"precense" :		"0",		// Precenses of users
@@ -252,8 +252,8 @@ function dzn_initialize() {
 		"slotsNames" :		dzn_convert(slotsNames, "toString"),	// Original names of slots
 		"slotsHeadsNames" :	dzn_convert(slotsHeads, "toString"),	// IDs of headers in slots names
 		
-		"usedSlots" : 		"0", 		// Used slots for sides
-		"usedNicks" : 		"0", 		// Used nicknames for sides
+		"usedSlots" : 		"0 $ 0 $ 0 $ 0", 		// Used slots for sides
+		"usedNicks" : 		"0 $ 0 $ 0 $ 0", 		// Used nicknames for sides
 	}, true);
 
 	// Deleting blocks with SIDE and SLOTS settings
@@ -266,7 +266,7 @@ function dzn_initialize() {
 	Logger.log("Initialized");
 	
 	// Running save trigger to update form
-	//dzn_onSave();
+	dzn_onSave();
 }
 
 
