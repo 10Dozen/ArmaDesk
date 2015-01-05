@@ -349,7 +349,7 @@ function dzn_onSave() {
 			for (var k = 0; k < data.usedNicks[sideIndex].length; k++) {
 				if (nickRE.test(data.usedNicks[sideIndex][k])) {
 					var numeredNick = data.usedNicks[sideIndex][k];
-					Logger.log(numeredNick);
+					if(debug) {Logger.log(numeredNick);}
 					dzn_assignSlot(numeredNick, 'Без слота', precense);
 					k--;
 				}
@@ -498,6 +498,8 @@ function dzn_onSave() {
 	// Flow starts here
 	// ****************
 	Logger.log(" Running dzn_onSave");
+	var debug = false;
+	if (debug) { Logger.log("Debugging!"); }
 	var form = FormApp.getActiveForm();
 	var properties = PropertiesService.getScriptProperties();
 	
@@ -507,7 +509,7 @@ function dzn_onSave() {
 	for (var i = 0; i < datalist.length; i++) {
 		var key = datalist[i].toString();
 		var value = dzn_convert(properties.getProperty(key), "toList");
-		Logger.log("%s -- %s", key, value);
+		if (debug) {Logger.log("%s -- %s", key, value);}
 		if (value.length == 1) {
 			// Property isn't array or array with only one item
 			if (key.substring(0,2) == "id") {
