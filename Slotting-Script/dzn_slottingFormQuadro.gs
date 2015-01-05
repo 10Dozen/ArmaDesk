@@ -224,8 +224,8 @@ function dzn_initialize() {
 	for (var i = 0; i < sidesCount; i++) {
 		slotList = form.getItemById(ids[i + 2]).getHelpText();	// !ALPHA | [ALPHA] Operator
 		slotParsed = dzn_init_getHeaderSlotsIds(slotList);	// [ "/nALPHA/n, [ALPHA] Operator", "0 | 3"]
-		slotsNames[i] = slotParsed[0];				// [ "/nAlpha/n", "0", "0", "0" ]
-		slotsHeads[i] = slotParsed[1];
+		slotsNames[i][0] = slotParsed[0];				// [ "/nAlpha/n", "0", "0", "0" ]
+		slotsHeads[i][0] = slotParsed[1];
 	}
 	
 	// WRITE TO PROPERTIES
