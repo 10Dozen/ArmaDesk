@@ -334,9 +334,18 @@ function dzn_onSave() {
 		
 		function dzn_unassignMultipleSlots() {
 			// There is NO SLOT chosen
-			var nickReplaced = nick.replace("\[", "");
-          		nickReplaced = nickReplaced.replace("\]", "");
-			var nickRE = new RegExp ("(\[)*" + nickReplaced + "(\])*-sq\\\d{1,2}$");
+			// Hidding special characters from RegExp
+			var nickReplaced = nick.replace("\\", "\\\\").replace("\\","\\\\")  
+				.replace("\[", "\\\[").replace("\]", "\\\]")
+				.replace("\(", "\\\(").replace("\)","\\\)")
+				.replace("\.", "\\\.")
+				.replace("\^","\\\^")
+				.replace("\$","\\\$")
+				.replace("\|","\\\|")
+				.replace("\?","\\\?")
+				.replace("\+","\\\+")
+          		
+			var nickRE = new RegExp (nickReplaced + "-sq\\\d{1,2}$");
 			for (var k = 0; k < data.usedNicks[sideIndex].length; k++) {
 				if (nickRE.test(data.usedNicks[sideIndex][k])) {
 					var numeredNick = data.usedNicks[sideIndex][k];
@@ -444,7 +453,21 @@ function dzn_onSave() {
 				excludeId.push(slotIndex);
 				var nicknameToShow = usedNicks[i];
 				// nicknameToShow = nicknameToShow.replace(/(\w+)(-sq)\d{1,2}$/, "$1");
-				nicknameToShow = nicknameToShow.replace(/(([A-Za-zА-Яа-я-_0-9\[\]])+)(-sq(\d){1,2})$/, "$1");
+				
+				/*
+				( ) — круглые скобки;
+				[ ] — квадратные скобки;
+				\ — обраный слеш;
+				. — точка;
+				^ — степень;
+				$ — знак доллара;
+				| — вертикальная черта;
+				? — вопросительный знак;
+				+ — плюс.
+				
+				*/
+				
+				nicknameToShow = nicknameToShow.replace(/(([A-Za-zА-Яа-я-_0-9\[\]\(\)\.\^\$\|\?\+])+)(-sq(\d){1,2})$/, "$1");
 				if (nickList.indexOf(nicknameToShow) == -1) {
 					nickList.push(nicknameToShow);
 				}
