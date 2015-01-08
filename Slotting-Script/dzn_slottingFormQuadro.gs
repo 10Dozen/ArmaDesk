@@ -319,7 +319,7 @@ function dzn_onSave() {
 						var idToRemove
 						for (var k = 0; k < data.sides.length; k++) {
 							if (k != sideIndex) {
-								idToRemove = data.usedNicks[sideIndex].indexOf(nick);
+								idToRemove = data.usedNicks[k].indexOf(nick);
 								if ( idToRemove > -1 ) {
 									data.usedNicks[k].splice(idToRemove,1);
 									data.usedSlots[k].splice(idToRemove,1);
@@ -335,7 +335,8 @@ function dzn_onSave() {
 		function dzn_unassignMultipleSlots() {
 			// There is NO SLOT chosen
 			// Hidding special characters from RegExp
-			var nickReplaced = nick.replace("\\", "\\\\").replace("\\","\\\\")  
+			var nickReplaced = nick
+				.replace("\\", "\\\\").replace("\\","\\\\")  
 				.replace("\[", "\\\[").replace("\]", "\\\]")
 				.replace("\(", "\\\(").replace("\)","\\\)")
 				.replace("\.", "\\\.")
