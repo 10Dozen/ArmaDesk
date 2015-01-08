@@ -149,7 +149,7 @@ function dzn_initialize() {
 				idName = form.addTextItem().setRequired(true).setTitle(itemName).setHelpText(str.nick).getId().toString();
 				break;
 			case "a":	
-				idPrecense = form.addScaleItem().setTitle(itemName).setHelpText(str.precense).setBounds(1, 7).setLabels('Не уверен', 'Буду').getId().toString();
+				idPrecense = form.addListItem().setTitle(itemName).setHelpText(str.precense).setChoiceValues([str.precenseCh0, str.precenseCh1, str.precenseCh2, str.precenseCh3]).getId().toString();
 				break;
 			case "x":
 				idPasscode = form.addTextItem().setTitle(itemName).setHelpText(str.passcode).getId().toString();
@@ -387,7 +387,7 @@ function dzn_onSave() {
 			var precense;
 			if (precenseResponse == null) {
 				// No response were given
-				precense = "10";
+				precense = str.precenseCh3;
 			} else {
 				// Get value from response
 				precense = precenseResponse.getResponse();
@@ -475,7 +475,7 @@ function dzn_onSave() {
 				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
 				
 				var precenseValueId = dzn_getPrecense(usedNicks[i]);
-				if ((data.precense[precenseValueId][1] > 0) && (data.precense[precenseValueId][1] < 8)) {
+				if (data.precense[precenseValueId][1] != str.precenseCh3) {
 					infoString = infoString + " (" + data.precense[precenseValueId][1] + "0%)";
 				}
 				sectionInfo[slotIndex] = infoString;
@@ -577,12 +577,16 @@ function dzn_onSave() {
 // String to show
 function dzn_setStringtable() {
 	var str = {
-		"precense" :	"Если считаешь, что не успеешь на игру и об этом должны знать все - укажи, пожалуйста, вероятность своего появления на игре (1 = 10%, 7 = 70%).",
+		"precense" :	"Если считаешь, что не успеешь на игру и об этом должны знать все - укажи, пожалуйста, вероятность своего появления на игре.",
 		"passcode" :	"Ввод паскода(выданного только лидерам ленивых отрядов) позволит занять несколько слотов. Если у Вас нет паскода и/или Вы не собираетесь занимать более одного слота - не заполняйте поле.",
 		"nick"	:	"",
 		"slots"	:	"Выберите одну из доступных ролей из списка ниже.",
 		"slotsLoading"	:	"Обработка... Обновите страницу через несколько секунд.",
-		"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЕсли твой ник не появился в списке - обнови страницу через несколько секунд."
+		"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЕсли твой ник не появился в списке - обнови страницу через несколько секунд.",
+		"precenseCh0"	:	"Хотел бы прийти",
+		"precenseCh1"	:	"Постараюсь прийти",
+		"precenseCh2"	:	"Сделаю все, чтобы прийти",
+		"precenseCh3"	:	"Обязательно приду"
 	};
 	return str
 }
