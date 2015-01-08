@@ -1,2 +1,2 @@
 // exec report
-if (isServer || isDedicated) then { [] execVM "dzn_report.sqf" };
+if (local player && { name player == "HC" } ) then { [] execVM "dzn_report.sqf" };
