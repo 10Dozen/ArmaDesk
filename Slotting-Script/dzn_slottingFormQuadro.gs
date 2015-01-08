@@ -475,9 +475,43 @@ function dzn_onSave() {
 				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
 				
 				var precenseValueId = dzn_getPrecense(usedNicks[i]);
-				if (data.precense[precenseValueId][1] != str.precenseCh3) {
-					infoString = infoString + " (" + data.precense[precenseValueId][1] + ")";
-				}
+						//if (data.precense[precenseValueId][1] != str.precenseCh3) {
+                  /*var precenseIcon;
+                  switch (data.precense[precenseValueId][1]) {
+                    case str.precenseCh0:
+                      precenseIcon = " - ";
+                      break;
+                    case str.precenseCh1:
+                      precenseIcon = " ± ";
+                      break;
+                    case str.precenseCh2:
+                      precenseIcon = " + ";
+                      break;
+                    case str.precenseCh3:
+                      precenseIcon = " ++ ";
+                      break;
+                  }
+                  
+					infoString = infoString + " (" + precenseIcon + ")";*/
+                 /* infoString = infoString + " (" + data.precense[precenseValueId][1] + ")";*/
+                 
+                 var precenseIcon;
+                  switch (data.precense[precenseValueId][1]) {
+                    case str.precenseCh0:
+                      precenseIcon = "◔";
+                      break;
+                    case str.precenseCh1:
+                      precenseIcon = "◑";
+                      break;
+                    case str.precenseCh2:
+                      precenseIcon = "◕";
+                      break;
+                    case str.precenseCh3:
+                      precenseIcon = "●";
+                      break;
+                  }
+                  
+					infoString = infoString + " " + precenseIcon;
 				sectionInfo[slotIndex] = infoString;
 			}
 		}
