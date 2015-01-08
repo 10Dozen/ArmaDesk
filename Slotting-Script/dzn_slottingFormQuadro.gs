@@ -476,7 +476,7 @@ function dzn_onSave() {
 				
 				var precenseValueId = dzn_getPrecense(usedNicks[i]);
 				if (data.precense[precenseValueId][1] != str.precenseCh3) {
-					infoString = infoString + " (" + data.precense[precenseValueId][1] + "0%)";
+					infoString = infoString + " (" + data.precense[precenseValueId][1] + ")";
 				}
 				sectionInfo[slotIndex] = infoString;
 			}
