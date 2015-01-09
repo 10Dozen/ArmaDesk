@@ -48,7 +48,7 @@ player addAction [
 		private ["_pos"];
 		_pos = getPosASL dzn_unitWithDocuments;
 	
-		"%MARKER_NAME%" setMarkerPos [_pos select 0, _pos select 1];	// Вписать имя маркера
+		"%MARKER_NAME%" setMarkerPosLocal [_pos select 0, _pos select 1];	// Вписать имя маркера
 		sleep 60;
 	};
 };
