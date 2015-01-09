@@ -44,8 +44,8 @@ player addAction [
 	waitUntil {!isNil "dzn_unitWithDocuments"};
 	waitUntil {!isNil "%MARKER_NAME%"};	// Вписать имя маркера
 	
+	private ["_pos"];
 	while { true } do {
-		private ["_pos"];
 		_pos = getPosASL dzn_unitWithDocuments;
 	
 		"%MARKER_NAME%" setMarkerPosLocal [_pos select 0, _pos select 1];	// Вписать имя маркера
