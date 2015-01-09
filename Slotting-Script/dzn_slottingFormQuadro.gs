@@ -243,7 +243,7 @@ function dzn_initialize() {
 		"passcodes" :		passcodes, 	// Valid passcodes
 		"sides" : 		dzn_convert(sidesNames, "toString"), 	// Names of sides
 		
-		"precense" :		"0",		// Precenses of users
+		"precense" :		"0 $ ",		// Precenses of users
 		
 		"slotsNames" :		dzn_convert(slotsNames, "toString"),	// Original names of slots
 		"slotsHeadsNames" :	dzn_convert(slotsHeads, "toString"),	// IDs of headers in slots names
