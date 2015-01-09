@@ -2,7 +2,16 @@ if (!isNil { dzn_missionStarted }) exitWith {};
 waitUntil { time > 1 };
 dzn_missionStarted = true;
 
-// Добавляем действие
+// Тут мы провереям - этот ли игрок имеет документы и назначаем его на роль dzn_unitWithDocuments
+if (!isNil {player getVariable 'dzn_hasDocuments'}) then {
+	dzn_unitWithDocuments = vehicle player;
+	publicVariable "dzn_unitWithDocuments";
+};
+
+// Ждем, пока dzn_unitWithDocuments не появится
+waitUntil { !isNil "dzn_unitWithDocuments" };
+
+// Добавляем действие на сбор документов
 // 	Ожидается, что у одного из юнитов будет прописано: _this setVariable ["dzn_hasDocuments", true, true]; в ините или в скрипте
 player addAction [
 	"<t color='#8AD2FF'>Забрать документы</t>",
@@ -30,7 +39,7 @@ player addAction [
 ];
 
 
-// Процесс рисования маркера:
+// Процесс рисования маркера - каждую минуту перемещает маркер на положение dzn_unitWithDocuments. Возможно работает локально для всех, из вики не понятно.
 [] spawn {
 	waitUntil {!isNil "dzn_unitWithDocuments"};
 	waitUntil {!isNil "%MARKER_NAME%"};	// Вписать имя маркера
