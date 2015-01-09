@@ -1,4 +1,4 @@
-if (!isNil { dzn_missionStarted }) exitWith {};
+if (!isNil "dzn_missionStarted") exitWith {};
 waitUntil { time > 1 };
 dzn_missionStarted = true;
 
