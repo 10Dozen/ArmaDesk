@@ -474,7 +474,7 @@ function dzn_onSave() {
 				}
 				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
 				
-				if (data.precense[dzn_getPrecense(usedNicks[i])][1] != "1") {
+				if (data.precense[dzn_getPrecense(usedNicks[i])][1] != "true") {
 					infoString = infoString + " ◑";
 				}
 				sectionInfo[slotIndex] = infoString;
