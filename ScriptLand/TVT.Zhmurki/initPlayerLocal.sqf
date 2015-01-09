@@ -19,7 +19,7 @@ player addAction [
 		if (!isNil { cursorTarget getVariable 'dzn_hasDocuments' } ) then {
 			cursorTarget setVariable ["dzn_hasDocuments", nil, true];
 			(_this select 1) setVariable ["dzn_hasDocuments", true, true];
-			dzn_unitWithDocuments = vehicle player;
+			dzn_unitWithDocuments = vehicle (_this select 1);
 			publicVariable "dzn_unitWithDocuments";
 		};
 		hint "Ты забрал документы";
