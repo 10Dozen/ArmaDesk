@@ -149,7 +149,7 @@ function dzn_initialize() {
 				idName = form.addTextItem().setRequired(true).setTitle(itemName).setHelpText(str.nick).getId().toString();
 				break;
 			case "a":	
-				idPrecense = form.addListItem().setTitle(itemName).setHelpText(str.precense).setChoiceValues([str.precenseCh0, str.precenseCh1, str.precenseCh2, str.precenseCh3]).getId().toString();
+				idPrecense = form.addCheckboxItem().setTitle(itemName).setHelpText(str.precense).setChoiceValues([str.precenseCh]).getId().toString();
 				break;
 			case "x":
 				idPasscode = form.addTextItem().setTitle(itemName).setHelpText(str.passcode).getId().toString();
@@ -387,10 +387,10 @@ function dzn_onSave() {
 			var precense;
 			if (precenseResponse == null) {
 				// No response were given
-				precense = str.precenseCh3;
+				precense = "true";
 			} else {
 				// Get value from response
-				precense = precenseResponse.getResponse();
+				precense = precenseResponse.getResponse()[0];
 			}
 			
 			if (slot.length == 1) { 
@@ -474,44 +474,9 @@ function dzn_onSave() {
 				}
 				var infoString = "✔ " + sectionInfo[slotIndex] + " -- " + nicknameToShow;
 				
-				var precenseValueId = dzn_getPrecense(usedNicks[i]);
-						//if (data.precense[precenseValueId][1] != str.precenseCh3) {
-                  /*var precenseIcon;
-                  switch (data.precense[precenseValueId][1]) {
-                    case str.precenseCh0:
-                      precenseIcon = " - ";
-                      break;
-                    case str.precenseCh1:
-                      precenseIcon = " ± ";
-                      break;
-                    case str.precenseCh2:
-                      precenseIcon = " + ";
-                      break;
-                    case str.precenseCh3:
-                      precenseIcon = " ++ ";
-                      break;
-                  }
-                  
-					infoString = infoString + " (" + precenseIcon + ")";*/
-                 /* infoString = infoString + " (" + data.precense[precenseValueId][1] + ")";*/
-                 
-                 var precenseIcon;
-                  switch (data.precense[precenseValueId][1]) {
-                    case str.precenseCh0:
-                      precenseIcon = "◔";
-                      break;
-                    case str.precenseCh1:
-                      precenseIcon = "◑";
-                      break;
-                    case str.precenseCh2:
-                      precenseIcon = "◕";
-                      break;
-                    case str.precenseCh3:
-                      precenseIcon = "●";
-                      break;
-                  }
-                  
-					infoString = infoString + " " + precenseIcon;
+				if (data.precense[dzn_getPrecense(usedNicks[i])][1] != "1") {
+					infoString = infoString + " ◑";
+				}
 				sectionInfo[slotIndex] = infoString;
 			}
 		}
@@ -611,16 +576,13 @@ function dzn_onSave() {
 // String to show
 function dzn_setStringtable() {
 	var str = {
-		"precense" :	"Если считаешь, что не успеешь на игру и об этом должны знать все - укажи, пожалуйста, вероятность своего появления на игре.",
+		"precense" :	"Если считаешь, что не успеешь на игру и об этом должны знать все - отметь этот чекбокс (твой ник впоследующем будет отображен со значком ◑).",
 		"passcode" :	"Ввод паскода(выданного только лидерам ленивых отрядов) позволит занять несколько слотов. Если у Вас нет паскода и/или Вы не собираетесь занимать более одного слота - не заполняйте поле.",
 		"nick"	:	"",
 		"slots"	:	"Выберите одну из доступных ролей из списка ниже.",
 		"slotsLoading"	:	"Обработка... Обновите страницу через несколько секунд.",
 		"formConfirm"	:	"Спасибо, мы тебя подписали на эвент.\n\nЕсли твой ник не появился в списке - обнови страницу через несколько секунд.",
-		"precenseCh0"	:	"Хотел бы прийти",
-		"precenseCh1"	:	"Постараюсь прийти",
-		"precenseCh2"	:	"Сделаю все, чтобы прийти",
-		"precenseCh3"	:	"Обязательно приду"
+		"precenseCh"	:	"Очень хочу прийти, но не уверен, что получится"
 	};
 	return str
 }
