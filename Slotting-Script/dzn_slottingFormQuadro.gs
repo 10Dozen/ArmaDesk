@@ -38,6 +38,7 @@ function dzn_preInitialize() {
 		"ids" : ids
 	}, true);
   
+	ScriptApp.newTrigger('dzn_onSave').forForm(form).onFormSubmit().create()
 	Logger.log("Pre-initialized!");
 }
 
