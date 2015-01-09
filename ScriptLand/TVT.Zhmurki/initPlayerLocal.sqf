@@ -27,15 +27,15 @@ player addAction [
 	"", 
 	6, 
 	true, 
-  true,
-  "", 
-  "(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
-    && {
-      !alive cursorTarget 
-      && (cursorTarget distance player < 2.5)
-      && (vehicle player == player)
-      && (alive player)
-    }"
+	true,
+	"", 
+	"(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
+		&& {
+		!alive cursorTarget 
+		&& (cursorTarget distance player < 2.5)
+		&& (vehicle player == player)
+		&& (alive player)
+	}"
 ];
 
 
