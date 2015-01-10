@@ -6,6 +6,21 @@ dzn_missionStarted = true;
 if (!isNil {player getVariable 'dzn_hasDocuments'}) then {
 	dzn_unitWithDocuments = vehicle player;
 	publicVariable "dzn_unitWithDocuments";
+	
+	_EHkilledIdx = player addEventHandler ["killed", {
+		private ["_veh"];
+		_veh = vehicle (_this select 0);
+		if (alive _veh) then {
+			_veh setVariable ["dzn_hasDocuments", true, true];
+			(_this select 0) setVariable ["dzn_hasDocuments", nil, true];
+			dzn_unitWithDocuments = _veh;
+			publicVariable "dzn_unitWithDocuments";
+		} else {
+			// Тут какое то условие на провал миссии
+			missionFailed = true;
+			publicVariable "missionFailed";
+		};
+	}]
 };
 
 // Ждем, пока dzn_unitWithDocuments не появится
