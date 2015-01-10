@@ -47,6 +47,37 @@ _EHkilledIdx = UNIT_NAME addEventHandler ["killed", {
 }];
 //*******************************************************************
 
+//Если пацаны из блюфор
+if (side player == west) then {
+	player setVariable ["dzn_canBeBurned", true, true];
+	
+	player addAction [
+		"<t color='#8AD2FF'>Уничтожить тело</t>",
+		{
+			private ["_body"];
+			_body = cursorTarget;
+			hint "Термитная граната активирована!";
+			sleep 5;
+			
+			"IncinerateShell" createVehicle (getPos _body);
+			sleep 3;
+			_body setPos (getMakerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
+		},
+		"", 
+		6, 
+		true, 
+		true,
+		"", 
+		"(!isNil {cursorTarget getVariable 'dzn_canBeBurned'}) 
+			&& {
+			!alive cursorTarget 
+			&& (cursorTarget distance player < 2.5)
+			&& (vehicle player == player)
+			&& (alive player)
+		}"
+	];
+	
+};
 
 // Ждем, пока dzn_unitWithDocuments не появится
 waitUntil { !isNil "dzn_unitWithDocuments" };
