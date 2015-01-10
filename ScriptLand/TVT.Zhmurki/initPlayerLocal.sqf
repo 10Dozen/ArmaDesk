@@ -103,6 +103,7 @@ player addAction [
 
 // Тут пока опциональное про сжигание тел
 //Если пацаны из блюфор
+
 if (side player == west) then {
 	player setVariable ["dzn_canBeBurned", true, true];
 	
@@ -116,7 +117,7 @@ if (side player == west) then {
 			
 			"IncinerateShell" createVehicle (getPos _body);
 			sleep 3;
-			_body setPos (getMakerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
+			_body setPos (getMarkerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
 		},
 		"", 
 		6, 
