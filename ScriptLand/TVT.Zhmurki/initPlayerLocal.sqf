@@ -30,7 +30,7 @@ if (!isNil {player getVariable 'dzn_hasDocuments'}) then {
 
 //********************************************************************
 // Для тестов вместо IF выше использовать это (заменить UNIT_NAME на бота
-UNIT_NAME setVariable ["dzn_hasDocuments", nil, true];
+UNIT_NAME setVariable ["dzn_hasDocuments", true, true];
 dzn_unitWithDocuments = UNIT_NAME;
 publicVariable "dzn_unitWithDocuments";
 _EHkilledIdx = UNIT_NAME addEventHandler ["killed", {
