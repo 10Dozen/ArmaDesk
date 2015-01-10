@@ -42,7 +42,7 @@ player addAction [
 // Процесс рисования маркера - каждую минуту перемещает маркер на положение dzn_unitWithDocuments. Возможно работает локально для всех, из вики не понятно.
 [] spawn {
 	waitUntil {!isNil "dzn_unitWithDocuments"};
-	waitUntil {!isNil "%MARKER_NAME%"};	// Вписать имя маркера
+//	waitUntil {!isNil "%MARKER_NAME%"};	// Вписать имя маркера
 	
 	private ["_pos"];
 	while { true } do {
