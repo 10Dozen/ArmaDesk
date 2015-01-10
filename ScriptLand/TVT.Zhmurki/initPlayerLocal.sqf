@@ -2,6 +2,22 @@ if (!isNil "dzn_missionStarted") exitWith {};
 waitUntil { time > 1 };
 dzn_missionStarted = true;
 
+_EH_KilledWithDocuments = player addEventHandler ["killed", {
+	if ( isNil { (_this select 0) getVariable "dzn_hasDocuments"}) exitWith {};
+	
+	private ["_veh"];
+	_veh = vehicle (_this select 0);
+	if (alive _veh) then {
+		_veh setVariable ["dzn_hasDocuments", true, true];
+		(_this select 0) setVariable ["dzn_hasDocuments", nil, true];
+		dzn_unitWithDocuments = _veh;
+		publicVariable "dzn_unitWithDocuments";
+	} else {
+		// Тут какое то условие на провал миссии
+		missionFailed = true;
+		publicVariable "missionFailed";
+	};
+}]
 
 
 /*
@@ -9,23 +25,9 @@ dzn_missionStarted = true;
 if (!isNil {player getVariable 'dzn_hasDocuments'}) then {
 	dzn_unitWithDocuments = vehicle player;
 	publicVariable "dzn_unitWithDocuments";
-	
-	_EHkilledIdx = player addEventHandler ["killed", {
-		private ["_veh"];
-		_veh = vehicle (_this select 0);
-		if (alive _veh) then {
-			_veh setVariable ["dzn_hasDocuments", true, true];
-			(_this select 0) setVariable ["dzn_hasDocuments", nil, true];
-			dzn_unitWithDocuments = _veh;
-			publicVariable "dzn_unitWithDocuments";
-		} else {
-			// Тут какое то условие на провал миссии
-			missionFailed = true;
-			publicVariable "missionFailed";
-		};
-	}]
 };
 */
+
 //********************************************************************
 // Для тестов вместо IF выше использовать это (заменить UNIT_NAME на бота
 UNIT_NAME setVariable ["dzn_hasDocuments", nil, true];
@@ -130,7 +132,7 @@ if (side player == west) then {
 		}"
 	];
 	
-	_EHkilledIdx = player addEventHandler ["killed", {
+	_EH_KilledInCar = player addEventHandler ["killed", {
 		private ["_veh"];
 		_veh = vehicle (_this select 0);
 		if (alive _veh) then {
