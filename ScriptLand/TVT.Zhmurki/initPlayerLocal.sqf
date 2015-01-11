@@ -84,13 +84,12 @@ player addAction [
 // Процесс рисования маркера - каждую минуту перемещает маркер на положение dzn_unitWithDocuments. Возможно работает локально для всех, из вики не понятно.
 [] spawn {
 	waitUntil {!isNil "dzn_unitWithDocuments"};
-//	waitUntil {!isNil "%MARKER_NAME%"};	// Вписать имя маркера
 	
 	private ["_pos"];
 	while { true } do {
 		_pos = getPosASL dzn_unitWithDocuments;
 	
-		"%MARKER_NAME%" setMarkerPosLocal [_pos select 0, _pos select 1];	// Вписать имя маркера
+		"docs" setMarkerPosLocal [_pos select 0, _pos select 1];	// Вписать имя маркера
 		sleep 60;
 	};
 };
@@ -118,7 +117,7 @@ if (side player == west) then {
 			
 				"IncinerateShell" createVehicle (getPos _this);
 				sleep 3;
-				_this setPos (getMarkerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
+				_this setPos (getMarkerPos "grave");	//Маркер для "кладбищя" синих
 			};
 		},
 		"", 
