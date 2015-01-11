@@ -9,13 +9,14 @@ dzn_areaOfOperation setRectangular true; //Если она квадрат
 
 waitUntil { escaped }; //Тут условие окончание миски (типа ушли к зоне высадке и триггер сказал escaped = true
 
-_evidencesLeft = false;
+_evidencesLeft = 0;
 {
   if ( !(_x in dzn_graveyard) && { _x in dzn_areaOfOperation } ) then {
-    _evidencesLeft = true;
+    _evidencesLeft = _evidencesLeft + 1;
   };
 } forEach allDeadMen;
 
-if ( _evidencesLeft ) then {
+// трупов больше 4 - провал
+if ( _evidencesLeft > 4 ) then {
   // BLUFOR failed
 };
