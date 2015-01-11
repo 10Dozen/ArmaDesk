@@ -17,7 +17,7 @@ _EH_KilledWithDocuments = player addEventHandler ["killed", {
 		missionFailed = true;
 		publicVariable "missionFailed";
 	};
-}]
+}];
 
 
 /*
