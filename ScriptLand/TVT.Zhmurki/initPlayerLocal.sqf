@@ -133,9 +133,13 @@ if (side player == west) then {
 		}"
 	];
 	
+	// Выкидывает труп из машины, если скорость машины меньше 5 и она менее 5 метров над землей
 	_EH_KilledInCar = player addEventHandler ["killed", {
 		private ["_veh"];
 		_veh = vehicle (_this select 0);
+		
+		waitUntil { (speed _veh < 5)  && (((getPosATL _veh) select 2) < 5) };
+		
 		if (alive _veh) then {
 			moveOut (_this select 0);
 		};
