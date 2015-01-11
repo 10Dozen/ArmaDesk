@@ -77,7 +77,8 @@ player addAction [
 	"", 
 	"(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
 	&& { 
-		(!alive cursorTarget 
+		( (cursorTarget isKindOf 'Man')
+		&& !alive cursorTarget 
 		&& (cursorTarget distance player < 2.5)
 		&& (vehicle player == player)
 		&& (alive player))
