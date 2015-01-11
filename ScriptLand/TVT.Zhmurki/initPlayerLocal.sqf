@@ -4,7 +4,7 @@ dzn_missionStarted = true;
 
 _EH_KilledWithDocuments = player addEventHandler ["killed", {
 	if ( isNil { (_this select 0) getVariable "dzn_hasDocuments"}) exitWith {};
-	if (vehicle (_this select 0) == (_this select 0) ) exitWtih {};
+	if (vehicle (_this select 0) == (_this select 0) ) exitWith {};
 	
 	private ["_veh"];
 	_veh = vehicle (_this select 0);
@@ -36,7 +36,7 @@ dzn_unitWithDocuments = UnitAAF_A1_FTL;
 publicVariable "dzn_unitWithDocuments";
 _EHkilledIdx = UnitAAF_A1_FTL addEventHandler ["killed", {
 	if ( isNil { (_this select 0) getVariable "dzn_hasDocuments"}) exitWith {};
-	if (vehicle (_this select 0) == (_this select 0) ) exitWtih {};
+	if (vehicle (_this select 0) == (_this select 0) ) exitWith {};
 	
 	private ["_veh"];
 	_veh = vehicle (_this select 0);
@@ -94,7 +94,13 @@ player addAction [
 		_pos = getPosASL dzn_unitWithDocuments;
 	
 		"docs" setMarkerPosLocal [_pos select 0, _pos select 1];	// Вписать имя маркера
-		sleep 60;
+		"docs" setMarkerAlphaLocal 1;
+		
+		for "_i" from 1 to 9 do {
+			_alphaDocs = MarkerAlpha "docs";
+			"docs" setMarkerAlphaLocal (_alphaDocs -0.1);
+			sleep 3;
+		};
 	};
 };
 
