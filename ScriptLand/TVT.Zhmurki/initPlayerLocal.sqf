@@ -75,16 +75,25 @@ player addAction [
 	true, 
 	true,
 	"", 
-	"(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
+	"_cT = cursorTarget;
+	if ( (!isNil {_cT getVariable 'dzn_hasDocuments'}) && { (vehicle player == player) && (alive player)  }) then {
+		if (_cT isKindOf "Man") then {
+			if (!alive _cT && (_cT distance player < 2.5)) then { true } else { false };
+		} else {
+			if (alive _cT && (_cT distance player < 6)) then { true } else { false };
+		}
+	};"
+];
+
+/*
+	(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
 		&& {
 		!alive cursorTarget 
 		&& (cursorTarget distance player < 2.5)
 		&& (vehicle player == player)
 		&& (alive player)
-	}"
-];
-
-
+	}
+	*/
 // Процесс рисования маркера - каждую минуту перемещает маркер на положение dzn_unitWithDocuments. Возможно работает локально для всех, из вики не понятно.
 [] spawn {
 	waitUntil {!isNil "dzn_unitWithDocuments"};
