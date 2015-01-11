@@ -113,11 +113,13 @@ if (side player == west) then {
 			private ["_body"];
 			_body = cursorTarget;
 			hint "Термитная граната активирована!";
-			sleep 5;
+			_body spawn {
+				sleep 5;
 			
-			"IncinerateShell" createVehicle (getPos _body);
-			sleep 3;
-			_body setPos (getMarkerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
+				"IncinerateShell" createVehicle (getPos _this);
+				sleep 3;
+				_this setPos (getMarkerPos "%MARKER_GRAVEYARD%");	//Маркер для "кладбищя" синих
+			};
 		},
 		"", 
 		6, 
@@ -135,13 +137,12 @@ if (side player == west) then {
 	
 	// Выкидывает труп из машины, если скорость машины меньше 5 и она менее 5 метров над землей
 	_EH_KilledInCar = player addEventHandler ["killed", {
-		private ["_veh"];
-		_veh = vehicle (_this select 0);
-		
-		waitUntil { (speed _veh < 5)  && (((getPosATL _veh) select 2) < 5) };
-		
-		if (alive _veh) then {
-			moveOut (_this select 0);
+		[(vehicle (_this select 0)), (_this select 0)]  spawn {
+			waitUntil { (speed (_this select 0) < 5)  && (((getPosATL (_this select 0)) select 2) < 5) };
+			if (alive (_this select 0)) then {
+				moveOut (_this select 1);
+			};
 		};
+	
 	}]
 };
