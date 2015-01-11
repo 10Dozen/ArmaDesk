@@ -21,16 +21,17 @@ _EH_KilledWithDocuments = player addEventHandler ["killed", {
 }];
 
 
-/*
+
 // Тут мы провереям - этот ли игрок имеет документы и назначаем его на роль dzn_unitWithDocuments
 if (!isNil {player getVariable 'dzn_hasDocuments'}) then {
 	dzn_unitWithDocuments = vehicle player;
 	publicVariable "dzn_unitWithDocuments";
 };
-*/
+
 
 //********************************************************************
 // Для тестов вместо IF выше использовать это (заменить UNIT_NAME на бота
+/*
 UnitAAF_A1_FTL setVariable ["dzn_hasDocuments", true, true];
 dzn_unitWithDocuments = UnitAAF_A1_FTL;
 publicVariable "dzn_unitWithDocuments";
@@ -51,6 +52,7 @@ _EHkilledIdx = UnitAAF_A1_FTL addEventHandler ["killed", {
 		publicVariable "missionFailed";
 	};
 }];
+*/
 //*******************************************************************
 
 
@@ -91,37 +93,7 @@ player addAction [
 	}"
 ];
 
-/*
-	(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
-	&& { 
-		(!alive cursorTarget 
-		&& (cursorTarget distance player < 2.5)
-		&& (vehicle player == player)
-		&& (alive player))
-		
-		|| 
-		
-		(!(cursorTarget isKindOf 'Man')
-		&& alive cursorTarget 
-		&& (cursorTarget distance player < 6)
-		&& (vehicle player == player)
-		&& (alive player))
-	} 
-	
-	
-	
-	
-	
-	
-	
-	(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
-		&& {
-		!alive cursorTarget 
-		&& (cursorTarget distance player < 2.5)
-		&& (vehicle player == player)
-		&& (alive player)
-	}
-	*/
+
 // Процесс рисования маркера - каждую минуту перемещает маркер на положение dzn_unitWithDocuments. Возможно работает локально для всех, из вики не понятно.
 [] spawn {
 	waitUntil {!isNil "dzn_unitWithDocuments"};
@@ -145,7 +117,7 @@ player addAction [
 
 
 
-
+/*
 
 // Тут пока опциональное про сжигание тел
 //Если пацаны из блюфор
@@ -212,3 +184,4 @@ bots = [];
 	
 	}]
 } forEach _bots;
+*/
