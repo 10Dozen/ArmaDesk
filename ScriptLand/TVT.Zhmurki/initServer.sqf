@@ -11,7 +11,7 @@ waitUntil { escaped }; //Тут условие окончание миски (т
 
 _evidencesLeft = 0;
 {
-  if ( !(_x in dzn_graveyard) && { _x in dzn_areaOfOperation } ) then {
+  if ( (!isNil {_x getVariable 'dzn_canBeBurned'}) && { !(_x in dzn_graveyard) && ( _x in dzn_areaOfOperation) } ) then {
     _evidencesLeft = _evidencesLeft + 1;
   };
 } forEach allDeadMen;
