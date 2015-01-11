@@ -4,6 +4,7 @@ dzn_missionStarted = true;
 
 _EH_KilledWithDocuments = player addEventHandler ["killed", {
 	if ( isNil { (_this select 0) getVariable "dzn_hasDocuments"}) exitWith {};
+	if (vehicle (_this select 0) == (_this select 0) ) exitWtih {};
 	
 	private ["_veh"];
 	_veh = vehicle (_this select 0);
@@ -34,6 +35,9 @@ UnitAAF_A1_FTL setVariable ["dzn_hasDocuments", true, true];
 dzn_unitWithDocuments = UnitAAF_A1_FTL;
 publicVariable "dzn_unitWithDocuments";
 _EHkilledIdx = UnitAAF_A1_FTL addEventHandler ["killed", {
+	if ( isNil { (_this select 0) getVariable "dzn_hasDocuments"}) exitWith {};
+	if (vehicle (_this select 0) == (_this select 0) ) exitWtih {};
+	
 	private ["_veh"];
 	_veh = vehicle (_this select 0);
 	if (alive _veh) then {
