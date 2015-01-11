@@ -112,7 +112,6 @@ player addAction [
 
 // Тут пока опциональное про сжигание тел
 //Если пацаны из блюфор
-
 if (side player == west) then {
 	player setVariable ["dzn_canBeBurned", true, true];
 	
@@ -146,6 +145,7 @@ if (side player == west) then {
 	
 	// Выкидывает труп из машины, если скорость машины меньше 5 и она менее 5 метров над землей
 	_EH_KilledInCar = player addEventHandler ["killed", {
+		if (vehicle (_this select 0) == (_this select 0)) exitWith {};
 		[(vehicle (_this select 0)), (_this select 0)]  spawn {
 			waitUntil { (speed (_this select 0) < 5)  && (((getPosATL (_this select 0)) select 2) < 5) };
 			if (alive (_this select 0)) then {
@@ -155,3 +155,23 @@ if (side player == west) then {
 	
 	}]
 };
+
+
+// Для тестов на ботах - имена ботов добавить в массив
+bots = [];
+
+{
+	_x setVariable ["dzn_canBeBurned", true, true];
+	
+	// Выкидывает труп из машины, если скорость машины меньше 5 и она менее 5 метров над землей
+	_EH_KilledInCar = _x addEventHandler ["killed", {
+		if (vehicle (_this select 0) == (_this select 0)) exitWith {};
+		[(vehicle (_this select 0)), (_this select 0)]  spawn {
+			waitUntil { (speed (_this select 0) < 5)  && (((getPosATL (_this select 0)) select 2) < 5) };
+			if (alive (_this select 0)) then {
+				moveOut (_this select 1);
+			};
+		};
+	
+	}]
+} forEach _bots;
