@@ -75,17 +75,44 @@ player addAction [
 	true, 
 	true,
 	"", 
-	"_cT = cursorTarget;
-	if ( (!isNil {_cT getVariable 'dzn_hasDocuments'}) && { (vehicle player == player) && (alive player)  }) then {
-		if (_cT isKindOf 'Man') then {
-			if (!alive _cT && (_cT distance player < 2.5)) then { true } else { false };
-		} else {
-			if (alive _cT && (_cT distance player < 6)) then { true } else { false };
-		}
-	};"
+	"(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
+	&& { 
+		(!alive cursorTarget 
+		&& (cursorTarget distance player < 2.5)
+		&& (vehicle player == player)
+		&& (alive player))
+		|| 
+		(!(cursorTarget isKindOf 'Man')
+		&& alive cursorTarget 
+		&& (cursorTarget distance player < 6)
+		&& (vehicle player == player)
+		&& (alive player))
+	}"
 ];
 
 /*
+	(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
+	&& { 
+		(!alive cursorTarget 
+		&& (cursorTarget distance player < 2.5)
+		&& (vehicle player == player)
+		&& (alive player))
+		
+		|| 
+		
+		(!(cursorTarget isKindOf 'Man')
+		&& alive cursorTarget 
+		&& (cursorTarget distance player < 6)
+		&& (vehicle player == player)
+		&& (alive player))
+	} 
+	
+	
+	
+	
+	
+	
+	
 	(!isNil {cursorTarget getVariable 'dzn_hasDocuments'}) 
 		&& {
 		!alive cursorTarget 
