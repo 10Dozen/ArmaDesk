@@ -11,6 +11,7 @@ waitUntil { escaped }; //Тут условие окончание миски (т
 
 _evidencesLeft = 0;
 {
+  // Условие: труп можно было сжечь, но он не на кладбище(сожжен), но в зоне операции
   if ( (!isNil {_x getVariable 'dzn_canBeBurned'}) && { !(_x in dzn_graveyard) && ( _x in dzn_areaOfOperation) } ) then {
     _evidencesLeft = _evidencesLeft + 1;
   };
