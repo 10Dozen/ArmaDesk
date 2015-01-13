@@ -44,21 +44,30 @@ function dzn_createSlottingCoop() {
 		SpreadsheetApp.getUi().alert('There is no "ARMA FSD Tools" folder on your Drive. Please, create it via "FSD Tools" menu');    
 	}
 
-	var name = dzn_getFormName('COOP');
-	Logger.log(name)
-	
-	// +++
-	// Добавить степ генерации имени из текущей даты: COOP + datetime
-	
-	
-	if (name != "null") {    
+	// Запрашиваем создание формы слоттинга
+	var formSlotName = dzn_getFormName('COOP');
+  
+	if (formSlotName[1] != "null") {
 		var folderId =  DriveApp.getFoldersByName("ARMA FSD Tools").next().createFolder(name).getId();
 		var folder = DocsList.getFolderById(folderId);
-    
-		var fileId = FormApp.create(name).getId();
-		var slotForm = DocsList.getFileById(fileId);
+
+		var formSlotId = FormApp.create(formSlotName[0]).getId();
+		var slotForm = DocsList.getFileById(formSlotId);
 		slotForm.addToFolder(folder);
 		slotForm.removeFromFolder(DocsList.getRootFolder());
+
+		// Запрашиваем создание формы фидбека
+		var formFeedName = dzn_isFeedbackNeeded('COOP', formSlotName[1]);
+		if (formFeedName != "null") {
+			var formFeedId = FormApp.create(formFeedName).getId();
+			var feedForm = DocsList.getFileById(formFeedId);
+			feedForm.addToFolder(folder);
+			feedForm.removeFromFolder(DocsList.getRootFolder());
+		}
+      
+        
+		
+    
 
     
     
