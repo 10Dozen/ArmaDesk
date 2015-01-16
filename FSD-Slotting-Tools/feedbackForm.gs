@@ -10,7 +10,31 @@ function dzn_formFeedAddMenu() {
 }
 
 function dzn_feedForm_preInitializeFromMenu() {
-	dzn_feedForm_preInitialize(FormApp.getActiveForm().getId());
+  
+  
+  
+  
+  
+/*  PropertiesService.getScriptProperties().setProperties(
+		{
+			"ids" : 'D',
+			"defaultRoles" : 'A',
+			"defaultBriefing" : 'B',
+			"defaultAction" : 'C',
+			"defaultResults" : 'E'      
+		},
+		true
+    );  
+    */
+	var props = PropertiesService.getScriptProperties();  
+  Logger.log(props.getProperties());
+	dzn_feedForm_preInitialize(
+                               FormApp.getActiveForm().getId(), 
+                               props.getProperty('defaultRoles'),
+                               props.getProperty('defaultBriefing'),
+                               props.getProperty('defaultAction'),
+                               props.getProperty('defaultResults')
+    );                               
 	FormApp.getUi().alert('Default view restored');
 }
 
@@ -18,10 +42,22 @@ function dzn_feedForm_initializeFromMenu() {
 	dzn_feedForm_initialize(FormApp.getActiveForm().getId());
 }
 
+function dd() {
+  PropertiesService.getScriptProperties().setProperties(
+		{
+			"ids" : 'a',
+			"defaultRoles" : 'a',
+			"defaultBriefing" : 'b',
+			"defaultAction" : 'c',
+			"defaultResults" : 'd'      
+		},
+		true
+    );  	
+}
 
 //*****************************
 // Preinitialize the form
-function dzn_feedForm_preInitialize(formId) {
+function dzn_feedForm_preInitialize(formId, roles, briefing, action, result) {
 	var form = FormApp.openById(formId);
 	
 	Logger.log('Pre-Initialization!  Clearing form!');
@@ -31,13 +67,24 @@ function dzn_feedForm_preInitialize(formId) {
 	
 	Logger.log('  Adding input forms!');
 	var headers = ["Roles Values", "Briefing feedback Values", "Action feedback Values", "Result feedback Values"];
+	var values = [roles, briefing, action, result];
+ Logger.log('Roles: ' + roles + '  || Brief: ' + briefing);
 	var ids = [];
 	for (var i = 0; i < headers.length; i++) {
-		var itemId = form.addSectionHeaderItem().setTitle(headers[i]).getId();
+		var itemId = form.addSectionHeaderItem().setTitle(headers[i]).setHelpText(values[i]).getId();
 		ids.push(itemId);
 	}
 
-	PropertiesService.getDocumentProperties().setProperties({"ids" : ids.join(" | ")}, true);	
+	PropertiesService.getScriptProperties().setProperties(
+		{
+			"ids" : ids.join(" | "),
+			"defaultRoles" : roles,
+			"defaultBriefing" : briefing,
+			"defaultAction" : action,
+			"defaultResults" : result      
+		},
+		true
+    );  	
 	Logger.log('Pre-Initialized!');
 }
 
