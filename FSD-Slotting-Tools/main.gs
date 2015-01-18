@@ -8,8 +8,6 @@ function onOpen() {
 		.addItem('Create Sloting form COOP', 'dzn_createSlottingCoop')
 		.addItem('Create Sloting form TVT', 'myFunction')
 		.addSeparator()
-		.addItem('Create Feedback form (COOP)', 'myFunction')
-		.addSeparator()
 		.addItem('Show Sidebar', 'showSidebar')
 		.addToUi();
  }
@@ -24,7 +22,14 @@ function showSidebar(link1, link2) {
 		if (link2 != null) {
 			htmlOut = htmlOut + "<br><a href='" + link2 + "'>Feedback Form</a>";; 
 		}
-	}
+    } else {
+      if (SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() != null) {
+         htmlOut = htmlOut + "Last Created Forms<br><h4>Links:</h4><br><a href='" + SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() + "'>Slotting Form</a>";
+		if (SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() != null) {
+			htmlOut = htmlOut + "<br><a href='" + SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() + "'>Feedback Form</a>";; 
+		}
+      }
+    }
 	var html = HtmlService.createHtmlOutput(htmlOut)
 		.setSandboxMode(HtmlService.SandboxMode.IFRAME)
 		.setTitle('FSD Slotting Tools')
@@ -46,7 +51,6 @@ function dzn_createFolder() {
 }
 
 
-
 // *****************
 // Creating Slotting form for COOP
 function dzn_createSlottingCoop() {
@@ -57,7 +61,7 @@ function dzn_createSlottingCoop() {
 	var ss = SpreadsheetApp.getActiveSpreadsheet();
 	// Запрашиваем создание формы слоттинга
 	var formSlotName = dzn_getSlotFormName('COOP');
-  
+  Logger.log(formSlotName);
 	if (formSlotName[1] != "null") {
 		var slotFormUrl, feedFormUrl
 		var folder =  DriveApp.getFoldersByName("ARMA FSD Tools").next().createFolder(formSlotName[0]);	 
@@ -66,7 +70,7 @@ function dzn_createSlottingCoop() {
 		DriveApp.getRootFolder().removeFile(DriveApp.getFileById(formSlotId)); 
 		slotFormUrl = DriveApp.getFileById(formSlotId).getUrl();
       
-		var propSheetId = SpreadsheetApp.create('properties' + formSlotName[1]).getId();
+		var propSheetId = SpreadsheetApp.create('properties ' + formSlotName[0]).getId();
 		folder.addFile(DriveApp.getFileById(propSheetId));
 		DriveApp.getRootFolder().removeFile(DriveApp.getFileById(propSheetId));
       
@@ -75,42 +79,19 @@ function dzn_createSlottingCoop() {
 		// Запрашиваем создание формы фидбека
 		var formFeedName = dzn_isFeedbackNeeded('COOP', formSlotName[1]);
 		if (formFeedName != "null") {
-		var formFeedId = FormApp.create(formFeedName).getId();
-		folder.addFile(DriveApp.getFileById(formFeedId));
-		DriveApp.getRootFolder().removeFile(DriveApp.getFileById(formFeedId));
-		feedFormUrl = DriveApp.getFileById(formFeedId).getUrl();          
-                    
-		propSheet.setNamedRange("feedForm_defRoles",propSheet.getRange("B1"));
-		propSheet.setNamedRange("feedForm_defBrief",propSheet.getRange("B2"));
-		propSheet.setNamedRange("feedForm_defAction",propSheet.getRange("B3"));
-		propSheet.setNamedRange("feedForm_defResult",propSheet.getRange("B4"));
+          var formFeedId = FormApp.create(formFeedName).getId();
+          folder.addFile(DriveApp.getFileById(formFeedId));
+          DriveApp.getRootFolder().removeFile(DriveApp.getFileById(formFeedId));
+          feedFormUrl = DriveApp.getFileById(formFeedId).getUrl();          
           
-		propSheet.getRangeByName("feedForm_defRoles").setValue(ss.getRangeByName("feedForm_defRoles").getValue());
-		propSheet.getRangeByName("feedForm_defBrief").setValue(ss.getRangeByName("feedForm_defBrief").getValue());
-		propSheet.getRangeByName("feedForm_defAction").setValue(ss.getRangeByName("feedForm_defAction").getValue());
-		propSheet.getRangeByName("feedForm_defResult").setValue(ss.getRangeByName("feedForm_defResult").getValue());
-
-		// PreInitialize 
-		//dzn_feedForm_preInitialize(formFeedId, propSheet.getId());
-		//ScriptApp.newTrigger('dzn_formFeedAddMenu').forForm(FormApp.openById(formFeedId)).onOpen().create();  
+          dzn_addNamedRanges("Feed", propSheetId, ss.getId()); 
+          // PreInitialize 
+          dzn_feedForm_preInitialize(formFeedId, propSheet.getId());
+          ScriptApp.newTrigger('dzn_formFeedAddMenu').forForm(FormApp.openById(formFeedId)).onOpen().create();  
         }
    
-		propSheet.setNamedRange("slotForm_defModes",propSheet.getRange("A1"));
-		propSheet.setNamedRange("slotForm_defSides",propSheet.getRange("A2"));
-		propSheet.setNamedRange("slotForm_defSlots1",propSheet.getRange("A3"));
-		propSheet.setNamedRange("slotForm_defSlots2",propSheet.getRange("A4"));
-		propSheet.setNamedRange("slotForm_defSlots3",propSheet.getRange("A5"));
-		propSheet.setNamedRange("slotForm_defSlots4",propSheet.getRange("A6"));
-		propSheet.setNamedRange("slotForm_defPass",propSheet.getRange("A7"));
-	      
-		propSheet.getRangeByName("slotForm_defModes").setValue(ss.getRangeByName("slotForm_defModes").getValue());
-		propSheet.getRangeByName("slotForm_defSides").setValue(ss.getRangeByName("slotForm_defSides").getValue());
-		propSheet.getRangeByName("slotForm_defSlots1").setValue(ss.getRangeByName("slotForm_defSlots1").getValue());
-		propSheet.getRangeByName("slotForm_defSlots2").setValue(ss.getRangeByName("slotForm_defSlots2").getValue());
-		propSheet.getRangeByName("slotForm_defSlots3").setValue(ss.getRangeByName("slotForm_defSlots3").getValue());
-		propSheet.getRangeByName("slotForm_defSlots4").setValue(ss.getRangeByName("slotForm_defSlots4").getValue());
-		propSheet.getRangeByName("slotForm_defPass").setValue(ss.getRangeByName("slotForm_defPass").getValue());
-      
+		dzn_addNamedRanges("Slot", propSheetId, ss.getId());
+		
 		//dzn_slotForm_preInitialize(formSlotId, propSheet.getId());
 		//ScriptApp.newTrigger('dzn_formSlotAddMenu').forForm(FormApp.openById(formSlotId)).onOpen().create();  
 		ss.getRangeByName("slotURL").setValue(slotFormUrl);
@@ -125,6 +106,43 @@ function dzn_createSlottingCoop() {
 	};
 }
 
+function dzn_addNamedRanges(type, ssId, sourceId) {
+	var ss = SpreadsheetApp.openById(ssId);
+	var source = SpreadsheetApp.openById(sourceId);
+  
+	if ( type == 'Feed' ) {
+		ss.setNamedRange("feedForm_defRoles",ss.getRange("B1"));
+		ss.setNamedRange("feedForm_defBrief",ss.getRange("B2"));
+		ss.setNamedRange("feedForm_defAction",ss.getRange("B3"));
+		ss.setNamedRange("feedForm_defResult",ss.getRange("B4"));
+		ss.setNamedRange('feedForm_ids', ss.getRange('B5'));
+		ss.setNamedRange('feedForm_names', ss.getRange('B6'));
+          
+		ss.getRangeByName("feedForm_defRoles").setValue(source.getRangeByName("feedForm_defRoles").getValue());
+		ss.getRangeByName("feedForm_defBrief").setValue(source.getRangeByName("feedForm_defBrief").getValue());
+		ss.getRangeByName("feedForm_defAction").setValue(source.getRangeByName("feedForm_defAction").getValue());
+		ss.getRangeByName("feedForm_defResult").setValue(source.getRangeByName("feedForm_defResult").getValue());
+	} else {
+		ss.setNamedRange("slotForm_defModes",ss.getRange("A1"));
+		ss.setNamedRange("slotForm_defSides",ss.getRange("A2"));
+		ss.setNamedRange("slotForm_defSlots1",ss.getRange("A3"));
+		ss.setNamedRange("slotForm_defSlots2",ss.getRange("A4"));
+		ss.setNamedRange("slotForm_defSlots3",ss.getRange("A5"));
+		ss.setNamedRange("slotForm_defSlots4",ss.getRange("A6"));
+		ss.setNamedRange("slotForm_defPass",ss.getRange("A7"));
+	      
+		ss.getRangeByName("slotForm_defModes").setValue(source.getRangeByName("slotForm_defModes").getValue());
+		ss.getRangeByName("slotForm_defSides").setValue(source.getRangeByName("slotForm_defSides").getValue());
+		ss.getRangeByName("slotForm_defSlots1").setValue(source.getRangeByName("slotForm_defSlots1").getValue());
+		ss.getRangeByName("slotForm_defSlots2").setValue(source.getRangeByName("slotForm_defSlots2").getValue());
+		ss.getRangeByName("slotForm_defSlots3").setValue(source.getRangeByName("slotForm_defSlots3").getValue());
+		ss.getRangeByName("slotForm_defSlots4").setValue(source.getRangeByName("slotForm_defSlots4").getValue());
+		ss.getRangeByName("slotForm_defPass").setValue(source.getRangeByName("slotForm_defPass").getValue());
+      
+	}
+	Logger.log('Properties set');
+}
+
 
 
 
@@ -132,6 +150,7 @@ function dzn_createSlottingCoop() {
 // *****************
 // Create PROMPT and return the answer for SLOTTING FORM
 function dzn_getSlotFormName(gametype) {
+  var gametype = 'COOP';
 	var ui = SpreadsheetApp.getUi();
 	var result = "";
 	var output = ["null"];
@@ -139,15 +158,14 @@ function dzn_getSlotFormName(gametype) {
 	result = ui.prompt('Create Form - Name of the Game','Please enter the Name of the Game:', ui.ButtonSet.OK_CANCEL);
 	var button = result.getSelectedButton();
 	var text = result.getResponseText();
-	if (button = ui.Button.OK) {
+	if (button == ui.Button.OK) {
 		if (text.length == 0) {
 			text = dzn_getToday();
 		}
 		output = [(gametype + ' ' + text), text];
 	}
 	return output
-}; 
-
+}
 
 // *****************
 // Create PROMPT and return YES/NO to create FEEDBACK
