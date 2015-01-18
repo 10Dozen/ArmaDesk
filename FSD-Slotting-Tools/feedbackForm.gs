@@ -213,7 +213,7 @@ function dzn_feedForm_initializeFromMenu() {
 	ss.getRangeByName('feedForm_ids').setValue(idsArray.join(" | "));
   
 	Logger.log('Feedback Form Initialized!');
-	//ScriptApp.newTrigger('dzn_feedForm_onSave').forForm(form).onFormSubmit().create();
+	ScriptApp.newTrigger('dzn_feedForm_onSave').forForm(form).onFormSubmit().create();
 	FormApp.getUi().alert('Feedback Form Initialized!');
 }
 
@@ -221,7 +221,7 @@ function dzn_feedForm_initializeFromMenu() {
 
 // **************************
 // On Save
-function dzn_onSave() {
+function dzn_feedForm_onSave() {
 	var form = FormApp.getActiveForm();
 	var ss = SpreadsheetApp.openById(dzn_feedForm_getPropertySheet(form.getId())); //properties
 
