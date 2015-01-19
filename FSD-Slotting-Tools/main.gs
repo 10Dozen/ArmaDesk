@@ -3,10 +3,13 @@
 function onOpen() {
 	SpreadsheetApp.getUi()
 		.createMenu('FSD Tools')
-		.addItem('Create FSD Tools Folder on Drive', 'dzn_createFolder')
+		.addItem('Create FSD Tools Folder on Drive', 'dzn_createFolderFromMenu')
 		.addSeparator()
-		.addItem('Create Sloting form COOP', 'dzn_createSlottingCoop')
-		.addItem('Create Sloting form TVT', 'myFunction')
+		.addItem('Parse Mission.sqm', 'dzn_mp_parseFromMenu')
+		.addItem('Confirm Data', 'dzn_mp_confirmParsingFromMenu')
+		.addSeparator()
+		.addItem('Create Sloting form COOP', 'dzn_createSlottingCoopFromMenu')
+		.addItem('Create Sloting form TVT', 'dzn_createSlottingTvtFromMenu')
 		.addSeparator()
 		.addItem('Show Sidebar', 'showSidebar')
 		.addToUi();
@@ -15,53 +18,78 @@ function onOpen() {
 // *****************
 // Show sidebar
 function showSidebar(link1, link2) {
-	var htmlOut = "<p>FSD Slotting Tool - is a way to create slotting and feedback forms for your multiplayer online game.<p><br><br>1/ Click<br>2/ Join<br>3/ Move<br>4/ ???<br>5/ Profit<br><br><br>";
-    
+	var htmlOut = "<p>FSD Slotting Tool - is a way to create slotting and feedback forms for your multiplayer online game.<p>";
+
 	if (link1 != null) {
-		htmlOut = htmlOut + "<br><h4>Links:</h4><br><a href='" + link1 + "'>Slotting Form</a>";
+		htmlOut = htmlOut + "<h4>Newly Created Forms:</h4><a href='" + link1 + "'>Slotting Form</a>";
 		if (link2 != null) {
 			htmlOut = htmlOut + "<br><a href='" + link2 + "'>Feedback Form</a>";; 
 		}
-    } else {
-      if (SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() != null) {
-         htmlOut = htmlOut + "Last Created Forms<br><h4>Links:</h4><br><a href='" + SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() + "'>Slotting Form</a>";
-		if (SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() != null) {
-			htmlOut = htmlOut + "<br><a href='" + SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() + "'>Feedback Form</a>";; 
+	} else {
+		if (SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() != "") {
+			htmlOut = htmlOut + "<h4>Last Created Forms</h4><a href='" + SpreadsheetApp.getActive().getRangeByName('slotURL').getValue() + "'>Slotting Form</a>";
+			if (SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() != "") {
+				htmlOut = htmlOut + "<br><a href='" + SpreadsheetApp.getActive().getRangeByName('feedURL').getValue() + "'>Feedback Form</a>";; 
+			}
 		}
-      }
-    }
-	var html = HtmlService.createHtmlOutput(htmlOut)
+	}
+
+	htmlOut = htmlOut + dzn_htmlInstruction();
+  
+	var html = HtmlService.createHtmlOutput(htmlOut)    
 		.setSandboxMode(HtmlService.SandboxMode.IFRAME)
 		.setTitle('FSD Slotting Tools')
-		.setWidth(200);
+		.setWidth(300)
 	SpreadsheetApp.getUi().showSidebar(html); 
 }
 
 
 // *****************
 // Creating base folder
-function dzn_createFolder() {  
+function dzn_createFolderFromMenu() {    
 	if (DriveApp.getFoldersByName("ARMA FSD Tools").hasNext()) {
 		SpreadsheetApp.getUi().alert('Folder already exists');
-	} else {
+	} else {        
 		SpreadsheetApp.getUi().alert('Folder with name "ARMA FSD Tools" will be created in the root of your Google Drive');
 		DriveApp.createFolder("ARMA FSD Tools");
 		SpreadsheetApp.getUi().alert('Folder "ARMA FSD Tools" was created successfully');
 	}  
 }
 
+// *****************
+// Check the existance of work folder
+function dzn_checkFolderExists() {
+	var output = true;
+	if (!(DriveApp.getFoldersByName("ARMA FSD Tools").hasNext())) {
+		SpreadsheetApp.getUi().alert('There is no "ARMA FSD Tools" folder on your Drive. Please, create it via "FSD Tools" menu');    
+		output = false;
+	}
+	return output
+}
+
+// *****************
+// Creating COOP or TVT form from menu
+function dzn_createSlottingCoopFromMenu() {
+	if (dzn_checkFolderExists()) {
+		SpreadsheetApp.getUi().alert('Starting to creating COOP Forms. Press OK and wait for a while.'); 
+		dzn_createForm('coop'); 
+	}
+}
+
+function dzn_createSlottingTvtFromMenu() {
+	if (dzn_checkFolderExists()) {
+		SpreadsheetApp.getUi().alert('Starting to creating TVT Forms. Press OK and wait for a while.'); 
+		dzn_createForm('tvt'); 
+	}
+}
 
 // *****************
 // Creating Slotting form for COOP
-function dzn_createSlottingCoop() {
-	if (!(DriveApp.getFoldersByName("ARMA FSD Tools").hasNext())) {
-		SpreadsheetApp.getUi().alert('There is no "ARMA FSD Tools" folder on your Drive. Please, create it via "FSD Tools" menu');    
-	}
-
+function dzn_createForm(mode) {
 	var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
 	// Запрашиваем создание формы слоттинга
-	var formSlotName = dzn_getSlotFormName('COOP');
-  Logger.log(formSlotName);
+	var formSlotName = dzn_getSlotFormName(mode);   
 	if (formSlotName[1] != "null") {
 		var slotFormUrl, feedFormUrl
 		var folder =  DriveApp.getFoldersByName("ARMA FSD Tools").next().createFolder(formSlotName[0]);	 
@@ -77,23 +105,22 @@ function dzn_createSlottingCoop() {
 		var propSheet = SpreadsheetApp.openById(propSheetId);
       
 		// Запрашиваем создание формы фидбека
-		var formFeedName = dzn_isFeedbackNeeded('COOP', formSlotName[1]);
+		var formFeedName = dzn_isFeedbackNeeded(mode, formSlotName[1]);
 		if (formFeedName != "null") {
-          var formFeedId = FormApp.create(formFeedName).getId();
-          folder.addFile(DriveApp.getFileById(formFeedId));
-          DriveApp.getRootFolder().removeFile(DriveApp.getFileById(formFeedId));
-          feedFormUrl = DriveApp.getFileById(formFeedId).getUrl();          
+			var formFeedId = FormApp.create(formFeedName).getId();
+			folder.addFile(DriveApp.getFileById(formFeedId));
+			DriveApp.getRootFolder().removeFile(DriveApp.getFileById(formFeedId));
+			feedFormUrl = DriveApp.getFileById(formFeedId).getUrl();          
           
-          dzn_addNamedRanges("Feed", propSheetId, ss.getId()); 
-          // PreInitialize 
-          dzn_feedForm_preInitialize(formFeedId, propSheet.getId());
-          ScriptApp.newTrigger('dzn_formFeedAddMenu').forForm(FormApp.openById(formFeedId)).onOpen().create();  
+			dzn_addNamedRanges("Feed", propSheetId, ss.getId()); 
+			// PreInitialize Feedback Form
+			dzn_feedForm_preInitialize(formFeedId, propSheet.getId()); 
         }
-   
+
 		dzn_addNamedRanges("Slot", propSheetId, ss.getId());
-		
-		//dzn_slotForm_preInitialize(formSlotId, propSheet.getId());
-		//ScriptApp.newTrigger('dzn_formSlotAddMenu').forForm(FormApp.openById(formSlotId)).onOpen().create();  
+		// Pre-initialize Slotting Form
+		dzn_slotForm_preInitialize(formSlotId, propSheet.getId());
+
 		ss.getRangeByName("slotURL").setValue(slotFormUrl);
 		if (feedFormUrl != null) {
 			showSidebar(slotFormUrl, feedFormUrl);
@@ -101,56 +128,15 @@ function dzn_createSlottingCoop() {
 		} else {
 			showSidebar(slotFormUrl)
 		}
-	    
+
 		SpreadsheetApp.getUi().alert('Form was successufully created! Check Sidebar for URLs');   
 	};
 }
-
-function dzn_addNamedRanges(type, ssId, sourceId) {
-	var ss = SpreadsheetApp.openById(ssId);
-	var source = SpreadsheetApp.openById(sourceId);
-  
-	if ( type == 'Feed' ) {
-		ss.setNamedRange("feedForm_defRoles",ss.getRange("B1"));
-		ss.setNamedRange("feedForm_defBrief",ss.getRange("B2"));
-		ss.setNamedRange("feedForm_defAction",ss.getRange("B3"));
-		ss.setNamedRange("feedForm_defResult",ss.getRange("B4"));
-		ss.setNamedRange('feedForm_ids', ss.getRange('B5'));
-		ss.setNamedRange('feedForm_names', ss.getRange('B6'));
-          
-		ss.getRangeByName("feedForm_defRoles").setValue(source.getRangeByName("feedForm_defRoles").getValue());
-		ss.getRangeByName("feedForm_defBrief").setValue(source.getRangeByName("feedForm_defBrief").getValue());
-		ss.getRangeByName("feedForm_defAction").setValue(source.getRangeByName("feedForm_defAction").getValue());
-		ss.getRangeByName("feedForm_defResult").setValue(source.getRangeByName("feedForm_defResult").getValue());
-	} else {
-		ss.setNamedRange("slotForm_defModes",ss.getRange("A1"));
-		ss.setNamedRange("slotForm_defSides",ss.getRange("A2"));
-		ss.setNamedRange("slotForm_defSlots1",ss.getRange("A3"));
-		ss.setNamedRange("slotForm_defSlots2",ss.getRange("A4"));
-		ss.setNamedRange("slotForm_defSlots3",ss.getRange("A5"));
-		ss.setNamedRange("slotForm_defSlots4",ss.getRange("A6"));
-		ss.setNamedRange("slotForm_defPass",ss.getRange("A7"));
-	      
-		ss.getRangeByName("slotForm_defModes").setValue(source.getRangeByName("slotForm_defModes").getValue());
-		ss.getRangeByName("slotForm_defSides").setValue(source.getRangeByName("slotForm_defSides").getValue());
-		ss.getRangeByName("slotForm_defSlots1").setValue(source.getRangeByName("slotForm_defSlots1").getValue());
-		ss.getRangeByName("slotForm_defSlots2").setValue(source.getRangeByName("slotForm_defSlots2").getValue());
-		ss.getRangeByName("slotForm_defSlots3").setValue(source.getRangeByName("slotForm_defSlots3").getValue());
-		ss.getRangeByName("slotForm_defSlots4").setValue(source.getRangeByName("slotForm_defSlots4").getValue());
-		ss.getRangeByName("slotForm_defPass").setValue(source.getRangeByName("slotForm_defPass").getValue());
-      
-	}
-	Logger.log('Properties set');
-}
-
-
-
 
 
 // *****************
 // Create PROMPT and return the answer for SLOTTING FORM
 function dzn_getSlotFormName(gametype) {
-  var gametype = 'COOP';
 	var ui = SpreadsheetApp.getUi();
 	var result = "";
 	var output = ["null"];
