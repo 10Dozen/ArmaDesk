@@ -299,7 +299,7 @@ function dzn_slotForm_initializeFromMenu() {
 	// Running save trigger to update form
 	ScriptApp.newTrigger('dzn_slotForm_onSave').forForm(form).onFormSubmit().create();
 	dzn_slotForm_onSave();
-    FormApp.getUi().alert('Slotting Form Initialized!');
+	FormApp.getUi().alert('Slotting Form Initialized!');
 }
 
 
@@ -469,7 +469,7 @@ function dzn_slotForm_onSave() {
 			if (property.length == 0) { property = [0] };
 			property = dzn_convert(property, "toString");
             
-            ss.getRangeByName(propertyList[i]).setValue(property);
+			ss.getRangeByName(propertyList[i]).setValue(property);
 		}
 	}	
 		
@@ -543,7 +543,7 @@ function dzn_slotForm_onSave() {
 	
 	// Get DATA from Properties: ID values convert to single string, notIDs - into Arrays
 	var data = {};
-    var datalist = ["slotForm_idName","slotForm_idSections","slotForm_idChoices","slotForm_idPrecense","slotForm_idPasscode","slotForm_idSidechoice","slotForm_idOverall","slotForm_mode","slotForm_passcodes","slotForm_sides","slotForm_precense","slotForm_slotsNames","slotForm_slotsHeadsNames","slotForm_usedSlots","slotForm_usedNicks"];
+	var datalist = ["slotForm_idName","slotForm_idSections","slotForm_idChoices","slotForm_idPrecense","slotForm_idPasscode","slotForm_idSidechoice","slotForm_idOverall","slotForm_mode","slotForm_passcodes","slotForm_sides","slotForm_precense","slotForm_slotsNames","slotForm_slotsHeadsNames","slotForm_usedSlots","slotForm_usedNicks"];
 	for (var i = 0; i < datalist.length; i++) {
 		var key = datalist[i].toString();
 		var value = dzn_convert(ss.getRangeByName(key).getValue().toString(), "toList");
@@ -557,9 +557,9 @@ function dzn_slotForm_onSave() {
 					value = [];
 				}
 			}
-        }
-        data[key] = value;  // A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"
-    }
+		}
+        	data[key] = value;  // A: Array [ 1, 2, 3]; B: Array []; C: Sting "1"
+	}
   
 	//	Data values
 	// slotForm_idName, slotForm_idSections, slotForm_idChoices, slotForm_idPrecense, slotForm_idPasscode, slotForm_idSidechoice, slotForm_idOverall
