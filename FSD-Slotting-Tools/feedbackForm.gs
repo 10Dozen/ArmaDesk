@@ -112,10 +112,10 @@ function dzn_feedForm_initializeFromMenu() {
 	Logger.log('   Add new items');
 	var itemMap = [
 		"img",
-        "brkAAR - Фидбек",
-			"sclОбщая оценка",      
-			"strНик в игре",
-			"lstРоль",
+		"brkAAR - Фидбек",
+		"sclОбщая оценка",      
+		"strНик в игре",
+		"lstРоль",
 		"brkAAR - Часть 1 - Планирование",
 			"cbx0Брифинг",
 			"tbx0Брифинг",
@@ -213,7 +213,7 @@ function dzn_feedForm_initializeFromMenu() {
 		ids.resultScoreId, ids.resultId
 	];
   
-    ss.getRangeByName('feedForm_names').setValue('scoreId | nickId | roleId | briefScoreId | briefingId | actionScoreId | actionId | resultScoreId | resultId');
+	ss.getRangeByName('feedForm_names').setValue('scoreId | nickId | roleId | briefScoreId | briefingId | actionScoreId | actionId | resultScoreId | resultId');
 	ss.getRangeByName('feedForm_ids').setValue(idsArray.join(" | "));
   
 	Logger.log('Feedback Form Initialized!');
@@ -226,8 +226,8 @@ function dzn_feedForm_initializeFromMenu() {
 function dzn_feedForm_onSave() {
 	var form = FormApp.getActiveForm();
 	var ss = SpreadsheetApp.openById(dzn_form_getPropertySheet(form.getId(), 'feed')); //properties
-Logger.log(form);
-  Logger.log(form.getId());
+	Logger.log(form);
+  	Logger.log(form.getId());
 	var idNames = ss.getRangeByName('feedForm_names').getValue().split(" | ");
 	var idItems = ss.getRangeByName('feedForm_ids').getValue().split(" | ");
 
@@ -246,7 +246,7 @@ Logger.log(form);
 			if (currentResponse == 10) {
 				currentResponse = "10 из 10!"; 
 			}
-        } else {
+        	} else {
 			switch (i) {
 				case 1:
 					currentResponse = '';
@@ -255,7 +255,7 @@ Logger.log(form);
 					currentResponse = 'Без оценки';
 					break;
 			}
-        }
+		}
 		formattedResponses.push(currentResponse);
 	}
 	var AARTitle = formattedResponses[0] + " (" + formattedResponses[1] + ") - " + formattedResponses[2];
@@ -269,7 +269,7 @@ Logger.log(form);
 			currentResponse = currentResponse.getResponse()
 			if (currentResponse == "") {
 				currentResponse = "";
-            } else {
+			} else {
 				switch (i) {
 					case 0:
 						currentResponse = "\nО брифинге:\n    " + currentResponse + "\n";
@@ -281,10 +281,10 @@ Logger.log(form);
 						currentResponse = "\nО результатах:\n    " + currentResponse + "\n";
 						break;
 				}
-            }
-        } else {
+			}
+		} else {
 			currentResponse = "";
-        }
+		}
 		formattedResponses.push(currentResponse);
 	}
 	var AARBody = formattedResponses[0] + formattedResponses[1] + formattedResponses[2];
@@ -297,7 +297,7 @@ Logger.log(form);
 		if (currentResponse != null) {
 			if (currentResponse == "") {
 				currentResponse = "";
-            } else {
+			} else {
 				currentResponse = currentResponse.getResponse()
 				switch (i) {
 					case 0:
@@ -310,16 +310,16 @@ Logger.log(form);
 						currentResponse = "\n  Выводы:		" + currentResponse.join(", ");
 						break;
 				}
-            }
-        } else {
+			}
+		} else {
 			currentResponse = "";
-        }
+		}
 		formattedResponses.push(currentResponse);
 	}
 	var AARFooter = "";
 	if (formattedResponses.join("") != "") {
 		AARFooter = "\n\nСтатистика:" + formattedResponses[0] + formattedResponses[1] + formattedResponses[2];
-    }
+	}
 
 	// Adding item with Formatted Response
 	var item = form.addSectionHeaderItem().setTitle(AARTitle).setHelpText(AARBody + AARFooter);
