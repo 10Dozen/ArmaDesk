@@ -1,37 +1,42 @@
+function dzn_feedForm_getStringtable() {
+	var strvals = {
+		"defaultRoles" : 	["Alhpa - SL", "Alpha - Medic", "Alpha 1 - FTL", "Alpha 1 - AR", "Alpha 1 - AAR", "Alpha 1 - Rifleman"],
+		"defaultBriefing" : ["Быстро", "Понятно", "Медленно", "Непонятно"],
+		"defaultAction" : 	["Организованно", "Тактикульно", "Весело", "Скучно", "Сплошной пост-рок", "Как стадо"],
+		"defaultResult" : 	["Все молодцы", "Школота сплошная", "У всех бугурт", "Только я один в белом пальто красивый", "Элитный чейрборн"],
+		"strNick" : "",
+		"strScore" : 		"Общее ощущение от игры",
+		"strRole" : 		"Выберите вашу роль в миссии",
+		"strBriefingScore" : "Как прошел брифинг?",
+		"strBriefing" : 	"Опишите как вы поняли задачу вашего отряда и общую задачу вашей стороны",
+		"strActionScore" : 	"Как прошла мисиия?",
+		"strAction" : 		"Опишите, что с вами приключилось за игру",
+		"strResultScore" : 	"Что по итогу?",
+		"strResult" : 		"Выскажите свое мнение по итогам игры - похвалите напарников, поругайте тим киллеров.",
+		"strResponse" : 	"Спасибо за фидбек! Вновь посетите форму, чтобы увидеть свой овтет."
+	};
+	return strvals
+}
+
+
 //***********************
 // Adds FSD Menu for Feedback Form
-function dzn_formFeedAddMenu() {
-  FormApp.getUi()
+function dzn_feedForm_addMenu() {
+	FormApp.getUi()
 		.createMenu('FSD Tools')
 		.addItem('Start Feedback form', 'dzn_feedForm_initializeFromMenu')
 		.addSeparator()
-		.addItem('Recreate with Defaults', 'dzn_feedForm_preInitializeFromMenu')
+		.addItem('Recreate with Defaults', 'dzn_feedForm_preInitializeFromMenu')		
+  		.addItem('Inactivate Feedback form', 'dzn_form_inactivateFormFromMenu')
 		.addToUi();
-}
-
-function dzn_feedForm_getPropertySheet(formId) {
-	var formName
-	if (formId == null) {
-		formName = DriveApp.getFileById(FormApp.getActiveForm().getId()).getName();
-	} else {
-		formName = DriveApp.getFileById(formId).getName();
-	}
-	
-	var sourceName
-	if (formName.substring(0,3) == 'TVT') {
-		sourceName = 'properties TVT ' + formName.substring(8,formName.length);
-	} else {
-		sourceName = 'properties COOP ' + formName.substring(9,formName.length);
-	}
-  
-	return (DriveApp.getFilesByName(sourceName).next().getId())
 }
 
 //*****************************
 // Preinitialize the form from Menu
 function dzn_feedForm_preInitializeFromMenu() {
 	var formId = FormApp.getActiveForm().getId();
-	var ssId = dzn_feedForm_getPropertySheet(formId);
+	var ssId = dzn_form_getPropertySheet(formId, 'feed');
+  Logger.log(ssId);
   
 	dzn_feedForm_preInitialize(formId,ssId);
 	FormApp.getUi().alert('Default view restored');
@@ -64,14 +69,13 @@ function dzn_feedForm_preInitialize(formId, ssId) {
 		ids.push(itemId);
 	}
    
-	ss.getRangeByName('feedForm_ids').setValue(ids.join(" | "));
-  
+	ss.getRangeByName('feedForm_ids').setValue(ids.join(" | "));  
 
 	var triggers = ScriptApp.getUserTriggers(form);
 	for (var i = 0; i < triggers.length; i++) {
-		ScriptApp.deleteTrigger(triggers[i]); 
+		ScriptApp.deleteTrigger(triggers[i]);
 	}
-	ScriptApp.newTrigger('dzn_formFeedAddMenu').forForm(FormApp.openById(formId)).onOpen().create();  
+	ScriptApp.newTrigger('dzn_feedForm_addMenu').forForm(form).onOpen().create();  
 
 	Logger.log('Pre-Initialized!');
 }
@@ -83,8 +87,8 @@ function dzn_feedForm_initializeFromMenu() {
 	Logger.log('Get IDs from PropertyService!');
 
 	var form = FormApp.getActiveForm();
-	var strVars = dzn_getStringtable(); // [ names, defaults ]
-	var ss = SpreadsheetApp.openById(dzn_feedForm_getPropertySheet(form.getId())); //properties
+	var strVars = dzn_feedForm_getStringtable(); // [ names, defaults ]
+	var ss = SpreadsheetApp.openById(dzn_form_getPropertySheet(form.getId(), 'feed')); //properties
 
 	var idList = ss.getRangeByName('feedForm_ids').getValue().split(" | ");
 	Logger.log('   Get input values');
@@ -217,14 +221,13 @@ function dzn_feedForm_initializeFromMenu() {
 	FormApp.getUi().alert('Feedback Form Initialized!');
 }
 
-
-
 // **************************
 // On Save
 function dzn_feedForm_onSave() {
 	var form = FormApp.getActiveForm();
-	var ss = SpreadsheetApp.openById(dzn_feedForm_getPropertySheet(form.getId())); //properties
-
+	var ss = SpreadsheetApp.openById(dzn_form_getPropertySheet(form.getId(), 'feed')); //properties
+Logger.log(form);
+  Logger.log(form.getId());
 	var idNames = ss.getRangeByName('feedForm_names').getValue().split(" | ");
 	var idItems = ss.getRangeByName('feedForm_ids').getValue().split(" | ");
 
@@ -323,25 +326,4 @@ function dzn_feedForm_onSave() {
 	form.moveItem(item.getIndex(), 1);
 
 	Logger.log("AAR Added!");
-}
-
-
-function dzn_getStringtable() {
-	var strvals = {
-		"defaultRoles" : 	["Alhpa - SL", "Alpha - Medic", "Alpha 1 - FTL", "Alpha 1 - AR", "Alpha 1 - AAR", "Alpha 1 - Rifleman"],
-		"defaultBriefing" : ["Быстро", "Понятно", "Медленно", "Непонятно"],
-		"defaultAction" : 	["Организованно", "Тактикульно", "Весело", "Скучно", "Сплошной пост-рок", "Как стадо"],
-		"defaultResult" : 	["Все молодцы", "Школота сплошная", "У всех бугурт", "Только я один в белом пальто красивый", "Элитный чейрборн"],
-		"strNick" : "",
-		"strScore" : 		"Общее ощущение от игры",
-		"strRole" : 		"Выберите вашу роль в миссии",
-		"strBriefingScore" : "Как прошел брифинг?",
-		"strBriefing" : 	"Опишите как вы поняли задачу вашего отряда и общую задачу вашей стороны",
-		"strActionScore" : 	"Как прошла мисиия?",
-		"strAction" : 		"Опишите, что с вами приключилось за игру",
-		"strResultScore" : 	"Что по итогу?",
-		"strResult" : 		"Выскажите свое мнение по итогам игры - похвалите напарников, поругайте тим киллеров.",
-		"strResponse" : 	"Спасибо за фидбек! Вновь посетите форму, чтобы увидеть свой овтет."
-	};
-	return strvals
 }
