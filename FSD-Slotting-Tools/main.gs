@@ -5,8 +5,8 @@ function onOpen() {
 		.createMenu('FSD Tools')
 		.addItem('Create FSD Tools Folder on Drive', 'dzn_createFolderFromMenu')
 		.addSeparator()
-		.addItem('Parse Mission.sqm', 'dzn_mp_parseFromMenu')
-		.addItem('Confirm Data', 'dzn_mp_confirmParsingFromMenu')
+		.addItem('⌕ Parse Mission.sqm', 'dzn_mp_parseFromMenu')
+		.addItem('✔ Confirm Data', 'dzn_mp_confirmParsingFromMenu')
 		.addSeparator()
 		.addItem('Create Sloting form COOP', 'dzn_createSlottingCoopFromMenu')
 		.addItem('Create Sloting form TVT', 'dzn_createSlottingTvtFromMenu')
@@ -48,11 +48,11 @@ function showSidebar(link1, link2) {
 // Creating base folder
 function dzn_createFolderFromMenu() {    
 	if (DriveApp.getFoldersByName("ARMA FSD Tools").hasNext()) {
-		SpreadsheetApp.getUi().alert('Folder already exists');
+		SpreadsheetApp.getUi().alert('✔ OK\n\nFolder already exists');
 	} else {        
 		SpreadsheetApp.getUi().alert('Folder with name "ARMA FSD Tools" will be created in the root of your Google Drive');
 		DriveApp.createFolder("ARMA FSD Tools");
-		SpreadsheetApp.getUi().alert('Folder "ARMA FSD Tools" was created successfully');
+		SpreadsheetApp.getUi().alert('✔ OK\n\nFolder "ARMA FSD Tools" was created successfully');
 	}  
 }
 
@@ -61,7 +61,7 @@ function dzn_createFolderFromMenu() {
 function dzn_checkFolderExists() {
 	var output = true;
 	if (!(DriveApp.getFoldersByName("ARMA FSD Tools").hasNext())) {
-		SpreadsheetApp.getUi().alert('There is no "ARMA FSD Tools" folder on your Drive. Please, create it via "FSD Tools" menu');    
+		SpreadsheetApp.getUi().alert('⊗ WARNING!\n\nThere is no "ARMA FSD Tools" folder on your Drive.\n\nPlease, create it via "FSD Tools" menu');    
 		output = false;
 	}
 	return output
@@ -71,15 +71,15 @@ function dzn_checkFolderExists() {
 // Creating COOP or TVT form from menu
 function dzn_createSlottingCoopFromMenu() {
 	if (dzn_checkFolderExists()) {
-		SpreadsheetApp.getUi().alert('Starting to creating COOP Forms. Press OK and wait for a while.'); 
-		dzn_createForm('coop'); 
+		SpreadsheetApp.getUi().alert('Starting to creating COOP Forms.\n\nPress OK and wait for a while.'); 
+		dzn_createForm('COOP'); 
 	}
 }
 
 function dzn_createSlottingTvtFromMenu() {
 	if (dzn_checkFolderExists()) {
-		SpreadsheetApp.getUi().alert('Starting to creating TVT Forms. Press OK and wait for a while.'); 
-		dzn_createForm('tvt'); 
+		SpreadsheetApp.getUi().alert('Starting to creating TVT Forms.\n\nPress OK and wait for a while.'); 
+		dzn_createForm('TVT'); 
 	}
 }
 
@@ -129,7 +129,7 @@ function dzn_createForm(mode) {
 			showSidebar(slotFormUrl)
 		}
 
-		SpreadsheetApp.getUi().alert('Form was successufully created! Check Sidebar for URLs');   
+		SpreadsheetApp.getUi().alert('✔ OK\n\nForm was successufully created!\n\nCheck Sidebar for URLs');   
 	};
 }
 
@@ -141,7 +141,7 @@ function dzn_getSlotFormName(gametype) {
 	var result = "";
 	var output = ["null"];
 	
-	result = ui.prompt('Create Form - Name of the Game','Please enter the Name of the Game:', ui.ButtonSet.OK_CANCEL);
+	result = ui.prompt('Create Form - Mission Title','Please enter the Mission Title:', ui.ButtonSet.OK_CANCEL);
 	var button = result.getSelectedButton();
 	var text = result.getResponseText();
 	if (button == ui.Button.OK) {
