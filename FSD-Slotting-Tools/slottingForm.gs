@@ -18,10 +18,10 @@ function dzn_slotForm_getStringtable() {
 function dzn_slotForm_addMenu() {
 	FormApp.getUi()
 		.createMenu('FSD Tools')
-		.addItem('Start Slotting Form', 'dzn_slotForm_initializeFromMenu')
+		.addItem('✓ Start Slotting Form', 'dzn_slotForm_initializeFromMenu')
 		.addSeparator()
-		.addItem('Recreate with Defaults', 'dzn_slotForm_preInitializeFromMenu')
-  		.addItem('Inactivate Slotting form', 'dzn_form_inactivateFormFromMenu')
+		.addItem('↺ Recreate with Defaults', 'dzn_slotForm_preInitializeFromMenu')
+  		.addItem('⨯ Inactivate Slotting form', 'dzn_form_inactivateFormFromMenu')
 		.addToUi();
 };
 
@@ -32,7 +32,7 @@ function dzn_slotForm_preInitializeFromMenu() {
 	var ssId = dzn_form_getPropertySheet(formId, 'slot');
   
 	dzn_slotForm_preInitialize(formId, ssId);
-	FormApp.getUi().alert('Default view restored');
+	FormApp.getUi().alert('✔ OK\n\nDefault view restored');
 }
 
 //*****************************
@@ -299,7 +299,7 @@ function dzn_slotForm_initializeFromMenu() {
 	// Running save trigger to update form
 	ScriptApp.newTrigger('dzn_slotForm_onSave').forForm(form).onFormSubmit().create();
 	dzn_slotForm_onSave();
-	FormApp.getUi().alert('Slotting Form Initialized!');
+	FormApp.getUi().alert('✔ OK\n\nSlotting Form Initialized!');
 }
 
 
