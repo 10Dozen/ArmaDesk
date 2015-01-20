@@ -24,10 +24,10 @@ function dzn_feedForm_getStringtable() {
 function dzn_feedForm_addMenu() {
 	FormApp.getUi()
 		.createMenu('FSD Tools')
-		.addItem('Start Feedback form', 'dzn_feedForm_initializeFromMenu')
+		.addItem('✓ Start Feedback form', 'dzn_feedForm_initializeFromMenu')
 		.addSeparator()
-		.addItem('Recreate with Defaults', 'dzn_feedForm_preInitializeFromMenu')		
-  		.addItem('Inactivate Feedback form', 'dzn_form_inactivateFormFromMenu')
+		.addItem('↺ Recreate with Defaults', 'dzn_feedForm_preInitializeFromMenu')		
+  		.addItem('⨯ Inactivate Feedback form', 'dzn_form_inactivateFormFromMenu')
 		.addToUi();
 }
 
@@ -39,7 +39,7 @@ function dzn_feedForm_preInitializeFromMenu() {
   Logger.log(ssId);
   
 	dzn_feedForm_preInitialize(formId,ssId);
-	FormApp.getUi().alert('Default view restored');
+	FormApp.getUi().alert('✔ OK\n\nDefault view restored');
 }
 
 //*****************************
@@ -218,7 +218,7 @@ function dzn_feedForm_initializeFromMenu() {
   
 	Logger.log('Feedback Form Initialized!');
 	ScriptApp.newTrigger('dzn_feedForm_onSave').forForm(form).onFormSubmit().create();
-	FormApp.getUi().alert('Feedback Form Initialized!');
+	FormApp.getUi().alert('✔ OK\n\nFeedback Form Initialized!');
 }
 
 // **************************
