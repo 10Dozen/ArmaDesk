@@ -1,7 +1,6 @@
 function dzn_htmlInstruction() {
 	var htmlText = 
-	"<h4>How to use?</h4> <ol><li>Add 'FSD Tools' work folder to your Drive. Go to 'FSD Tools' menu and click 'Create FSD Tools Folder on Drive'</li><br><li>Copy your mission from mission.sqm file</li><li>Paste your mission to 'INPUT: mission.sqm' sheet</li><br><li>Parse your mission file to get roles names. Click 'Parse Mission.sqm' from 'FSD Tools' menu</li><li>After your mission will be parsed, check 'Main' sheet to view and edit roles and squads (marked like '!  Alpha')</li><li>Check and edit additional parameters - playable sides, default settings of Feedback forms, etc.</li><br><li>When you ready, confirm your data, using 'Confirm Data' from 'FSD Tools' menu</li><p><b>Now you can create your Forms with your's confirmed data. Check next steps</b></p><li>Use 'FSD Tools' -> 'Create Sloting form COOP' or 'Create Sloting form TVT'</li><li>Enter the name of your game and click OK</li><li>Do you want to get feedback after misson? Then click YES on pop-up.</li><li>Relax and wait for a while</li><li>After confirmation message appeared, check the links at sidebar (check bottom) and open them in the new tab</li><p><b>Form were created and waiting for your attention. Check the values at the existing items and edit them if you need it</b></p><li>When you will be ready, click 'Start Feedback form' from Form's 'FSD Tools' menu</li><li>Now form will be prepared for publishing. Take a minute for relax and then you are almost done</li><li>Check 'Change Theme' to give your forms some kawaiiness</li><li>Publish it!</li></ol><p>If you don't want to use form anymore - do not forget to <b>'Inactivate'</b> it from form's 'FSD Tools' menu - form will be closed for respondents and all triggers will be terminated.<br /> Now you can simply delete it from your drive</p>"
-  
+	"<h4>How to use?</h4> <ol><li>Add 'ARMA FSD Tools' work folder to your Drive. Go to 'FSD Tools' menu and click 'Create FSD Tools Folder on Drive'</li><br><li>Copy your mission from mission.sqm file</li><li>Paste your mission to 'INPUT: mission.sqm' sheet</li><br><li>Parse your mission file to get role names. Click 'Parse Mission.sqm' from 'FSD Tools' menu</li><li>After your mission is parsed, check 'Main' sheet to view and edit roles and squads (marked like '!  Alpha')</li><li>Check and edit additional parameters - playable sides, default settings of Feedback forms, etc.</li><br><li>When ready, confirm your data, using 'Confirm Data' from 'FSD Tools' menu</li><p><b>Now you can create Forms with confirmed data. Check next steps</b></p><li>Use 'FSD Tools' -> 'Create Slotting form COOP' or 'Create Slotting form TVT'</li><li>Enter your mission title and click OK</li><li>Do you want to get feedback after misson? Then click YES on pop-up.</li><li>Relax and wait for a while</li><li>After confirmation message appeared, check the links at sidebar (check bottom) and open them in the new tab</li><p><b>Form was created and waiting for your attention. Check the values of existing items and edit them if you need it</b></p><li>When you are ready, click 'Start Feedback form' from Form's 'FSD Tools' menu</li><li>Now form will be prepared for publishing. Take a minute for relax and you are almost done</li><li>Check 'Change Theme' to give your forms some kawaiiness</li><li>Publish it!</li></ol><p>If you don't want to use the form anymore - do not forget to <b>'Inactivate'</b> it from form's 'FSD Tools' menu - form will be closed for respondents and all triggers will be terminated.<br /> Now you can simply delete it from your drive</p>"
 	return htmlText
 }
 
@@ -48,7 +47,7 @@ function dzn_addNamedRanges(type, ssId, sourceId) {
 		ss.setNamedRange("slotForm_usedSlots",ss.getRange("A22"));
 		ss.setNamedRange("slotForm_usedNicks",ss.getRange("A23"));  
 
-		ss.getRangeByName("slotForm_defModes").setValue(source.getRangeByName("slotForm_defModes").getValue());
+		ss.getRangeByName("slotForm_defModes").setValue(mode);
 		ss.getRangeByName("slotForm_defSides").setValue(source.getRangeByName("slotForm_defSides").getValue());
 		ss.getRangeByName("slotForm_defSlots1").setValue(source.getRangeByName("slotForm_defSlots1").getValue());
 		ss.getRangeByName("slotForm_defSlots2").setValue(source.getRangeByName("slotForm_defSlots2").getValue());
@@ -97,7 +96,7 @@ function dzn_form_inactivateFormFromMenu() {
 	}
 	form.setAcceptingResponses(false);
 
-	FormApp.getUi().alert('Form inactivated!');
+	FormApp.getUi().alert('✔ OK\n\nForm inactivated!');
 }
 
 // Convert List to String or String to List (type = 'toString' and 'toList')
