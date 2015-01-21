@@ -17,16 +17,11 @@ dzn_plr_missionStarted = true;
 	   	true,
 	   	"", 
 	   	"_cT = cursorTarget;
-	   	(!isNil {cursorTarget getVariable '%ПЕРМЕННАЯ ТУТ%'})  // Если есть на объекте какаято модная переменная, то ищем сначала ее
-	   	&& (_cT distance _this < 3)
+	   	(!isNil {cursorTarget getVariable 'iedArmed'})  
 	   	&& {
-	   		(
-	   			(_cT isKindOf '%CLASSNAME')		// Проверяем что принадлежит одному из класснеймов СВУ
-	   			|| (_cT isKindOf '%CLASSNAME')
-	   			|| (_cT isKindOf '%CLASSNAME')
-	   		)
-	   		&& (vehicle _this == _this)  // Игрок не в мащиге
-	   		&& (alive _this)	// Игрок жив
+	   		(_cT distance player < 3)
+	   		&& (vehicle player == player) 
+	   		&& (alive player)
 	   	}"
 	];
 
