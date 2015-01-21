@@ -21,9 +21,9 @@ dzn_plr_missionStarted = true;
 	   	&& (_cT distance _this < 3)
 	   	&& {
 	   		(
-	   			(_cT isKindOf "%CLASSNAME")		// Проверяем что принадлежит одному из класснеймов СВУ
-	   			|| (_cT isKindOf "%CLASSNAME")
-	   			|| (_cT isKindOf "%CLASSNAME")
+	   			(_cT isKindOf '%CLASSNAME')		// Проверяем что принадлежит одному из класснеймов СВУ
+	   			|| (_cT isKindOf '%CLASSNAME')
+	   			|| (_cT isKindOf '%CLASSNAME')
 	   		)
 	   		&& (vehicle _this == _this)  // Игрок не в мащиге
 	   		&& (alive _this)	// Игрок жив
