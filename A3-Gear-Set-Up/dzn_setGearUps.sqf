@@ -38,7 +38,7 @@ dzn_gearSetup = {
 	// Adding gear
 	// Adding UVBHG
 	_gearCat = _gearSet select 1;
-	if !(_gearCat select 0 == 'no') then { _unit addUniform (_gearCat select 0); };
+	if !(_gearCat select 0 == 'no') then { _unit forceAddUniform (_gearCat select 0); };
 	if !(_gearCat select 1 == 'no') then { _unit addVest (_gearCat select 1); };
 	if !(_gearCat select 2 == 'no') then { _unit addBackpack (_gearCat select 2); };
 	if !(_gearCat select 3 == 'no') then { _unit addHeadgear (_gearCat select 3); };
@@ -53,10 +53,12 @@ dzn_gearSetup = {
 
 	// Add Primary Weapon and accessories
 	_gearCat = _gearSet select 2;
-	if !(_gearCat select 0 == 'no') then { _unit addWeapon (_gearCat select 0);	};
-	{
-		if !(_x == 'no') then { _unit addPrimaryWeaponItem _x; };
-	} forEach (_gearCat select 1);
+	if !(_gearCat select 0 == 'no') then { 
+		_unit addWeapon (_gearCat select 0);
+		{
+			if !(_x == 'no') then { _unit addPrimaryWeaponItem _x; };
+		} forEach (_gearCat select 1);
+	};
 	
 	// Add Secondary Weapon
 	_gearCat = _gearSet select 3;
@@ -64,10 +66,12 @@ dzn_gearSetup = {
 	
 	// Add Handgun and accessories
 	_gearCat = _gearSet select 4;
-	if !(_gearCat select 0 == 'no') then { _unit addWeapon (_gearCat select 0); };
-	{
-		if !(_x == 'no') then { _unit addHandgunItem _x; };
-	} forEach (_gearCat select 1);
+	if !(_gearCat select 0 == 'no') then { 
+		_unit addWeapon (_gearCat select 0); 
+		{
+			if !(_x == 'no') then { _unit addHandgunItem _x; };
+		} forEach (_gearCat select 1);
+	};
 	
 	// Add items
 	_gearCat = _gearSet select 5;
@@ -93,4 +97,7 @@ dzn_gearSetup = {
 			};
 		};
 	} forEach _gearCat;
+	
+	sleep .1;
+	_unit switchMove '';
 };
