@@ -7,7 +7,7 @@ if !(name player == "HC") exitWith {};
 dzn_dachc_initialized = false;
 publicVariable "dzn_dachc_initialized";
 
-private ["_allTriggers"];
+private ["_allTriggers","_statements"];
 _allTriggers = allMissionObjects "EmptyDetector";
 
 {
