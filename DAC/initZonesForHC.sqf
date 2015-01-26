@@ -1,6 +1,6 @@
 // Recreates triggers with zones for DAC for HC use
 // Should be SPAWNED or EXECVM from init of HC
-// EDITOR: onAct of trigger will have line witch: dac_hc = [ ... ]  OR  triggerText = dac_hc
+// EDITOR: onAct of trigger have line with: dac_hc = [ ... ]  OR  triggerText = dac_hc
 
 if !(name player == "HC") exitWith {};
 
