@@ -6,6 +6,7 @@ dzn_dac_customScriptCIV = { player sideChat format ["Script for CIVILIAN unit %1
 
 // Return all alive infantries
 dzn_dac_getAliveInfantries = {
+	private ["_units","_vehicles"];
 	_units = entities "CAManBase";
 	_vehicles = vehicles;
 	{
