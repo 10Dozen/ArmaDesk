@@ -4,11 +4,24 @@ dzn_dac_customScriptEAST = { player sideChat format ["Script for EAST unit %1", 
 dzn_dac_customScriptINDEP = { player sideChat format ["Script for INDEP unit %1", _this]};
 dzn_dac_customScriptCIV = { player sideChat format ["Script for CIVILIAN unit %1", _this]};
 
+// Return all alive infantries
+dzn_dac_getAliveInfantries = {
+	_units = entities "CAManBase";
+	_vehicles = vehicles;
+	{
+		if (alive _x) then {
+			_units = _units + (crew _x);
+		};
+	} forEach _vehicles;
+	_units = _units - allDead;
+	
+	_units
+};
 
 
 // Get all editor-placed infantries and set variable for them
 private ["_units"];
-_units = entities "CAManBase";
+_units = call dzn_dac_getAliveInfantries;
 {
 	_x setVariable ["dzn_isEquipedAfterSpawn",true];
 } forEach _units;
@@ -19,15 +32,7 @@ waitUntil { time > 1 };
 while { true } do {
 	sleep 10;
 	
-	_units = (entities "CAManBase");
-	_vehicles = vehicles;
-	{
-		if (alive _x) then {
-			_units = _units + (crew _x);
-		};
-	} forEach _vehicles;
-	_units = _units - allDead;
-	
+	_units = call dzn_dac_getAliveInfantries;
 	{
 		if ( !(isPlayer _x) && { isNil { _x getVariable "dzn_isEquipedAfterSpawn" }) then {
 			_x setVariable ["dzn_isEquipedAfterSpawn", true];
