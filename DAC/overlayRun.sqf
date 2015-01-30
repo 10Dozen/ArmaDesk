@@ -1,3 +1,5 @@
+// Should be ran on DAC-host side (Server or HC) only
+
 // User-defined script for spawned units: reference to unit = _this
 dzn_dac_customScriptWEST = { player sideChat format ["Script for WEST unit %1", _this]};
 dzn_dac_customScriptEAST = { player sideChat format ["Script for EAST unit %1", _this]};
