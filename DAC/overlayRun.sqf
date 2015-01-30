@@ -27,7 +27,7 @@ _units = call dzn_dac_getAliveInfantries;
 	_x setVariable ["dzn_isEquipedAfterSpawn",true];
 } forEach _units;
 
-// Wait until mission started and sciprt-placed units are spawned and apply custom script on them. 
+// Wait until mission starts and sciprt-placed units are spawned and apply custom script on them. 
 // I think, it should be running on FSM, but here is script-version
 waitUntil { time > 1 };
 while { true } do {
