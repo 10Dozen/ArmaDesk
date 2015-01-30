@@ -35,7 +35,7 @@ while { true } do {
 	
 	_units = call dzn_dac_getAliveInfantries;
 	{
-		if ( !(isPlayer _x) && { isNil { _x getVariable "dzn_isEquipedAfterSpawn" }) then {
+		if ( isNil { _x getVariable "dzn_isEquipedAfterSpawn" } && { !(isPlayer _x) }) then {
 			_x setVariable ["dzn_isEquipedAfterSpawn", true];
 			_x spawn {
 				switch (side _this) do {
