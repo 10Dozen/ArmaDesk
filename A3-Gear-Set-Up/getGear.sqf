@@ -1,3 +1,6 @@
+waitUntil { time > 0 };
+hint "Started";
+
 dzn_getEquipment = {
 	// "uniform" / "vest" / "headgear" / "glasses" / "backpack" spawn dzn_getWeapons
 	
@@ -67,6 +70,12 @@ dzn_getWeapons = {
 	};
 	
 	_namelist = [];
+	_opticsList = [];
+	_muzzleList = [];
+	_pointerList = [];
+
+
+	
 	
 	for "_i" from 0 to (count _cfg)-1 do {
 		_item = _cfg select _i;
@@ -77,6 +86,31 @@ dzn_getWeapons = {
 			_namelist = _namelist + [_DName];
 			hintSilent format ["Item:\n%1\n%2", _DName, _CName];
 			diag_log [_DName, _CName];
+			
+			if (_this in ["primary", "handgun"]) then {
+				
+				_optics = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems");
+				{
+					if !( _x in _opticsList) then { _opticsList = _opticsList  + [_x]; };
+				} forEach _optics;
+				
+				_muzzle = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems");
+				_pointer = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems");
+			};
 		};
-	};	
+	};
+
+	diag_log "OPTICS ATTACHES";
+	{
+		diag_log _x;
+	} forEach _opticsList;
+};
+
+dzn_getAttachments = {
+	//"muzzle" / "optic" / "launcher" / "mags" spawn dzn_getWeapons
+	_opticsAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> "cfgWeapons");
+	_muzzleAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> "cfgWeapons");
+	_pointerAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 301") configclasses (configfile >> "cfgWeapons");
+	
+	
 };
