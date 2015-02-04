@@ -65,8 +65,33 @@ dzn_getWeapons = {
 	_muzzleList = [];
 	_pointerList = [];
 
-
-	
+	dzn_getAllLinkedAccessories = {
+		// [ClassName, Type] call dzn_getAllLinkedAccessories
+		// TYPE: "muzzle" / "optic" / "pointer"
+		private ["_CName","_cfgItems","_linked"];
+		
+		_CName = _this select 0;
+		_cfgItems = switch ( _this select 1 ) do {
+			case "muzzle": {
+				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems")
+			};
+			case "optic": {
+				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems")
+			};
+			case "pointer": {
+				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems")
+			};
+		};
+		
+		_linked = [];
+		{
+			if !(_x in _linked) then {
+				_linked = _linked + [_x];
+			};
+		} forEach _cfgItems;
+		
+		_linked
+	};
 	
 	for "_i" from 0 to (count _cfg)-1 do {
 		_item = _cfg select _i;
@@ -79,20 +104,17 @@ dzn_getWeapons = {
 			diag_log [_DName, _CName];
 			
 			if (_this in ["primary", "handgun"]) then {
-				
-				_optics = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems");
-				{
-					if !( _x in _opticsList) then { _opticsList = _opticsList  + [_x]; };
-				} forEach _optics;
-				
-				_muzzle = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems");
-				_pointer = getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems");
+				_opticsList =  [_CName, "optics"] call dzn_getAllLinkedAccessories;
+				_muzzleList =  [_CName, "muzzle"] call dzn_getAllLinkedAccessories;
+				_pointerList =  [_CName, "pointer"] call dzn_getAllLinkedAccessories;
 			};
 		};
 	};
-
-	diag_log "OPTICS ATTACHES";
+	
+	diag_log "ATTACHES:";
 	{
+		//[_classlist, _namelist]
+		
 		diag_log _x;
 	} forEach _opticsList;
 };
@@ -100,7 +122,7 @@ dzn_getWeapons = {
 dzn_getAttachments = {
 	//"muzzle" / "optic" / "pointer" spawn dzn_getWeapons
 	// OUT: Array of all attachement's [classname, DisplayName];
-	private ["_config","_cfg","_namelist","_CName","_DName","_item"];
+	private ["_config","_cfg","_classlist","_namelist","_item"];
 	
 	_config = "cfgWeapons";
 	_cfg = switch (_this) do {
@@ -115,14 +137,14 @@ dzn_getAttachments = {
 		};
 	};
 	
+	_classlist = [];
 	_namelist = [];
 	for "_i" from 0 to (count _cfg)-1 do {
 		_item = _cfg select _i;
-		_CName = configName(_item);
-		_DName = getText(configFile >> _config >> _CName >> "displayName");
-		_namelist = _namelist + [[_CName, _DName]];
+		_classlist = _classlist + [configName(_item)];
+		_namelist = _namelist + [getText(configFile >> _config >> _CName >> "displayName")];
 	};
-	hintSilend "Attachements dumped";
+	hintSilent "Attachements dumped";
 	
-	_namelist
+	[_classlist, _namelist]
 };
