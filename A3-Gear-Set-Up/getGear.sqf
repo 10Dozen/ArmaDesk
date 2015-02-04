@@ -3,27 +3,18 @@ hint "Started";
 
 dzn_getEquipment = {
 	// "uniform" / "vest" / "headgear" / "glasses" / "backpack" spawn dzn_getWeapons
+	// OUT: null, dump name-classname to log
 	
 	_type = 0;
 	_config = "cfgWeapons";
 	hint "X";
 	
 	switch (_this) do {
-		case "uniform": { 
-			_type = 801;
-		};
-		case "vest": { 
-			_type = 701;
-		};
-		case "headgear": {  
-			_type = 605;
-		};
-		case "glasses": { 
-			_config = "cfgGlasses";
-		};
-		case "backpack": {
-			_config = "cfgVehicles";
-		};
+		case "uniform"		{ _type = 801; };
+		case "vest"		{ _type = 701; };
+		case "headgear":	{ _type = 605; };
+		case "glasses":		{ _config = "cfgGlasses"; };
+		case "backpack":	{ _config = "cfgVehicles"; };
 	};
 	
 	_cfg = switch (_config) do {
@@ -54,10 +45,10 @@ dzn_getWeapons = {
 	_type = 0;
 		
 	switch ( _this ) do {
-		case "primary": { _type =  1; };
-		case "handgun": { _type = 2; };
-		case "launcher": { _type = 4; };	
-		case "mags": {_config = "cfgMagazines"; };
+		case "primary":		{ _type =  1; };
+		case "handgun":		{ _type = 2; };
+		case "launcher":	{ _type = 4; };	
+		case "mags":		{ _config = "cfgMagazines"; };
 	};
 
 	_cfg = switch ( _config ) do {
