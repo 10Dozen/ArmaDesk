@@ -66,7 +66,7 @@ dzn_getWeapons = {
 	_pointerList = [];
 
 	dzn_getAllLinkedAccessories = {
-		// [ClassName, Type] call dzn_getAllLinkedAccessories
+		// [ClassName, Type, TypeArray] call dzn_getAllLinkedAccessories
 		// TYPE: "muzzle" / "optic" / "pointer"
 		private ["_CName","_cfgItems","_linked"];
 		
@@ -83,7 +83,7 @@ dzn_getWeapons = {
 			};
 		};
 		
-		_linked = [];
+		_linked = _this select 2; // Array of all linked accessories of the chosen type
 		{
 			if !(_x in _linked) then {
 				_linked = _linked + [_x];
@@ -104,9 +104,9 @@ dzn_getWeapons = {
 			diag_log [_DName, _CName];
 			
 			if (_this in ["primary", "handgun"]) then {
-				_opticsList =  [_CName, "optics"] call dzn_getAllLinkedAccessories;
-				_muzzleList =  [_CName, "muzzle"] call dzn_getAllLinkedAccessories;
-				_pointerList =  [_CName, "pointer"] call dzn_getAllLinkedAccessories;
+				_opticsList =  [_CName, "optics", _opticsList] call dzn_getAllLinkedAccessories;
+				_muzzleList =  [_CName, "muzzle", _muzzleList] call dzn_getAllLinkedAccessories;
+				_pointerList =  [_CName, "pointer", _pointerList] call dzn_getAllLinkedAccessories;
 			};
 		};
 	};
