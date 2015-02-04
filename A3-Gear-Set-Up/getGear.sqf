@@ -114,13 +114,41 @@ dzn_getWeapons = {
 	diag_log "ATTACHES:";
 	{
 		//[_classlist, _namelist]
+		_allConfigAccessories = [];
 		
-		diag_log _x;
-	} forEach _opticsList;
+		switch (_forEachIndex) do {
+			case 0: { 
+				_allConfigAccessories = "optic" call dzn_getAttachments;
+				diag_log "OPTICS ITEMS";
+			};
+			case 1: { 
+				_allConfigAccessories = "muzzle" call dzn_getAttachments;
+				diag_log "MUZZLE ITEMS";
+			};
+			case 2: { 
+				_allConfigAccessories = "pointer" call dzn_getAttachments;
+				diag_log "POINTER ITEMS";
+			};
+		};
+		
+		_accClassnames = _allConfigAccessories select 0;
+		_accDisplayName = _allConfigAccessories select 1;
+		
+		_linkedItems = _x;
+		{
+			_itemClassname = _x;
+			_itemDisplayName = "";
+			_index = _accClassnames find _itemClassname;
+			if (_index > -1) then {
+				_itemDisplayName = _accDisplayName select _index;
+				diag_log [_itemClassname, _itemDisplayName];
+			};
+		} forEach _linkedItems;
+	} forEach [_opticsList, _muzzleList, _pointerList];
 };
 
 dzn_getAttachments = {
-	//"muzzle" / "optic" / "pointer" spawn dzn_getWeapons
+	//"muzzle" / "optic" / "pointer" call dzn_getAttachments
 	// OUT: Array of all attachement's [classname, DisplayName];
 	private ["_config","_cfg","_classlist","_namelist","_item"];
 	
