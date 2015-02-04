@@ -98,10 +98,31 @@ dzn_getWeapons = {
 };
 
 dzn_getAttachments = {
-	//"muzzle" / "optic" / "launcher" / "mags" spawn dzn_getWeapons
-	_opticsAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> "cfgWeapons");
-	_muzzleAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> "cfgWeapons");
-	_pointerAll = ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 301") configclasses (configfile >> "cfgWeapons");
+	//"muzzle" / "optic" / "pointer" spawn dzn_getWeapons
+	// OUT: Array of all attachement's [classname, DisplayName];
+	private ["_config","_cfg","_namelist","_CName","_DName","_item"];
 	
+	_config = "cfgWeapons";
+	_cfg = switch (_this) do {
+		case "muzzle": {
+			 ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> _config);
+		};
+		case "optic": {
+			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> _config);
+		};
+		case "pointer": {
+			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 301") configclasses (configfile >> _config);
+		};
+	};
 	
+	_namelist = [];
+	for "_i" from 0 to (count _cfg)-1 do {
+		_item = _cfg select _i;
+		_CName = configName(_item);
+		_DName = getText(configFile >> _config >> _CName >> "displayName");
+		_namelist = _namelist + [[_CName, _DName]];
+	};
+	hintSilend "Attachements dumped";
+	
+	_namelist
 };
