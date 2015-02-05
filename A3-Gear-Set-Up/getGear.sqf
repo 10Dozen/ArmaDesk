@@ -74,10 +74,10 @@ dzn_getWeapons = {
 		player sideChat format ["cname : linked :: %1 : %2 :: %3", str(_this select 0),str(_this select 1), str(_this select 2)];
 		_CName = _this select 0;
 		_cfgItems = switch ( _this select 1 ) do {
-			case "muzzle": {
+			case "optics": {
 				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems")
 			};
-			case "optics": {
+			case "muzzle": {
 				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems")
 			};
 			case "pointer": {
@@ -163,10 +163,10 @@ dzn_getAttachments = {
 	_config = "cfgWeapons";
 	_cfg = switch (_this) do {
 		case "muzzle": {
-			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> _config);
+			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> _config);			
 		};
 		case "optics": {			
-			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> _config);
+			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> _config);
 		};
 		case "pointer": {
 			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 301") configclasses (configfile >> _config);
