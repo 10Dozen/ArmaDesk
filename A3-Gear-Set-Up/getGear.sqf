@@ -2,7 +2,7 @@ waitUntil { time > 0 };
 hint "Started";
 
 dzn_getEquipment = {
-	// "uniform" / "vest" / "headgear" / "glasses" / "backpack" spawn dzn_getWeapons
+	// "uniform" / "vest" / "headgear" / "glasses" / "backpack" spawn dzn_getEquipment
 	// OUT: null, dump name-classname to log
 	
 	_type = 0;
@@ -10,8 +10,8 @@ dzn_getEquipment = {
 	hint "X";
 	
 	switch (_this) do {
-		case "uniform"		{ _type = 801; };
-		case "vest"		{ _type = 701; };
+		case "uniform":		{ _type = 801; };
+		case "vest":		{ _type = 701; };
 		case "headgear":	{ _type = 605; };
 		case "glasses":		{ _config = "cfgGlasses"; };
 		case "backpack":	{ _config = "cfgVehicles"; };
@@ -70,18 +70,23 @@ dzn_getWeapons = {
 		// TYPE: "muzzle" / "optic" / "pointer"
 		private ["_CName","_cfgItems","_linked"];
 		
+		
+		player sideChat format ["cname : linked :: %1 : %2 :: %3", str(_this select 0),str(_this select 1), str(_this select 2)];
 		_CName = _this select 0;
 		_cfgItems = switch ( _this select 1 ) do {
 			case "muzzle": {
 				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems")
 			};
-			case "optic": {
+			case "optics": {
 				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems")
 			};
 			case "pointer": {
 				getArray (configfile >> "CfgWeapons" >> _CName >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems")
 			};
 		};
+		player sideChat format ["cname : linked :: %1 ", str(_cfgItems)];
+		
+		
 		
 		_linked = _this select 2; // Array of all linked accessories of the chosen type
 		{
@@ -104,13 +109,14 @@ dzn_getWeapons = {
 			diag_log [_DName, _CName];
 			
 			if (_this in ["primary", "handgun"]) then {
+				player sideChat format ["INPUT : %1 :: %2", str(_CName), str(_opticsList)];
 				_opticsList =  [_CName, "optics", _opticsList] call dzn_getAllLinkedAccessories;
 				_muzzleList =  [_CName, "muzzle", _muzzleList] call dzn_getAllLinkedAccessories;
 				_pointerList =  [_CName, "pointer", _pointerList] call dzn_getAllLinkedAccessories;
 			};
 		};
 	};
-	
+
 	diag_log "ATTACHES:";
 	{
 		//[_classlist, _namelist]
@@ -118,7 +124,7 @@ dzn_getWeapons = {
 		
 		switch (_forEachIndex) do {
 			case 0: { 
-				_allConfigAccessories = "optic" call dzn_getAttachments;
+				_allConfigAccessories = "optics" call dzn_getAttachments;
 				diag_log "OPTICS ITEMS";
 			};
 			case 1: { 
@@ -132,12 +138,14 @@ dzn_getWeapons = {
 		};
 		
 		_accClassnames = _allConfigAccessories select 0;
-		_accDisplayName = _allConfigAccessories select 1;
-		
+		_accDisplayName = _allConfigAccessories select 1;		
+
 		_linkedItems = _x;
 		{
 			_itemClassname = _x;
 			_itemDisplayName = "";
+			//diag_log _itemClassname;
+			
 			_index = _accClassnames find _itemClassname;
 			if (_index > -1) then {
 				_itemDisplayName = _accDisplayName select _index;
@@ -148,17 +156,17 @@ dzn_getWeapons = {
 };
 
 dzn_getAttachments = {
-	//"muzzle" / "optic" / "pointer" call dzn_getAttachments
+	//"muzzle" / "optics" / "pointer" call dzn_getAttachments
 	// OUT: Array of all attachement's [classname, DisplayName];
 	private ["_config","_cfg","_classlist","_namelist","_item"];
 	
 	_config = "cfgWeapons";
 	_cfg = switch (_this) do {
 		case "muzzle": {
-			 ("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> _config);
-		};
-		case "optic": {
 			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'optics') == 1") configclasses (configfile >> _config);
+		};
+		case "optics": {			
+			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 101") configclasses (configfile >> _config);
 		};
 		case "pointer": {
 			("isclass _x && getnumber (_x >> 'scope') == 2 && getnumber (_x >> 'itemInfo' >> 'type') == 301") configclasses (configfile >> _config);
@@ -170,7 +178,7 @@ dzn_getAttachments = {
 	for "_i" from 0 to (count _cfg)-1 do {
 		_item = _cfg select _i;
 		_classlist = _classlist + [configName(_item)];
-		_namelist = _namelist + [getText(configFile >> _config >> _CName >> "displayName")];
+		_namelist = _namelist + [getText(configFile >> _config >> configName(_item) >> "displayName")];
 	};
 	hintSilent "Attachements dumped";
 	
