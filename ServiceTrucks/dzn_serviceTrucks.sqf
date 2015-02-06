@@ -2,12 +2,13 @@
 // Will add action 'Unload wheel' which will spawn agm spare wheel for repair.
 
 private ["_supportVehicles","_wheelsCount","_vehicles"];
+// Supported Vehicle classes
 _supportVehicles = [
 	"B_Truck_01_Repair_F",
 	"O_Truck_03_repair_F",
 	"O_Truck_02_box_F"
 ];
-_wheelsCount = 4;
+_wheelsCount = 4; // Count of wheels per truck
 
 _vehicles = vehicles;
 
