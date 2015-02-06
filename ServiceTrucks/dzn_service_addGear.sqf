@@ -1,14 +1,19 @@
+// Should be ran from init of server: 0 = [] execVM "dzn_serviceTrucks.sqf";
+// Will add action 'Unload wheel' which will spawn agm spare wheel for repair.
+
+private ["_supportVehicles","_wheelsCount","_vehicles"];
 _supportVehicles = [
 	"B_Truck_01_Repair_F",
 	"O_Truck_03_repair_F",
 	"O_Truck_02_box_F"
 ];
+_wheelsCount = 4;
 
 _vehicles = vehicles;
 
 {
 	if (((typeOf _x) in _supportVehicles ) && (isNil {_x getVariable "dzn_serviceTruck_wheels"})) then {
-		_x setVariable ["dzn_serviceTruck_wheels", 4, true];
+		_x setVariable ["dzn_serviceTruck_wheels", _wheelsCount, true];
 		_x setVariable [
 			"dzn_serviceTruck_unloadWheel", 
 			_x addAction [
