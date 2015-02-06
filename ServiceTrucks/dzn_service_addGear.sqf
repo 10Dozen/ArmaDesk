@@ -1,3 +1,9 @@
+_supportVehicles = [
+	"B_Truck_01_Repair_F",
+	"O_Truck_03_repair_F",
+	"O_Truck_02_box_F"
+];
+
 _vehicles = vehicles;
 
 {
