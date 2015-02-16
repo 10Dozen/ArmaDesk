@@ -52,7 +52,9 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_mags = magazines _unit;
 		_duplicates = [];
 		
-		
+		// primaryWeaponMagazine _unit
+		// secondaryWeaponMagazine _unit
+		// handgunMagazine _unit
 		
 		
 		
