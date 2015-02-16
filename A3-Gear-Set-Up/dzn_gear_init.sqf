@@ -2,7 +2,7 @@
 private["_editMode"];
 
 // EDIT MODE
-_editMode = true;
+_editMode = _this select 0;
 
 if (_editMode) then {
 	// Add virtual arsenal action
