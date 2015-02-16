@@ -1,6 +1,7 @@
 // Init of dzn_gear
 private["_editMode"];
-
+ #define CAR(NAME) displayName = NAME;
+ CAR("mini");
 // EDIT MODE
 _editMode = _this select 0;
 
@@ -112,6 +113,9 @@ if (_editMode) then {
 				};
 			} forEach _mags;
 			
+			#define hasPrimaryThen(PW)		if (primaryWeapon _unit != "") then {PW} else {""}
+			#define hasSecondaryThen(SW)	if (secondaryWeapon _unit != "") then {SW} else {""}
+			#define hasSHandgunThen(HW)		if (handgunWeapon _unit != "") then {HW} else {""}
 			_outputKit = [
 				/* Equipment */
 				[
@@ -123,21 +127,21 @@ if (_editMode) then {
 				],
 				/* Primary Weapon */
 				[
-					primaryWeapon _unit,
-					(primaryWeaponItems _unit) select 2,
-					(primaryWeaponItems _unit) select 0,
-					(primaryWeaponItems _unit) select 1
+					hasPrimaryThen(primaryWeapon _unit),
+					hasPrimaryThen((primaryWeaponItems _unit) select 2),
+					hasPrimaryThen((primaryWeaponItems _unit) select 0),
+					hasPrimaryThen((primaryWeaponItems _unit) select 1)					
 				],
 				/* Secondary Weapon */
 				[
-					secondaryWeapon _unit
+					hasSecondaryThen(secondaryWeapon _unit)
 				],
 				/* Handgun Weapon */
 				[
-					handgunWeapon _unit,
-					(handgunItems _unit) select 2,
-					(handgunItems _unit) select 0,
-					(handgunItems _unit) select 1
+					hasSHandgunThen(handgunWeapon _unit),
+					hasSHandgunThen((handgunItems _unit) select 2),
+					hasSHandgunThen((handgunItems _unit) select 0),
+					hasSHandgunThen((handgunItems _unit) select 1)
 				],
 				/* Personal Items */
 				/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
@@ -175,7 +179,13 @@ if (_editMode) then {
 			copyToClipboard ("_kitName = " + str(_outputKit) + ";");
 			
 			// Hint here or title
-			hint "Gear has been copied to clipboard";
+			#define COLORS ["F","C","B","3","6","9"]
+			hintSilent parseText format[      
+				"<t size='1.25' color='#%1%2%3%4%5%6'>Gear has been copied to clipboard</t>",     
+				COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
+				COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
+				COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom
+			];  		
 		}
 	];
 };
@@ -191,19 +201,17 @@ if !(isServer) exitWith {};
 dzn_gear_assignKit = {
 	_this select 0 setVariable ["dzn_gear_done", true];
 	
-	/*
-	_kit = if (typename  (_this select 1) == "ARRAY") then {
-		(_this select 1) call BIS_fnc_selectRandom;
-	} else {
+	_kit = if (typename ((_this select 1) select 0) == "ARRAY") then {
 		(_this select 1)
+	} else {
+		(_this select 1) call BIS_fnc_selectRandom
 	};
 	
-	if !(isNil {call compile(_kit)}) then {
-		[_this select 0, call compile (_kit)] spawn dzn_gear_assignKit;
-	} else {
-		player sideChat format ["No kit with name: %1", _kit];
+	if !(isNil {call compile (_kit)}) then {
+		hint "YEAH!";
+	} then {
+		hint format ["No kit with name: %1", _kit];
 	};
-	*/
 };
 
 // Assign gear from given kit
