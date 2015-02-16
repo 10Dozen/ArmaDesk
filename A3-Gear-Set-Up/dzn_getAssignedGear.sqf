@@ -3,6 +3,13 @@
 
 player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 	{
+		private[
+			"_unit","_item1","_item2","_item3","_item4","_item5","_item6","_items",
+			"_pwMags","_swMags","_hgMags","_mag1","_mag2","_mag3","_mag4","_mag5","_mag6",
+			"_mags","_magSlot","_pwMag","_swMag","_hgMag",
+			"_duplicates","_item","_count","_outputKit"
+		];
+		
 		_unit = _this select 1;
 		
 		// Нужно получить все айтемы и собрать их в стеки
@@ -94,7 +101,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 			};
 		} forEach _mags;
 		
-		outputKit = [
+		_outputKit = [
 			/* Equipment */
 			[
 				uniform _unit,
@@ -154,7 +161,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		];
 		
 		// Copying to clipboard
-		copyToClipboard text;
+		copyToClipboard _outputKit;
 		
 		// Hint here or title
 		hint "Gear copied to clipboard";
