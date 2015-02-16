@@ -186,7 +186,7 @@ if !(isServer) exitWith {};
 // FUNCTIONS
 
 // Assign kit from given
-// [ UNIT, KIT or ARRAY OF KITS ] call dzn_gear_assignKit
+// [ UNIT, KIT or ARRAY OF KITS ] spawn dzn_gear_assignKit
 dzn_gear_assignKit = {
 
 };
@@ -202,4 +202,22 @@ dzn_gear_assignGear = {};
 
 // INITIALIZATION
 waitUntil { time > 0 };
+private ["_logics", "_kitName", "_synUnits"];
+
+_logics = entities "Logic";
+if (count _logics == 0) exitWith {};	
+{
+	if (["dzn_gear_", str(_x), false] call BIS_fnc_inString) then {
+		_kitName = str(_x) select [9]; // String from 9th character
+		_synUnits = synchronizedObjects _x;
+		{
+			if (_x  isKindOf "CAManBase") then {
+				[ _x, _kitName ] spawn dzn_gear_assignKit;
+				_x setVariable ["dzn_gear_done", true];
+				sleep 0.2;
+			};
+		} forEach _synUnits;
+		deleteVehicle _x;
+	};
+} forEach _logics;
 
