@@ -16,7 +16,8 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_item6 = ['no', 0];
 	
 		// Нужно получить все магазины и собрать их в стеки
-	
+		_mags = magazines _unit;
+		
 		
 		kitName = [
 			/* Equipment */
