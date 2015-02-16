@@ -173,7 +173,7 @@ if (_editMode) then {
 			];
 			
 			// Copying to clipboard
-			copyToClipboard _outputKit;
+			copyToClipboard ("_kitName = " + str(_outputKit) + ";");
 			
 			// Hint here or title
 			hint "Gear has been copied to clipboard";
