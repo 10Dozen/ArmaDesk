@@ -1,7 +1,6 @@
 // Init of dzn_gear
 private["_editMode"];
- #define CAR(NAME) displayName = NAME;
- CAR("mini");
+
 // EDIT MODE
 _editMode = _this select 0;
 
@@ -92,13 +91,13 @@ if (_editMode) then {
 					
 					switch (_item) do {
 						case _pwMag: {
-							_pwMags = [_item, _count];
+							_pwMags = [_item, _count + 1];
 						};
 						case _swMag: {
-							_swMags = [_item, _count];
+							_swMags = [_item, _count + 1];
 						};
 						case _hgMag: {
-							_hgMags = [_item, _count];
+							_hgMags = [_item, _count + 1];
 						};
 						default {
 							call compile format [
@@ -193,37 +192,37 @@ if (_editMode) then {
 waitUntil { 1 > 0 };
 if !(isServer) exitWith {};
 
-
 // FUNCTIONS
-
+waitUntil { !isNil "BIS_fnc_selectRandom" };
 // Assign kit from given
 // [ UNIT, KIT or ARRAY OF KITS ] spawn dzn_gear_assignKit
 dzn_gear_assignKit = {
-	private ["_kit"];
-	(_this select 0) setVariable ["dzn_gear_done", _this select 1];
+	private ["_kit","_randomKit"];
+	(_this select 0) setVariable ["dzn_gear_assigned", _this select 1];
 	
 	_kit = [];
 	if (!isNil {call compile (_this select 1)}) then {
-		_kit = call compile (_this select 1)
+		
+		_kit = call compile (_this select 1);
+		
+		if (typename (_kit select 0) != "ARRAY") then {
+			_randomKit =  (_kit call BIS_fnc_selectRandom);
+			(_this select 0) setVariable ["dzn_gear_assigned", _randomKit];
+			_kit = call compile _randomKit;
+		};		
+		
+		[_this select 0, _kit] call dzn_gear_assignGear;
 	} else {
 		diag_log format ["There is no kit with name %1", (_this select 1)];
 		player sideChat format ["There is no kit with name %1", (_this select 1)];
 	};
-	
-	_kit = if (typename (_kit select 0) == "ARRAY") then {
-		(_this select 1)
-	} else {
-		call compile ((_this select 1) call BIS_fnc_selectRandom)
-	};
-	
-	hint "YEAH!";	
 };
 
 // Assign gear from given kit
 // [ UNIT, GEAR_ARRAY ] spawn dzn_gear_assignKit
 dzn_gear_assignGear = {
-	// Here is function assigning gear to unit
-	player sideChat "Assigned!";
+	// Here is function assigning gear to unit	
+	#include "dzn_gear_assignGear.sqf";
 };
 
 
