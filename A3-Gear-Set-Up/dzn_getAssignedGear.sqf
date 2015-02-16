@@ -7,7 +7,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_output = [];
 		
 		kitName = [
-			// Equipment
+			/* Equipment */
 			[
 				uniform _unit,
 				vest _unit,
@@ -15,34 +15,28 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				headgear _unit,
 				goggles _unit
 			],
-			// Primary Weapon
+			/* Primary Weapon */
 			[
 				primaryWeapon _unit,
 				(primaryWeaponItems _unit) select 2,
 				(primaryWeaponItems _unit) select 0,
 				(primaryWeaponItems _unit) select 1
 			],
-			// Secondary Weapon
+			/* Secondary Weapon */
 			[
 				secondaryWeapon _unit
 			],
-			// Handgun Weapon
+			/* Handgun Weapon */
 			[
 				handgunWeapon _unit,
 				(handgunItems _unit) select 2,
 				(handgunItems _unit) select 0,
 				(handgunItems _unit) select 1
 			],
-			// Personal Items
-			[
-				"ItemNVG",
-				"ItemRadio",
-				"ItemGPS",
-				"ItemMap",
-				"ItemWatch",
-				"ItemCompass"
-			],
-			// Magazines
+			/* Personal Items */
+			assignedItems _unit
+			/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
+			/* Magazines */
 			[
 				["PrimaryWeaponMagazineClassname", 10],
 				["SecondaryWeaponMagazineClassname", 10],
@@ -54,7 +48,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				["Magazine5Classname", 10],
 				["Magazine6Classname", 10]
 			],
-			// Items
+			/* Items */
 			[
 				["Item1Classname", 10],
 				["Item2Classname", 10],
@@ -63,12 +57,8 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				["Item5Classname", 10],
 				["Item6Classname", 10]
 			],
-			// Person and Insignia
-			[
-				"Insignia",
-				"Face",
-				"Voice"
-			]
+			/* Person and Insignia */
+			/*["Insignia","Face","Voice"]*/
 		];
 		
 		
