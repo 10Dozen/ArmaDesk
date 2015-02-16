@@ -25,12 +25,12 @@ if (_editMode) then {
 			_unit = _this select 1;
 			
 			// Нужно получить все айтемы и собрать их в стеки
-			_item1 = ['no', 0];
-			_item2 = ['no', 0];
-			_item3 = ['no', 0];
-			_item4 = ['no', 0];
-			_item5 = ['no', 0];
-			_item6 = ['no', 0];
+			_item1 = ["", 0];
+			_item2 = ["", 0];
+			_item3 = ["", 0];
+			_item4 = ["", 0];
+			_item5 = ["", 0];
+			_item6 = ["", 0];
 			
 			_items = items _unit;
 			_duplicates = [];
@@ -48,7 +48,7 @@ if (_editMode) then {
 					
 					if !(count _duplicates > 6) then {
 						call compile format [
-							"_item%1 = [%2, %3];",
+							"_item%1 = ['%2', %3];",
 							count _duplicates,
 							_item,
 							_count
@@ -60,35 +60,34 @@ if (_editMode) then {
 			} forEach _items;
 		
 			// Нужно получить все магазины и собрать их в стеки
-			_pwMags = ["no", 0];
-			_swMags = ["no", 0];
-			_hgMags = ["no", 0];
-			_mag1 = ["no", 0];
-			_mag2 = ["no", 0];
-			_mag3 = ["no", 0];
-			_mag4 = ["no", 0];
-			_mag5 = ["no", 0];
-			_mag6 = ["no", 0];
+			_pwMags = ["", 0];
+			_swMags = ["", 0];
+			_hgMags = ["", 0];
+			_mag1 = ["", 0];
+			_mag2 = ["", 0];
+			_mag3 = ["", 0];
+			_mag4 = ["", 0];
+			_mag5 = ["", 0];
+			_mag6 = ["", 0];
 			
 			_mags = magazines _unit;
 			_duplicates = [];
 			
-			_pwMag = if (count (primaryWeaponMagazine _unit) > 0) then {primaryWeaponMagazine _unit  select 0 };
-			_swMag = if (count (secondaryWeaponMagazine _unit) > 0) then {secondaryWeaponMagazine _unit  select 0 };
-			_hgMag = if (count (handgunMagazine _unit) > 0) then {handgunMagazine _unit  select 0 };
+			_pwMag = if (count (primaryWeaponMagazine _unit) > 0) then {primaryWeaponMagazine _unit  select 0} else { "" };
+			_swMag = if (count (secondaryWeaponMagazine _unit) > 0) then {secondaryWeaponMagazine _unit  select 0} else { "" };
+			_hgMag = if (count (handgunMagazine _unit) > 0) then {handgunMagazine _unit  select 0} else { "" };
 			_magSlot = 1;
-			
+
 			{
 				if !(_x in _duplicates) then {
 					_item = _x;
-					_count = 0;
-					
+					_count = 0;				
 					_duplicates = _duplicates + [_item];
-					{
+					{	
 						if (_x == _item) then {
 							_count = _count + 1;
 						};
-					} forEach _items;
+					} forEach _mags;
 					
 					switch (_item) do {
 						case _pwMag: {
@@ -102,7 +101,7 @@ if (_editMode) then {
 						};
 						default {
 							call compile format [
-								"_mag%1 = [%2, %3];",
+								"_mag%1 = ['%2', %3];",
 								_magSlot,
 								_item,
 								_count
@@ -173,7 +172,7 @@ if (_editMode) then {
 			];
 			
 			// Copying to clipboard
-			copyToClipboard ("_kitName = " + str(_outputKit) + ";");
+			copyToClipboard ("_kitName = " + str(_outputKit) + ";\n");
 			
 			// Hint here or title
 			hint "Gear has been copied to clipboard";
@@ -181,7 +180,7 @@ if (_editMode) then {
 	];
 };
 
-
+waitUntil { 1 > 0 };
 if !(isServer) exitWith {};
 
 
