@@ -4,19 +4,60 @@
 player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 	{
 		_unit = _this select 1;
-		_output = [];
 		
 		// Нужно получить все айтемы и собрать их в стеки
-		_items = items _unit;
 		_item1 = ['no', 0];
 		_item2 = ['no', 0];
 		_item3 = ['no', 0];
 		_item4 = ['no', 0];
 		_item5 = ['no', 0];
 		_item6 = ['no', 0];
+		
+		_items = items _unit;
+		_duplicates = [];
+		{
+			if !(_x in _duplicates) then {
+				_item = _x;
+				_count = 0;
+	
+				_duplicates = _duplicates + [_item];
+				{
+					if (_x == _item) then {
+						_count = _count + 1;
+					};
+				} forEach _items;
+				
+				if !(count _duplicates > 6) then {
+					call compile format [
+						"_item%1 = [_item, _count];",
+						count _duplicates
+					];
+				} else {
+					hint "Maximum of 6 item slots were exceeded";
+				};	
+			};
+		} forEach _items;
 	
 		// Нужно получить все магазины и собрать их в стеки
+		_pwMags = ["no", 0];
+		_swMags = ["no", 0];
+		_hgMags = ["no", 0];
+		_mag1 = ["no", 0];
+		_mag2 = ["no", 0];
+		_mag3 = ["no", 0];
+		_mag4 = ["no", 0];
+		_mag5 = ["no", 0];
+		_mag6 = ["no", 0];
+		
 		_mags = magazines _unit;
+		_duplicates = [];
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		kitName = [
