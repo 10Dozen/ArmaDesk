@@ -1,2 +1,2 @@
 // Add to init.sqf
-[] execVM "dzn_gear_init.sqf";
+[true] execVM "dzn_gear_init.sqf";
