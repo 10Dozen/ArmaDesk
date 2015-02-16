@@ -29,8 +29,10 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				
 				if !(count _duplicates > 6) then {
 					call compile format [
-						"_item%1 = [_item, _count];",
-						count _duplicates
+						"_item%1 = [%2, %3];",
+						count _duplicates,
+						_item,
+						_count
 					];
 				} else {
 					hint "Maximum of 6 item slots were exceeded";
@@ -52,17 +54,47 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_mags = magazines _unit;
 		_duplicates = [];
 		
-		// primaryWeaponMagazine _unit
-		// secondaryWeaponMagazine _unit
-		// handgunMagazine _unit
+		_pwMag = primaryWeaponMagazine _unit;
+		_swMag = secondaryWeaponMagazine _unit;
+		_hgMag = handgunMagazine _unit
+		_magSlot = 1;
 		
+		{
+			if !(_x in _duplicates) then {
+				_item = _x;
+				_count = 0;
+				
+				_duplicates = _duplicates + [_item];
+				{
+					if (_x == _item) then {
+						_count = _count + 1;
+					};
+				} forEach _items;
+				
+				switch (_item) do {
+					case _pwMag: {
+						_pwMags = [_item, _count];
+					};
+					case _swMag: {
+						_swMags = [_item, _count];
+					};
+					case _hgMag: {
+						_hgMags = [_item, _count];
+					};
+					case default: {
+						call compile format [
+							"_mag%1 = [%2, %3];",
+							_magSlot,
+							_item,
+							_count
+						];
+						_magSlot = _magSlot + 1;
+					};
+				};
+			};
+		} forEach _mags;
 		
-		
-		
-		
-		
-		
-		kitName = [
+		outputKit = [
 			/* Equipment */
 			[
 				uniform _unit,
@@ -90,36 +122,35 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				(handgunItems _unit) select 1
 			],
 			/* Personal Items */
-			assignedItems _unit,
 			/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
+			assignedItems _unit,
+			
 			/* Magazines */
-			/*[
-				["PrimaryWeaponMagazineClassname", 10],
-				["SecondaryWeaponMagazineClassname", 10],
-				["HandguyWeaponMagazineClassname", 10],
-				["Magazine1Classname", 10],
-				["Magazine2Classname", 10],
-				["Magazine3Classname", 10],
-				["Magazine4Classname", 10],
-				["Magazine5Classname", 10],
-				["Magazine6Classname", 10]
-			],*/
-			
-			
+			[
+				_pwMags,
+				_swMags,
+				_hgMags,
+				_mag1,
+				_mag2,
+				_mag3,
+				_mag4,
+				_mag5,
+				_mag6
+			],
 			
 			/* Items */
-			/*[
-				["Item1Classname", 10],
-				["Item2Classname", 10],
-				["Item3Classname", 10],
-				["Item4Classname", 10],
-				["Item5Classname", 10],
-				["Item6Classname", 10]
-			],*/
-			items _unit,
+			[
+				_item1,
+				_item2,
+				_item3,
+				_item4,
+				_item5,
+				_item6
+			],
 			
 			/* Person and Insignia */
 			/*["Insignia","Face","Voice"]*/
+			[]
 		];
 		
 		// Copying to clipboard
