@@ -182,10 +182,24 @@ if (_editMode) then {
 };
 
 if !(isServer) exitWith {};
+
 // FUNCTIONS
 
+// Assign kit from given
+// [ UNIT, KIT or ARRAY OF KITS ] call dzn_gear_assignKit
+dzn_gear_assignKit = {
+
+};
+
+// Assign gear from given kit
+// [ UNIT, GEAR_ARRAY ] spawn dzn_gear_assignKit
+dzn_gear_assignGear = {};
+
+
+
 // GEARS
-#include dzn_gear_kits
+#include "dzn_gear_kits.sqf"
 
 // INITIALIZATION
 waitUntil { time > 0 };
+
