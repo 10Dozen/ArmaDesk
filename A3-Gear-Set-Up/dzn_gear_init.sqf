@@ -188,7 +188,7 @@ if !(isServer) exitWith {};
 // Assign kit from given
 // [ UNIT, KIT or ARRAY OF KITS ] spawn dzn_gear_assignKit
 dzn_gear_assignKit = {
-
+	_this setVariable ["dzn_gear_done", true];
 };
 
 // Assign gear from given kit
@@ -204,20 +204,56 @@ dzn_gear_assignGear = {};
 waitUntil { time > 0 };
 private ["_logics", "_kitName", "_synUnits"];
 
+// Logics
 _logics = entities "Logic";
 if (count _logics == 0) exitWith {};	
 {
-	if (["dzn_gear_", str(_x), false] call BIS_fnc_inString) then {
-		_kitName = str(_x) select [9]; // String from 9th character
+	
+	if (["dzn_gear_", str(_x), false] call BIS_fnc_inString || !isNil { _x getVariable "dzn_gear" }) then {
+		_kitName = if (!isNil {_x getVariable "dzn_gear"}) then {
+			_x getVariable "dzn_gear"
+		} else {
+			str(_x) select [9]
+		};
 		_synUnits = synchronizedObjects _x;
 		{
 			if (_x  isKindOf "CAManBase") then {
-				[ _x, _kitName ] spawn dzn_gear_assignKit;
-				_x setVariable ["dzn_gear_done", true];
-				sleep 0.2;
+				[_x, _kitName] spawn dzn_gear_assignKit;
+			} else {
+				private ["_crew"];
+				_crew = crew _x;
+				if !(_crew isEqualTo []) then {
+					{
+						[_x, _kitName] spawn dzn_gear_assignKit;
+						sleep 0.1;
+					} forEach _crew;
+				};
 			};
+			sleep 0.2;
 		} forEach _synUnits;
 		deleteVehicle _x;
 	};
 } forEach _logics;
 
+// Units
+_units = allUnits;
+{
+	if (!isNil {_x getVariable "dzn_gear"}) then {
+		_kitName = _x getVariable "dzn_gear";
+		if (_x isKindOf "CAManBase" && isNil {_x getVariable "dzn_gear_done"}) then {
+			[_x, _kitName] spawn dzn_gear_assignKit;
+		} else {
+			private ["_crew"];
+			_crew = crew _x;
+			if !(_crew isEqualTo []) then {
+				{
+					if (isNil {_x getVariable "dzn_gear_done"}) then {
+						[_x, _kitName] spawn dzn_gear_assignKit;
+					};
+					sleep 0.1;
+				} forEach _crew;
+			};
+		};
+	};
+	sleep 0.2;
+} forEach _units;
