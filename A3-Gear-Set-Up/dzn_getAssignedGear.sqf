@@ -34,7 +34,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				(handgunItems _unit) select 1
 			],
 			/* Personal Items */
-			assignedItems _unit
+			assignedItems _unit,
 			/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
 			/* Magazines */
 			[
