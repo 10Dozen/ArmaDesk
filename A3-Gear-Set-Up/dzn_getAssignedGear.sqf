@@ -61,9 +61,9 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_mags = magazines _unit;
 		_duplicates = [];
 		
-		_pwMag = primaryWeaponMagazine _unit;
-		_swMag = secondaryWeaponMagazine _unit;
-		_hgMag = handgunMagazine _unit
+		_pwMag = if (count (primaryWeaponMagazine _unit) > 0) then {primaryWeaponMagazine _unit  select 0 };
+		_swMag = if (count (secondaryWeaponMagazine _unit) > 0) then {secondaryWeaponMagazine _unit  select 0 };
+		_hgMag = if (count (handgunMagazine _unit) > 0) then {handgunMagazine _unit  select 0 };
 		_magSlot = 1;
 		
 		{
