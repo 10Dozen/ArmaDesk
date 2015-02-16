@@ -6,6 +6,18 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		_unit = _this select 1;
 		_output = [];
 		
+		// Нужно получить все айтемы и собрать их в стеки
+		_items = items _unit;
+		_item1 = ['no', 0];
+		_item2 = ['no', 0];
+		_item3 = ['no', 0];
+		_item4 = ['no', 0];
+		_item5 = ['no', 0];
+		_item6 = ['no', 0];
+	
+		// Нужно получить все магазины и собрать их в стеки
+	
+		
 		kitName = [
 			/* Equipment */
 			[
@@ -37,7 +49,7 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 			assignedItems _unit,
 			/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
 			/* Magazines */
-			[
+			/*[
 				["PrimaryWeaponMagazineClassname", 10],
 				["SecondaryWeaponMagazineClassname", 10],
 				["HandguyWeaponMagazineClassname", 10],
@@ -47,16 +59,21 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 				["Magazine4Classname", 10],
 				["Magazine5Classname", 10],
 				["Magazine6Classname", 10]
-			],
+			],*/
+			
+			
+			
 			/* Items */
-			[
+			/*[
 				["Item1Classname", 10],
 				["Item2Classname", 10],
 				["Item3Classname", 10],
 				["Item4Classname", 10],
 				["Item5Classname", 10],
 				["Item6Classname", 10]
-			],
+			],*/
+			items _unit,
+			
 			/* Person and Insignia */
 			/*["Insignia","Face","Voice"]*/
 		];
