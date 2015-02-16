@@ -79,7 +79,10 @@ player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 			/*["Insignia","Face","Voice"]*/
 		];
 		
+		// Copying to clipboard
+		copyToClipboard text;
 		
-		
+		// Hint here or title
+		hint "Gear copied to clipboard";
 	}
 ];
