@@ -181,20 +181,35 @@ if (_editMode) then {
 	];
 };
 
+
 if !(isServer) exitWith {};
+
 
 // FUNCTIONS
 
 // Assign kit from given
 // [ UNIT, KIT or ARRAY OF KITS ] spawn dzn_gear_assignKit
 dzn_gear_assignKit = {
-	_this setVariable ["dzn_gear_done", true];
+	_this select 0 setVariable ["dzn_gear_done", true];
+	_kit = if (typename  (_this select 1) == "ARRAY") then {
+		(_this select 1) call BIS_fnc_selectRandom;
+	} else {
+		(_this select 1)
+	};
+	
+	if !(isNil {call compile(_kit)}) then {
+		[_this select 0, call compile (_kit)] spawn dzn_gear_assignKit;
+	} else {
+		player sideChat format ["No kit with name: %1", _kit];
+	};
 };
 
 // Assign gear from given kit
 // [ UNIT, GEAR_ARRAY ] spawn dzn_gear_assignKit
-dzn_gear_assignGear = {};
-
+dzn_gear_assignGear = {
+	// Here is function assigning gear to unit
+	player sideChat "Assigned!";
+};
 
 
 // GEARS
