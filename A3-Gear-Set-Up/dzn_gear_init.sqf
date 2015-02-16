@@ -114,7 +114,7 @@ if (_editMode) then {
 			
 			#define hasPrimaryThen(PW)		if (primaryWeapon _unit != "") then {PW} else {""}
 			#define hasSecondaryThen(SW)	if (secondaryWeapon _unit != "") then {SW} else {""}
-			#define hasSHandgunThen(HW)		if (handgunWeapon _unit != "") then {HW} else {""}
+			#define hasHandgunThen(HW)		if (handgunWeapon _unit != "") then {HW} else {""}
 			_outputKit = [
 				/* Equipment */
 				[
@@ -137,15 +137,13 @@ if (_editMode) then {
 				],
 				/* Handgun Weapon */
 				[
-					hasSHandgunThen(handgunWeapon _unit),
-					hasSHandgunThen((handgunItems _unit) select 2),
-					hasSHandgunThen((handgunItems _unit) select 0),
-					hasSHandgunThen((handgunItems _unit) select 1)
+					hasHandgunThen(handgunWeapon _unit),
+					hasHandgunThen((handgunItems _unit) select 2),
+					hasHandgunThen((handgunItems _unit) select 0),
+					hasHandgunThen((handgunItems _unit) select 1)
 				],
 				/* Personal Items */
-				/*["ItemNVG","ItemRadio","ItemGPS","ItemMap","ItemWatch","ItemCompass"],*/
 				assignedItems _unit,
-				
 				/* Magazines */
 				[
 					_pwMags,
@@ -158,7 +156,6 @@ if (_editMode) then {
 					_mag5,
 					_mag6
 				],
-				
 				/* Items */
 				[
 					_item1,
@@ -168,7 +165,6 @@ if (_editMode) then {
 					_item5,
 					_item6
 				],
-				
 				/* Person and Insignia */
 				/*["Insignia","Face","Voice"]*/
 				[]
@@ -189,11 +185,11 @@ if (_editMode) then {
 	];
 };
 
-waitUntil { 1 > 0 };
 if !(isServer) exitWith {};
 
 // FUNCTIONS
 waitUntil { !isNil "BIS_fnc_selectRandom" };
+
 // Assign kit from given
 // [ UNIT, KIT or ARRAY OF KITS ] spawn dzn_gear_assignKit
 dzn_gear_assignKit = {
@@ -224,7 +220,6 @@ dzn_gear_assignGear = {
 	// Here is function assigning gear to unit	
 	#include "dzn_gear_assignGear.sqf";
 };
-
 
 // GEARS
 #include "dzn_gear_kits.sqf"
