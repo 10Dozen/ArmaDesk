@@ -1,6 +1,7 @@
 // Init of dzn_gear
 private["_editMode"];
 
+// EDIT MODE
 _editMode = true;
 
 if (_editMode) then {
@@ -175,7 +176,16 @@ if (_editMode) then {
 			copyToClipboard _outputKit;
 			
 			// Hint here or title
-			hint "Gear copied to clipboard";
+			hint "Gear has been copied to clipboard";
 		}
 	];
 };
+
+if !(isServer) exitWith {};
+// FUNCTIONS
+
+// GEARS
+#include dzn_gear_kits
+
+// INITIALIZATION
+waitUntil { time > 0 };
