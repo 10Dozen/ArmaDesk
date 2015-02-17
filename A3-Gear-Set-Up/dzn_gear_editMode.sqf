@@ -155,22 +155,50 @@
 			[]
 		];
 		
+		
 		_outputKit
 	};
+	
 	dzn_gear_editMode_copyToClipboard = {
-		_outputKit = _this call dzn_gear_editMode_getGear;
-			
+		private ["_colorString"];
+		
 		// Copying to clipboard
-		copyToClipboard ("_kitName = " + str(_outputKit) + ";");
-			
+		copyToClipboard ("_kitName = " + str(_this) + ";");
+	
 		// Hint here or title
 		#define COLORS ["F","C","B","3","6","9"]
+		_colorString = format [
+			"#%1%2%3%4%5%6", 
+			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
+			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom
+		];
+		
 		hintSilent parseText format[      
-			"<t size='1.25' color='#%1%2%3%4%5%6'>Gear has been copied to clipboard</t>",     
-			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
-			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
-			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom
-		];  
+			"<t size='1.25' color='%1'>Gear has been copied to clipboard</t>",     
+			_colorString
+		];
+		
+		_colorString
+	};
+	
+	dzn_gear_editMode_createKit = {
+		private ["_outputKit","_colorString"];
+		_outputKit = _this call dzn_gear_editMode_getGear;		
+		_colorString = _outputKit call dzn_gear_editMode_copyToClipboard;
+		
+		player addAction [
+			format [
+				"<t color='%1'>Kit with %2 %3</t>",
+				_colorString,
+				round(time),
+				_outputKit select 1 select 0
+			],
+			{
+				[(_this select 1), _this select 3 ] call dzn_gear_assignGear;
+				(_this select 3) call dzn_gear_editMode_copyToClipboard;
+			},
+			_outputKit
+		];		
 	};
 	
 	// ACTIONS
@@ -184,5 +212,5 @@
 	// Copy to clipboard set of unit's gear in format according to
 	// https://github.com/10Dozen/ArmaDesk/blob/master/A3-Gear-Set-Up/Kit%20Examples.sqf
 	player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
-		{(_this select 1) call dzn_gear_editMode_copyToClipboard;}
+		{(_this select 1) call dzn_gear_editMode_createKit;}
 	];
