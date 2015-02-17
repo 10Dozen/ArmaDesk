@@ -9,7 +9,7 @@
 	
 	_unit = _this select 0;
 	_kit = _this select 1;
-	
+		
 	// Clear Gear
 	removeUniform _unit;
 	removeVest _unit;
@@ -31,7 +31,6 @@
 	#define getRandom(INDEX)	(cItem(INDEX) call BIS_fnc_selectRandom)
 	#define assignGear(IDX, ACT)	if isItem(IDX) then { if NotEmpty(IDX) then { _unit ACT cItem(IDX); }; } else { _unit ACT getRandom(IDX); };
 	
-
 	// Adding UVBHG
 	_category = _kit select 0;
 	assignGear(0, forceAddUniform)
