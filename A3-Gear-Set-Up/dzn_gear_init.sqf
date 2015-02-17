@@ -5,7 +5,7 @@ private["_editMode"];
 _editMode = _this select 0;
 
 if (_editMode) then {
-	dzn_gear_editMode_copyToClipboard = {
+	dzn_gear_editMode_getGear = {
 		private[
 			"_unit","_item1","_item2","_item3","_item4","_item5","_item6","_items",
 			"_pwMags","_swMags","_hgMags","_mag1","_mag2","_mag3","_mag4","_mag5","_mag6",
@@ -159,6 +159,12 @@ if (_editMode) then {
 			/*["Insignia","Face","Voice"]*/
 			[]
 		];
+		
+		_outputKit
+	};
+
+	dzn_gear_editMode_copyToClipboard = {
+		_outputKit = _this call dzn_gear_editMode_getGear;
 			
 		// Copying to clipboard
 		copyToClipboard ("_kitName = " + str(_outputKit) + ";");
