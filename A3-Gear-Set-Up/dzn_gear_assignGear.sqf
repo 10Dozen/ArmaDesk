@@ -31,6 +31,7 @@
 	#define getRandom(INDEX)	(cItem(INDEX) call BIS_fnc_selectRandom)
 	#define assignGear(IDX, ACT)	if isItem(IDX) then { if NotEmpty(IDX) then { _unit ACT cItem(IDX); }; } else { _unit ACT getRandom(IDX); };
 	
+
 	// Adding UVBHG
 	_category = _kit select 0;
 	assignGear(0, forceAddUniform)
@@ -39,26 +40,43 @@
 	assignGear(3, addHeadgear)
 	assignGear(4, addGoggles)
 
+	#define assignWeapon(IDX,WT)	if isItem(IDX) then { if NotEmpty(IDX) then { _unit addWeapon cItem(IDX); }; } else { _unit addWeapon (cItem(IDX) select WT); };
+	#define getRandomType(IDX)		if isItem(IDX) then { 0 } else { round(random(count cItem(IDX) - 1)) }
+	#define assignMags(IDX, WT)		if (typename (cItem(IDX) select 0) == "STRING") then { _unit addMagazines cItem(IDX); } else { _unit addMagazines (cItem(IDX) select WT); };
+	
 	// Add Primary, Secondary and Handgun Magazines
 	_category = _kit select 5;
-	for "_i" from 0 to 2 do {
-		if !(cItem(_i) select 0 == "") then {_unit addMagazines cItem(_i);};
-	};
+	
+	_primaryRandom = getRandomType(0);
+	_secondaryRandom = getRandomType(1);
+	_handgunRandom = getRandomType(2);	
+	
+	{
+		assignMags(_forEachIndex, _x)
+	} forEach [_primaryRandom, _secondaryRandom, _handgunRandom];
+	
+	// for "_i" from 0 to 2 do {
+		// assignMags(_i, WT)
+		// if !(cItem(_i) select 0 == "") then {_unit addMagazines cItem(_i);};
+	// };
 	
 	// Add Primary Weapon and accessories
 	_category = _kit select 1;
-	assignGear(0, addWeapon);
+	assignWeapon(0,_primaryRandom)
+	//assignGear(0, addWeapon);
 	for "_i" from 1 to count(_category) do {
 		assignGear(_i, addPrimaryWeaponItem);
 	};
 	
 	// Add Secondary Weapon
 	_category = _kit select 2;
-	assignGear(0, addWeapon);
+	assignWeapon(0,_secondaryRandom)
+	//assignGear(0, addWeapon);
 	
 	// Add Handgun and accessories
 	_category = _kit select 3;
-	assignGear(0, addWeapon);
+	assignWeapon(0,_handgunRandom)
+	//assignGear(0, addWeapon);
 	for "_i" from 1 to count(_category) do {
 		assignGear(_i, addHandgunItem);
 	};
