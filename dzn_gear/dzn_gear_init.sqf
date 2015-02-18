@@ -172,11 +172,10 @@ if (_editMode) then {
 		copyToClipboard ("_kitName = " + str(_this) + ";");
 	
 		// Hint here or title
-		#define COLORS ["F","C","B","3","6","9"]
+		#define GetColors ["F","C","B","3","6","9"] call BIS_fnc_selectRandom
 		_colorString = format [
 			"#%1%2%3%4%5%6", 
-			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,
-			COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom,COLORS call BIS_fnc_selectRandom
+			GetColors, GetColors, GetColors, GetColors, GetColors, GetColors
 		];
 		
 		hintSilent parseText format[      
@@ -224,7 +223,7 @@ if (_editMode) then {
 	
 	// Copy gear of cursorTarget
 	player addAction [
-		"<t color='#4083AD'>Copy Gear of Cursor Target</t>",
+		"<t color='#4083AD'>Copy and Assign Gear of Cursor Target</t>",
 		{
 			private["_kit"];
 			_kit = cursorTarget call dzn_gear_editMode_getGear;
