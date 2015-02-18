@@ -51,3 +51,6 @@ Draw markers on AOs.
 
 Set win conditions for each AOs.
 
+2.3. Civilians
+
+Civilians and traffic.
