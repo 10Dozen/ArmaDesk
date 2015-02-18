@@ -17,8 +17,21 @@ Civilians and civil traffic are present.
   Location - FOB: north and south bases
   Location - Outpost: 3 outppost - east, central and west
   
+  Each base contains:
+    2 Fireteams
+    1 Light Car / Armored Car (UAZ, LandRover, HMMWV, IFRIT, etc.)
+    1 Armed Car (UAZ w.MG, HMMWV w.MG etc.)
+    1 Truck 
+    1 APC/IFV
   
-  
+  FOB Contains additionl:
+    2 pilots
+    1 CAS aircraft
+    1 combat helicopter
+    1 transport helicopter
+    3 APC
+    3 IFV
+    2 Tank
 
 2.2. Areas of Operations
 
