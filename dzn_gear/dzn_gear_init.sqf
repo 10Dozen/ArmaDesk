@@ -217,8 +217,22 @@ if (_editMode) then {
   
 	// Copy to clipboard set of unit's gear in format according to
 	// https://github.com/10Dozen/ArmaDesk/blob/master/A3-Gear-Set-Up/Kit%20Examples.sqf
-	player addAction ["<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
+	player addAction [
+		"<t color='#8AD2FF'>Copy Current Gear to Clipboard</t>",
 		{(_this select 1) call dzn_gear_editMode_createKit;}
+	];
+	
+	// Copy gear of cursorTarget
+	player addAction [
+		"<t color='#4083AD'>Copy Gear of Cursor Target</t>",
+		{
+			private["_kit"];
+			_kit = cursorTarget call dzn_gear_editMode_getGear;
+			[(_this select 1), _kit ] call dzn_gear_assignGear;
+			_kit call dzn_gear_editMode_copyToClipboard;
+		},
+		"",3,true,true,"",
+		"(cursorTarget isKindOf 'CAManBase')"
 	];
 };
 
