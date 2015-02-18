@@ -24,15 +24,21 @@ Civilians and civil traffic are present.
     1 Truck 
     1 APC/IFV
   
-  FOB Contains additionl:
+  FOB Contains additional:
     2 pilots
     1 CAS aircraft
     1 combat helicopter
     1 transport helicopter
-    3 APC
-    3 IFV
+    +3 APC
+    +3 IFV
     2 Tank
-
+    +4 Light car
+    +4 Truck
+    +4 Armed car
+    +6 Service truck
+    + Service Zone Vehicle
+    + Service Zone Aircraft
+    
 2.2. Areas of Operations
 
 Defining 2 towns (NameCapital or NameTown), and 3 villages (NameVillages). Take 1 village for assault, other 2 for recon mission.
