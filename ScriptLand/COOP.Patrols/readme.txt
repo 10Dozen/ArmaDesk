@@ -12,3 +12,11 @@ Civilians and civil traffic are present.
 
 2. MissionFlow
 
+2.1. Areas of Operations
+
+Defining 2 towns (NameCapital or NameTown), and 3 villages (NameVillages). Take 1 village for assault, other 2 for recon mission.
+
+
+After mission started:
+Move unused playable units from unused outposts to North or South airfield. Spawn several allied AI soldiers to patrol base.
+
