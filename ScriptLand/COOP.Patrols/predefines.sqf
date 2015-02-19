@@ -25,5 +25,5 @@
 // создает в зоне 2 кемпа, размер групп, спавнящихся в кемре - 4, радиус патруля кемпа - 50 метров, 100% вероятность респавна, 5 респавнов на кем
 #defice DAC_Camp	[2,4,50,0,100,4]
 
-#define DAC_SEIZE_AREA(NAME,X,Y)	[NAME,[0,0,0,X,Y],DAC_Infantry,DAC_Car,DAC_Armored,DAC_Camp,[1,1,0,6]] spawn DAC_Init_Zone 
+#define DAC_SEIZE_AREA(NAME,X,Y)	[NAME,[0,0,0,X,Y], DAC_Infantry, DAC_Car, DAC_Armored, DAC_Camp, [1,1,0,6]] spawn DAC_Init_Zone 
 	
