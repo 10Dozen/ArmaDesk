@@ -1,4 +1,8 @@
-// Choose mission areas (name -> text (location)):
+#include "defines.sqf"
+
+//	**********************************************
+// 	Choose mission areas (name -> text (location))
+// 	**********************************************
 _locationsForSeize = nearestLocations [ [0,0,0], ["NameCity","NameCityCapital"], 20000];
 _locationsForRecon = nearestLocations [ [0,0,0], ["NameCity","NameVillage"], 20000];
 
@@ -25,10 +29,84 @@ for "_i" from 0 to 2 do {
 dzn_reconToSeizeLocation = dzn_reconLocations call BIS_fnc_selectRandom;
 dzn_reconLocations = dzn_reconLocations - [dzn_reconToSeizeLocation];
 
-//
-// Spawning DAC camps and Areas
-//
 
+//	**********************************************
+//	Spawning gear at bases
+//	**********************************************
+
+[] spawn {
+	{
+		hint "Olla";
+		_spots = synchronizedObjects _x;
+		{
+			_x spawn {
+				#define checkClass(MARK, CLASS)	if ([MARK, str(_this), false] call BIS_fnc_inString) then { _defined = CLASS } else {
+				#define closeCheckClass			};};};};};};};};};};};};};};};};};
+				_defined = "";
+				
+					checkClass("RECON_CAR", RECON_CAR)
+					checkClass("TRUCK_CARGO", TRUCK_CARGO)
+					checkClass("ARMED_CAR", ARMED_CAR)
+					checkClass("IFV", IFV)
+					checkClass("APC", APC)
+					checkClass("TANK", TANK)
+					checkClass("CARGO_HELI", CARGO_HELI)
+					checkClass("CAS_HELI", CAS_HELI)
+					checkClass("CAS_PLANE", CAS_PLANE)
+					checkClass("TRUCK_REPAIR", TRUCK_REPAIR)
+					checkClass("TRUCK_FUEL", TRUCK_FUEL)
+					checkClass("TRUCK_AMMO", TRUCK_AMMO)
+					checkClass("BOX_AMMO", BOX_AMMO)
+					checkClass("BOX_MEDIC", BOX_MEDIC)
+					checkClass("SERVICE_AIR", SERVICE_AIR)
+					checkClass("SERVICE_GROUND", { player sideChat "Ke-ke - Service Ground";})
+					checkClass("SERVICE_OUTPOST", SERVICE_OUTPOST)
+				closeCheckClass
+				
+				if !(isNil {_defined}) then {
+					if (typename _defined == "ARRAY") then {
+						_defined = _defined call BIS_fnc_selectRandom;
+					};
+					
+					if (typename _defined == "STRING") then {
+						_veh = _defined createVehicle (getPosATL _this);
+						_veh setDir (getDir _this);
+					} else {
+						[] spawn _defined;
+					};
+				} else {		
+					player sideChat "No classname for this shit!";
+				};
+				
+				deleteVehicle _this;
+				
+				sleep .1;
+			}
+		} forEach _spots;
+	} forEach (FOBs + OUTPOSTs)
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	**********************************************
+// 	Spawning DAC camps and Areas
+//	**********************************************
+/*
 dzn_createDACZone = {
 	// [posX, posY, x, y, isCamp, zoneName
   
@@ -54,6 +132,8 @@ dzn_createDACZone = {
 {
 
 } forEach (dzn_seizeLocations + [dzn_reconToSeizeLocation]);
+
+*/
 /*
 	dac = ["zCamp",[1,0,0],[5,3,50,10],[3,3,30,10],[1,1,5,5][2,4,50,0,100,5],[0,0,0,0]]
 		zCamp - название зоны. должно совпадать с названием триггера
@@ -68,6 +148,4 @@ dzn_createDACZone = {
 		и форма
 		последний массив - зона принадлежит 0 (опфор), корфиг юнитов зоны 0 (опфор), настройка скиллов 0, конфиг кемпов 0
 */
-//
-// 
-//
+
