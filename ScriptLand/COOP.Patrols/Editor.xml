@@ -32,5 +32,43 @@
     </services>
   </fob>
     
-  <outpost></outpost>
+  <outpost>
+    <displayName>
+      <name location="outpost_0">Outpost (Central, Feruz-Abad)</name>
+      <name location="outpost_1">Outpost (West, Jilavur)</name>
+      <name location="outpost_2">Outpost (East, Garmarud)</name>
+    </displayName>
+    <locationType>GameLogic-Location-Outpost</locationType>
+    <units>
+      <squad type="rifleman" count="10">2</squad>
+      <squad type="crew" count="3">1</squad>
+    </units>
+    <vehicles>
+      <vehicle type="car">1</vehicle>
+      <vehicle type="truck">1</vehicle>
+      <vehicle type="armed car">1</vehicle>
+      <vehicle type="IFV">1(50%)</vehicle>
+      <vehicle type="APC">1(50%)</vehicle>
+    </vehicles>
+    <services>
+      <service type="ammobox">1</service>
+      <service type="medibox">1</service>
+      <service type="ground vehicles service zone - ammo and fuel">1</service>
+    </services>
+  </outpost>
 </base>
+
+<locations>
+  <seizeArea>
+    <task>Очистить зону от противника</task>
+    <completeCondition>
+      Зачищено
+    </completeCondition>
+  </seizeArea>
+  <reconArea>
+    <task>Убедиться, что в зоне нет противника</task>
+    <completeCondition>
+      Локация посещена игроками.
+    </completeCondition>
+  </reconArea>
+</locations>
