@@ -2,21 +2,33 @@
 _locationsForSeize = nearestLocations [ [0,0,0], ["NameCity","NameCityCapital"], 20000];
 _locationsForRecon = nearestLocations [ [0,0,0], ["NameCity","NameVillage"], 20000];
 
-_seizeLocations = [];   // Locations for Seize mission
-_reconLocations = [];   // Locations for Recon mission
+dzn_seizeLocations = [];   // Locations for Seize mission
+dzn_reconLocations = [];   // Locations for Recon mission
 
+// 2 for Seize
 for "_i" from 0 to 1 do {
   _loc = _locationsForSeize select round(random(count _locationsForSeize - 1));
-  _seizeLocations = _seizeLocations + [_loc];
+  dzn_seizeLocations = dzn_seizeLocations + [_loc];
   _locationsForSeize = _locationsForSeize - [_loc];
   if (_loc in _locationsForRecon) then {
     _locationsForRecon = _locationsForRecon - [_loc];
   };
 };
 
-for "_i" from 0 to 1 do {
+// 3 for Recon
+for "_i" from 0 to 2 do {
   _loc = _locationsForRecon select round(random(count _locationsForRecon - 1));
-  _reconLocations = _reconLocations + [_loc];
+  dzn_reconLocations = dzn_reconLocations + [_loc];
   _locationsForRecon = _locationsForRecon - [_loc];
 };
 
+dzn_reconToSeizeLocation = dzn_reconLocations call BIS_fnc_selectRandom;
+dzn_reconLocations = dzn_reconLocations - [dzn_reconToSeizeLocation];
+
+//
+// Spawning DAC camps and Areas
+//
+
+//
+// 
+//
