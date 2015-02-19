@@ -1,8 +1,35 @@
 <base>
-  <fob name='fob_0'>
-    <displayName>FOB (North)</displayName>
-    <location>GameLogic-Location-FOB</location>
-    
+  <fob>
+    <displayName>
+      <name location="fob_0">FOB (Northern Airstrip)</name>
+      <name location="fob_1">FOB (Southern Airstrip)</name>
+    </displayName>
+    <locationType>GameLogic-Location-FOB</locationType>
+    <units>
+      <squad type="rifleman" count="10">2</squad>
+      <squad type="pilot" count="1">2</pilot>
+      <squad type="crew" count="3">2</squad>
+    </units>
+    <vehicles>
+      <vehicle type="car">5</vehicle>
+      <vehicle type="truck">5</vehicle>
+      <vehicle type="armed car">5</vehicle>
+      <vehicle type="IFV">4</vehicle>
+      <vehicle type="APC">4</vehicle>
+      <vehicle type="tank">2</vehicle>
+      <vehicle type="repairTruck">2</vehicle>
+      <vehicle type="ammoTruck">2</vehicle>
+      <vehicle type="fuelTruck">2</vehicle>
+      <vehicle type="heli">1</vehicle>
+      <vehicle type="casHeli">1</vehicle>
+      <vehicle type="casPlane">1</vehicle>
+    </vehicles>
+    <services>
+      <service type="ammobox">3</service>
+      <service type="medibox">3</service>
+      <service type="ground vehicles service zone">1</service>
+      <service type="air vehicles service zone">2</service>
+    </services>
   </fob>
     
   <outpost></outpost>
