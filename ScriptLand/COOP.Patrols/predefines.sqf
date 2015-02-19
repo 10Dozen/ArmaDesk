@@ -16,3 +16,6 @@
 #define	TRUCK_FUEL		"truckFuelClass"
 #define	TRUCK_AMMO		"truckAmmoClass"
 
+// DAC zones settings
+#define SEIZE_AREA_SPAWN(NAME,X,Y)  ["z1"[1,0,0,400,200],[ ],[ ],[ ],[ ],[1,1,0,6]] exec "DAC\Scripts\DAC_Init_Zone.sqs" 
+#define SEIZE_AREA_CAMP(NAME,X,Y)  
