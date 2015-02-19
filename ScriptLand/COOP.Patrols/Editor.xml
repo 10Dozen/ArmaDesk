@@ -1,1 +1,9 @@
-<placed>Editor text</placed>
+<base>
+  <fob name='fob_0'>
+    <displayName>FOB (North)</displayName>
+    <location>GameLogic-Location-FOB</location>
+    
+  </fob>
+    
+  <outpost></outpost>
+</base>
