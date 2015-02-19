@@ -29,6 +29,33 @@ dzn_reconLocations = dzn_reconLocations - [dzn_reconToSeizeLocation];
 // Spawning DAC camps and Areas
 //
 
+dzn_createDACZone = {
+  // [posX, posY, x, y, isCamp, zoneName
+  
+  _trg = createTrigger ["EmptyDetector", (_this select 0), (_this select 1)];
+  _trg setTriggerArea [(_this select 2), (_this select 3), 0, false];
+  _trg setTriggerActivation ["LOGIC", "PRESENT", true];
+  
+  if (_this select 4) then {
+    _trg setTriggerStatements [
+      "true", 
+      str(SEIZE_AREA_SPAWN((_this select 5),(_this select 2),(_this select 3))), 
+      ""
+    ]; 
+  } else {
+  	_trg setTriggerStatements [
+      "true", 
+      str(SEIZE_CAMP_SPAWN((_this select 5),(_this select 2),(_this select 3))), 
+      ""
+    ]; 
+  };
+};
+
+{
+  _trg=createTrigger["EmptyDetector",getPos player];
+  
+} forEach (dzn_seizeLocations + [dzn_reconToSeizeLocation]);
+
 //
 // 
 //
