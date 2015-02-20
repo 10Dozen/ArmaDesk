@@ -31,9 +31,10 @@ dzn_reconLocations = dzn_reconLocations - [dzn_reconToSeizeLocation];
 
 
 //	**********************************************
-//	Spawning gear at bases
+//	Spawning gear, service points at bases
 //	**********************************************
 
+#include "serviceZones.sqf"
 [] execVM "serverSetupBases.sqf";
 
 //	**********************************************
