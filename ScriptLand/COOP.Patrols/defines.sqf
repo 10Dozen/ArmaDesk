@@ -4,7 +4,7 @@
 #define FOBs		[fob_0, fob_1]
 #define OUTPOSTs	[outpost_0, outpost_1, outpost_2]
 
-// Vehicles
+// Vehicles (can be string or array)
 #define RECON_CAR			["O_G_Offroad_01_F","I_MRAP_03_F"]
 #define TRUCK_CARGO		["O_Truck_03_covered_F","O_Truck_02_covered_F","O_Truck_02_transport_F","O_Truck_03_transport_F"]
 #define ARMED_CAR	"I_MRAP_03_hmg_F"
@@ -16,10 +16,10 @@
 #define CAS_HELI		"O_Heli_Attack_02_F"
 #define CAS_PLANE		"O_Plane_CAS_02_F"
 
+// Always string!
 #define	TRUCK_REPAIR	"O_Truck_03_repair_F"
 #define	TRUCK_FUEL		"O_Truck_02_fuel_F"
 #define	TRUCK_AMMO		"O_Truck_02_Ammo_F"
-
 #define BOX_AMMO		"Box_FIA_Ammo_F"
 #define BOX_MEDIC		"O_CargoNet_01_ammo_F"
 
