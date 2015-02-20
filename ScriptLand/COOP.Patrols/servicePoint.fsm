@@ -1,0 +1,19 @@
+// 	STEP:		START
+private ["_veh"];
+_veh = _this select 0;
+_timer = time + 60;
+
+//	TRANSITION from STEP: START to Loop
+(time > _timer)
+
+//	TRANSITION from Loop to STEP:		Renew ServicePoint
+// [TRUCK_FUEL, TRUCK_AMMO,TRUCK_REPAIR]
+switch (_this select 1) do {
+	case 0:	{_veh setFuelCargo 1;};
+	case 1: {_veh setAmmoCargo 1;};
+	case 2: {_veh setRepairCargo 1;};
+};
+
+_timer = time + 60;
+
+//	TRANSITION from STEP: Renew ServicePoint to Loop
