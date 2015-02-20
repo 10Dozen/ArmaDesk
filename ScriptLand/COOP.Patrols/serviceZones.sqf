@@ -21,12 +21,12 @@ dzn_servicePoint_create = {
 		1:	POS3D	Base point position
 	*/
 	
-	private[];
+	private["_type","_pos","_supplyList","_veh"];
 	_type = _this select 0;
 	_pos = _this select 1;
 	
 	_supplyList = switch (_this select 0) do {
-		case "SERVICE_GROUND": {	[TRUCK_REPAIR, TRUCK_FUEL, TRUCK_AMMO]	};
+		case "SERVICE_GROUND": {	[TRUCK_FUEL, TRUCK_AMMO,TRUCK_REPAIR]	};
 		case "SERVICE_OUTPOST": {	[TRUCK_FUEL, TRUCK_AMMO]		};
 	};
 	
