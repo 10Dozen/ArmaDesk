@@ -17,6 +17,10 @@ for "_i" from 0 to 1 do {
 	if (_loc in _locationsForRecon) then {
 		_locationsForRecon = _locationsForRecon - [_loc];
 	};
+	
+	_markerstr = createMarker [format ["markername%1", _i],[locationPosition _loc select 0,locationPosition _loc select 1]];
+	_markerstr setMarkerShape "ICON";
+	_markerstr setMarkerType "mil_warning";
 };
 
 // 3 for Recon
@@ -24,6 +28,10 @@ for "_i" from 0 to 2 do {
 	_loc = _locationsForRecon select round(random(count _locationsForRecon - 1));
 	dzn_reconLocations = dzn_reconLocations + [_loc];
 	_locationsForRecon = _locationsForRecon - [_loc];
+	
+	_markerstr = createMarker [format ["markername2_%1", _i],[locationPosition _loc select 0,locationPosition _loc select 1]];
+	_markerstr setMarkerShape "ICON";
+	_markerstr setMarkerType "mil_unknown";
 };
 
 dzn_reconToSeizeLocation = dzn_reconLocations call BIS_fnc_selectRandom;
@@ -33,9 +41,10 @@ dzn_reconLocations = dzn_reconLocations - [dzn_reconToSeizeLocation];
 //	**********************************************
 //	Spawning gear, service points at bases
 //	**********************************************
-
+a = FOBs;
 #include "serviceZones.sqf"
-[] execVM "serverSetupBases.sqf";
+#include "serverSetupBases.sqf"
+// [] execVM "serverSetupBases.sqf";
 
 //	**********************************************
 // 	Spawning DAC camps and Areas
