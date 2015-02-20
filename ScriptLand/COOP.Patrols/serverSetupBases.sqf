@@ -42,7 +42,7 @@
 			};
 				
 			deleteVehicle _this;
-			sleep .1;
 		}
+		sleep .1;
 	} forEach _spots;
 } forEach (FOBs + OUTPOSTs);
