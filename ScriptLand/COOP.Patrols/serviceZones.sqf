@@ -14,14 +14,13 @@ dzn_servicePoint_create = {
 		case "SERVICE_OUTPOST": {	[TRUCK_FUEL, TRUCK_AMMO]		};
 	};
 	
+	player sideChat str(_pos);
 	{
-		_veh = _x createVehicle (_this select 1);
-		_veh hideObjectGloval true;
-		_veh enableSimulation false;
+		_veh = _x createVehicle _pos;		
+		// _veh hideObjectGlobal true;
+		// _veh enableSimulation false;
 		[_veh, _forEachIndex] spawn {
 			// call FSM
 		};
-	} forEach _supplyList;
-	
-	
+	} forEach _supplyList;	
 };
