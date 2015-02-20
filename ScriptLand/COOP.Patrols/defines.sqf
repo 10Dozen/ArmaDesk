@@ -5,28 +5,28 @@
 #define OUTPOSTs	[outpost_0, outpost_1, outpost_2]
 
 // Vehicles (can be string or array)
-#define RECON_CAR			["O_G_Offroad_01_F","I_MRAP_03_F"]
-#define TRUCK_CARGO		["O_Truck_03_covered_F","O_Truck_02_covered_F","O_Truck_02_transport_F","O_Truck_03_transport_F"]
+#define RECON_CAR	["O_G_Offroad_01_F","I_MRAP_03_F"]
+#define TRUCK_CARGO	["O_Truck_03_covered_F","O_Truck_02_covered_F","O_Truck_02_transport_F","O_Truck_03_transport_F"]
 #define ARMED_CAR	"I_MRAP_03_hmg_F"
-#define IFV			"O_APC_Wheeled_02_rcws_F"
-#define APC			"O_APC_Tracked_02_cannon_F"
+#define IFV		"O_APC_Wheeled_02_rcws_F"
+#define APC		"O_APC_Tracked_02_cannon_F"
 #define TANK		"O_MBT_02_cannon_F"
 
-#define CARGO_HELI		"O_Heli_Light_02_unarmed_F"
-#define CAS_HELI		"O_Heli_Attack_02_F"
-#define CAS_PLANE		"O_Plane_CAS_02_F"
+#define CARGO_HELI	"O_Heli_Light_02_unarmed_F"
+#define CAS_HELI	"O_Heli_Attack_02_F"
+#define CAS_PLANE	"O_Plane_CAS_02_F"
 
 // Always string!
 #define	TRUCK_REPAIR	"O_Truck_03_repair_F"
-#define	TRUCK_FUEL		"O_Truck_02_fuel_F"
-#define	TRUCK_AMMO		"O_Truck_02_Ammo_F"
-#define BOX_AMMO		"Box_FIA_Ammo_F"
-#define BOX_MEDIC		"O_CargoNet_01_ammo_F"
+#define	TRUCK_FUEL	"O_Truck_02_fuel_F"
+#define	TRUCK_AMMO	"O_Truck_02_Ammo_F"
+#define BOX_AMMO	"Box_FIA_Ammo_F"
+#define BOX_MEDIC	"O_CargoNet_01_ammo_F"
 
 // Service Zones
 #define SERVICE_AIR		{ hint "kekeke"; }
-#define SERVICE_GROUND	"Land_ToiletBox_F"
-#define SERVICE_OUTPOST	"Land_ToiletBox_F"
+#define SERVICE_GROUND		"Land_ToiletBox_F"
+#define SERVICE_OUTPOST		"Land_ToiletBox_F"
 
 
 
