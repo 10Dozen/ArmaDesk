@@ -2,7 +2,7 @@
 	hint "Olla";
 	_spots = synchronizedObjects _x;
 	{
-		_x spawn {
+		_x spawn {		
 			#define checkClass(MARK, CLASS)	if ([MARK, str(_this), false] call BIS_fnc_inString) then { _defined = CLASS } else {
 			#define closeCheckClass			};};};};};};};};};};};};};};};};};
 			_defined = "";
@@ -22,7 +22,7 @@
 			checkClass("BOX_AMMO", BOX_AMMO)
 			checkClass("BOX_MEDIC", BOX_MEDIC)
 			checkClass("SERVICE_AIR", SERVICE_AIR)
-			checkClass("SERVICE_GROUND", { player sideChat "Ke-ke - Service Ground";})
+			checkClass("SERVICE_GROUND", SERVICE_GROUND)
 			checkClass("SERVICE_OUTPOST", SERVICE_OUTPOST)
 			closeCheckClass
 				
@@ -35,14 +35,14 @@
 					_veh = _defined createVehicle (getPosATL _this);
 					_veh setDir (getDir _this);
 				} else {
-					[] spawn _defined;
+					(getPosATL _this) spawn _defined;
 				};
 			} else {		
 				player sideChat "No classname for this shit!";
 			};
 				
 			deleteVehicle _this;
-		}
+		};
 		sleep .1;
 	} forEach _spots;
 } forEach (FOBs + OUTPOSTs);
