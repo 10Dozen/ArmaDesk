@@ -24,8 +24,8 @@ _allTriggers = allMissionObjects "EmptyDetector";
 			
 			deleteVehicle _sourceTrg;
 		};
-	}
-	sleep 0.1
+	};
+	sleep 0.1;
 } forEach _allTriggers;
 
 dzn_dachc_initialized = true;
