@@ -63,9 +63,13 @@ https://community.bistudio.com/wiki/BIS_fnc_baseWeapon
 https://community.bistudio.com/wiki/BIS_fnc_bloodEffect
 <br>Adds the bleeding effect post-processing effect to the players screen.
 
-<h5></h5>
+<h5>BIS_fnc_createmenu</h5>
+https://community.bistudio.com/wiki/BIS_fnc_createmenu
+<br>Create custom commanding menu (with multiple pages if necessary).
 
-<br>
+<h5>BIS_fnc_crewCount</h5>
+https://community.bistudio.com/wiki/BIS_fnc_crewCount
+<br>Function that counts amount of seats, both for crew and cargo seats.
 
 <h5></h5>
 
