@@ -36,9 +36,10 @@ https://community.bistudio.com/wiki/BIS_fnc_consolidateArray
 https://community.bistudio.com/wiki/BIS_fnc_buildingPositions
 <br>Get all available positions within a building or structure.
 
-<h5></h5>
+<h5>BIS_fnc_dirTo</h5>
+https://community.bistudio.com/wiki/BIS_fnc_dirTo
+<br>Function which returns vector direction from pos1 to pos2.
 
-<br>
 <h5></h5>
 
 <br>
@@ -71,9 +72,25 @@ https://community.bistudio.com/wiki/BIS_fnc_createmenu
 https://community.bistudio.com/wiki/BIS_fnc_crewCount
 <br>Function that counts amount of seats, both for crew and cargo seats.
 
+<h5>BIS_fnc_crows</h5>
+https://community.bistudio.com/wiki/BIS_fnc_crows
+<br>Spawns flock of crows circling the area.
+
+<h5>BIS_fnc_diagMissionPositions</h5>
+https://community.bistudio.com/wiki/BIS_fnc_diagMissionPositions
+<br>Displays positions of units from all missions
+
+
+
 <h5></h5>
 
 <br>
+
+
+<h5></h5>
+
+<br>
+
 
 <h5></h5>
 
