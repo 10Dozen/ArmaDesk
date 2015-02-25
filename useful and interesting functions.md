@@ -22,12 +22,28 @@ https://community.bistudio.com/wiki/BIS_fnc_conditionalSelect
 https://community.bistudio.com/wiki/BIS_fnc_consolidateArray
 <br>Finds duplicities in array of strings and consolidates it to the array of sub-arrays, where:
 
+<h5>BIS_fnc_enemyDetected</h5>
+https://community.bistudio.com/wiki/BIS_fnc_enemyDetected
+<br>https://community.bistudio.com/wiki/BIS_fnc_enemyTargets
+<br>Return true if unit knows about nearby enemy unit or driven vehicle.
+
 <h5></h5>
 
 <br>
 <h5></h5>
 
 <br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+
+
 
 <h3> Script useful </h3>
 
@@ -40,9 +56,12 @@ https://community.bistudio.com/wiki/BIS_fnc_buildingPositions
 https://community.bistudio.com/wiki/BIS_fnc_dirTo
 <br>Function which returns vector direction from pos1 to pos2.
 
-<h5></h5>
+<h5>BIS_fnc_endMission</h5>
+https://community.bistudio.com/wiki/BIS_fnc_endMission
+<br>https://community.bistudio.com/wiki/BIS_fnc_endMissionServer
+<br>Ends mission with a fade effect.
 
-<br>
+
 <h5></h5>
 
 <br>
@@ -84,17 +103,33 @@ https://community.bistudio.com/wiki/BIS_fnc_diagMissionPositions
 https://community.bistudio.com/wiki/BIS_fnc_drawAO
 <br>Draws a dashed line around the outer edges of a trigger.
 
+<h5>BIS_fnc_dynamicText</h5>
+https://community.bistudio.com/wiki/BIS_fnc_dynamicText
+<br>Dynamic opening credits
+
+
+<h5>BIS fnc effectFiredFlares</h5>
+
+<br>
 
 <h5></h5>
 
 <br>
-
-
 <h5></h5>
 
 <br>
+<h5></h5>
 
+<br>
+<h5></h5>
 
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
 <h5></h5>
 
 <br>
