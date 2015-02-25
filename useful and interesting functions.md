@@ -27,9 +27,10 @@ https://community.bistudio.com/wiki/BIS_fnc_enemyDetected
 <br>https://community.bistudio.com/wiki/BIS_fnc_enemyTargets
 <br>Return true if unit knows about nearby enemy unit or driven vehicle.
 
-<h5></h5>
+<h5>BIS_fnc_error</h5>
+https://community.bistudio.com/wiki/BIS_fnc_error
+<br>Log error message and display it (bottom of the UI).
 
-<br>
 <h5></h5>
 
 <br>
@@ -108,31 +109,35 @@ https://community.bistudio.com/wiki/BIS_fnc_dynamicText
 <br>Dynamic opening credits
 
 
+
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+
+
+
+
+
 <h5>BIS fnc effectFiredFlares</h5>
 
-<br>
-
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
-<h5></h5>
-
-<br>
