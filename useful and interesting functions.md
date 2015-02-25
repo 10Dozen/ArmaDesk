@@ -14,10 +14,20 @@ type and value.
 https://community.bistudio.com/wiki/BIS_fnc_call
 <br>Execute given code with or without parameter.
 
+<h5>BIS_fnc_conditionalSelect</h5>
+https://community.bistudio.com/wiki/BIS_fnc_conditionalSelect
+<br>This returns a sub-array of elements that satisfy a specific condition. The originally passed array is NOT modified!
+
+<h5>BIS_fnc_consolidateArray</h5>
+https://community.bistudio.com/wiki/BIS_fnc_consolidateArray
+<br>Finds duplicities in array of strings and consolidates it to the array of sub-arrays, where:
+
 <h5></h5>
 
 <br>
+<h5></h5>
 
+<br>
 
 <h3> Script useful </h3>
 
@@ -26,7 +36,25 @@ https://community.bistudio.com/wiki/BIS_fnc_call
 https://community.bistudio.com/wiki/BIS_fnc_buildingPositions
 <br>Get all available positions within a building or structure.
 
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+<h5></h5>
+
+<br>
+
+
 <h3> Interesting </h3>
+
 <h5>BIS_fnc_baseWeapon</h5>
 https://community.bistudio.com/wiki/BIS_fnc_baseWeapon
 <br>Determines base weapon class, with no attachments.
