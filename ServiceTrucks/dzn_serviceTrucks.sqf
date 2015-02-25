@@ -10,11 +10,15 @@ _supportVehicles = [
 ];
 _wheelsCount = 4; // Count of wheels per truck
 
-_vehicles = vehicles;
+_vehicles = vehicles; // Get all vehicles in mission
 
+// For each vehicle:
 {
+	// Is class of vehicle is one of the classes from array above (_supportVehicles) and custom wheels weren't added
 	if (((typeOf _x) in _supportVehicles ) && (isNil {_x getVariable "dzn_serviceTruck_wheels"})) then {
+		// Assign a number of wheel for vehicle
 		_x setVariable ["dzn_serviceTruck_wheels", _wheelsCount, true];
+		// Add an action available for everyone: unload 1 wheel from added by this script
 		_x setVariable [
 			"dzn_serviceTruck_unloadWheel", 
 			_x addAction [
