@@ -80,6 +80,9 @@ https://community.bistudio.com/wiki/BIS_fnc_crows
 https://community.bistudio.com/wiki/BIS_fnc_diagMissionPositions
 <br>Displays positions of units from all missions
 
+<h5>BIS_fnc_drawAO</h5>
+https://community.bistudio.com/wiki/BIS_fnc_drawAO
+<br>Draws a dashed line around the outer edges of a trigger.
 
 
 <h5></h5>
@@ -92,6 +95,9 @@ https://community.bistudio.com/wiki/BIS_fnc_diagMissionPositions
 <br>
 
 
+<h5></h5>
+
+<br>
 <h5></h5>
 
 <br>
