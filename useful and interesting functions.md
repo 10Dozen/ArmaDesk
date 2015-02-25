@@ -37,14 +37,44 @@ https://community.bistudio.com/wiki/BIS_fnc_error
 <h5></h5>
 
 <br>
+
+<h3>Strings</h3>
+
+<h5>BIS_fnc_filterString</h5>
+https://community.bistudio.com/wiki/BIS_fnc_filterString
+<br>Removes characters from a string based on the list of allowed characters. 
+
+
+
 <h5></h5>
 
 <br>
+
+
+
+
+<h3>Arrays</h3>
+
+<h5>BIS_fnc_findExtreme</h5>
+https://community.bistudio.com/wiki/BIS_fnc_findExtreme
+<br>Returns the minimum or maximum value in an Array.
+
+<h5>BIS_fnc_findInPairs</h5>
+https://community.bistudio.com/wiki/BIS_fnc_findInPairs
+<br>Searches the associative array for the 1st occurance of the key string and returns it's index.
+
+
+<h5>BIS_fnc_findNestedElement</h5>
+https://community.bistudio.com/wiki/BIS_fnc_findNestedElement
+<br>Function to find item in nested arrays and return a path to the first match.
+
 <h5></h5>
 
 <br>
 
+<h5></h5>
 
+<br>
 
 <h3> Script useful </h3>
 
