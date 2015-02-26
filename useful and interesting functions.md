@@ -93,9 +93,11 @@ https://community.bistudio.com/wiki/BIS_fnc_endMission
 <br>Ends mission with a fade effect.
 
 
-<h5></h5>
+<h5>CBA_fnc_nearPlayer</h5>
+https://dev.withsix.com/docs/cba/files/common/fnc_nearPlayer-sqf.html#CBA_fnc_nearPlayer
+<br>Check whether these are any players within a certain distance of a unit.
 
-<br>
+
 <h5></h5>
 
 <br>
