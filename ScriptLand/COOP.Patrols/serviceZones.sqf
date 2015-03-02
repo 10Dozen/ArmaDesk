@@ -12,6 +12,10 @@ dzn_servicePoint_create = {
 	_obj = if (isNil {_pos}) then { _this select 1 };
 	
 	// Тут определить массив машинок пустых 
+	#define	TRUCK_REPAIR	"O_Truck_03_repair_F"
+	#define	TRUCK_FUEL	"O_Truck_02_fuel_F"
+	#define	TRUCK_AMMO	"O_Truck_02_Ammo_F"
+	
 	_supplyList = switch (_this select 0) do {
 		case "SERVICE_GROUND": {	[TRUCK_FUEL, TRUCK_AMMO,TRUCK_REPAIR]	};
 		case "SERVICE_OUTPOST": {	[TRUCK_FUEL, TRUCK_AMMO]		};
