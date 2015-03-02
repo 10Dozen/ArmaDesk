@@ -1,7 +1,7 @@
 dzn_servicePoint_create = {
 	/*
 		[ type, pos ] spawn dzn_servicePoint_create
-		0:	STRING			- Type of service
+		0:	STRING			- Type of service - SERVICE_GROUND (for full) or SERVICE_OUTPOST (for ammo and fuel)
 		1:	POS3D or OBJECT		- Base point position or Object to attach to
 		
 	*/
