@@ -17,8 +17,7 @@ dzn_servicePoint_create = {
 	player sideChat str(_pos);
 	{
 		_veh = _x createVehicle _pos;		
-		// _veh hideObjectGlobal true;
-		// _veh enableSimulation false;
+		_veh hideObjectGlobal true;
 		[_veh, _forEachIndex] spawn {
 			// call FSM
 		};
