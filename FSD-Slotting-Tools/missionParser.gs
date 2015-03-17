@@ -1,3 +1,12 @@
+function mp_trim(str) {
+	var	str = str.replace(/^\s\s*/, ''),
+	ws = /\s/,
+	k = str.length;
+	while (ws.test(str.charAt(--k)));
+			
+	return str.slice(0, k + 1);
+}
+
 function dzn_mp_parseFromMenu() {
 	SpreadsheetApp.getUi().alert('Starting to parsing mission data.\n\nIt could take a long time.');
 	var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -56,7 +65,7 @@ function dzn_mp_mapValuesIntoSheet(roles, startRange) {
 	var mapRangeStart = ss.getRangeByName(startRange);
 	for (var i = 0; i < roles.length; i++) {
 		var cell = mapRangeStart.offset(i,0);
-		cell.setValue(roles[i]);
+		cell.setValue(mp_trim(roles[i]));
 	}
 }
 
@@ -96,6 +105,8 @@ function dzn_mp_prepareRoles(roles) {
 	return units  
 }
 
+
+
 function dzn_mp_confirmParsingFromMenu() {
 	function getEditedValuesFromRange(rolesRange) {    
 		var output = [];
@@ -114,16 +125,25 @@ function dzn_mp_confirmParsingFromMenu() {
 		return output
 	} 
   
+	function dzn_clearData() {
+		var namedRanges = ['feedForm_defRoles','feedForm_defBrief','feedForm_defAction','feedForm_defResult','slotForm_defSides',
+			'slotForm_defSlots1','slotForm_defSlots2','slotForm_defSlots3','slotForm_defSlots4','slotForm_defPass'];
+		for (var m = 0; m < namedRanges.length; m++) {
+			ss.getRangeByName(namedRanges[m]).clearContent();
+		}
+	}
+
 	SpreadsheetApp.getUi().alert('Starting to prepare data for using with Forms.\n\nPress OK and wait for a while.'); 
 	var ss = SpreadsheetApp.getActiveSpreadsheet();
-  
+	dzn_clearData();
+
 	var sides = getEditedValuesFromRange('mp_sides');
 	ss.getRangeByName('slotForm_defSides').setValue(sides.join(" | "));      
     
 	var slotSides = ['mp_westRoles', 'mp_eastRoles', 'mp_indepRoles', 'mp_civRoles'];
 	var roles, i
 	var feedbackRoles = [];
-	var slotRoles = [];
+    var slotRoles = [];
 
 	for (i = 0; i < slotSides.length; i++) {    
 		// Get edited slots    
@@ -131,33 +151,34 @@ function dzn_mp_confirmParsingFromMenu() {
 		if (roles.length > 0) {
 			slotRoles.push(roles);
 		}
-	}
+    }
 
-	if (slotRoles.length > sides.length) {
-		SpreadsheetApp.getUi().alert('⊗ WARNING!\n\nThere is not enough SIDES defined for all roles.\n\nAdd another side or delete some roles for not used roles.'); 
-	} else {
-		for (i = 0; i < sides.length; i++) {
-			// Slotting
-			ss.getRangeByName('slotForm_defSlots' + (i+1).toString()).setValue(slotRoles[i].join(" | "));
-			// Feedback    
-			for (var j = 0; j < slotRoles[i].length; j++) {
-				if (slotRoles[i][j].indexOf("!") == -1) {
-					feedbackRoles.push(sides[i] + " - " + slotRoles[i][j]);
-				}
-			}
-		}
-		// Feedback roles 
-		ss.getRangeByName('feedForm_defRoles').setValue(feedbackRoles.join(" | "));
-		// DefBriefing
-		ss.getRangeByName('feedForm_defBrief').setValue(getEditedValuesFromRange('mp_defBrief').join(" | "));
-		// DefAction
-		ss.getRangeByName('feedForm_defAction').setValue(getEditedValuesFromRange('mp_defAction').join(" | "));
-		// DefResult
-		ss.getRangeByName('feedForm_defResult').setValue(getEditedValuesFromRange('mp_defResult').join(" | "));
+    if (slotRoles.length > sides.length) {
+        SpreadsheetApp.getUi().alert('⊗ WARNING!\n\nThere is not enough SIDES defined for all roles.\n\nAdd another side or delete some roles for not used roles.'); 
+    } else {
+     
+        for (i = 0; i < sides.length; i++) {
+            // Slotting          
+            ss.getRangeByName('slotForm_defSlots' + (i+1).toString()).setValue(slotRoles[i].join(" | "));
+            // Feedback    
+            for (var j = 0; j < slotRoles[i].length; j++) {
+                if (slotRoles[i][j].indexOf("!") == -1) {
+                    feedbackRoles.push(sides[i] + " - " + slotRoles[i][j]);
+                }
+            }
+        }
+        // Feedback roles 
+    	ss.getRangeByName('feedForm_defRoles').setValue(feedbackRoles.join(" | "));
+    	// DefBriefing
+    	ss.getRangeByName('feedForm_defBrief').setValue(getEditedValuesFromRange('mp_defBrief').join(" | "));
+    	// DefAction
+    	ss.getRangeByName('feedForm_defAction').setValue(getEditedValuesFromRange('mp_defAction').join(" | "));
+    	// DefResult
+    	ss.getRangeByName('feedForm_defResult').setValue(getEditedValuesFromRange('mp_defResult').join(" | "));
 
-		// Passcodes
-		ss.getRangeByName('slotForm_defPass').setValue(getEditedValuesFromRange('mp_passcodes').join(" | "));  
+    	// Passcodes
+    	ss.getRangeByName('slotForm_defPass').setValue(getEditedValuesFromRange('mp_passcodes').join(" | "));  
   
-		SpreadsheetApp.getUi().alert('✔ OK\n\nEdited Data was confirmed and could be used for creation of forms.');
-	}
+    	SpreadsheetApp.getUi().alert('✔ OK\n\nEdited Data was confirmed and could be used for creation of forms.');
+    }
 }
