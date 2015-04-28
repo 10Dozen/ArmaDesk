@@ -54,6 +54,6 @@ waitUntil { time > 1 };
 			};
 		} forEach _units;
 		
-		dzn_dac_overlayTimer = dzn_dac_overlayTimer + dzn_dac_overlayTimerStep;
+		dzn_dac_overlayTimer = time + dzn_dac_overlayTimerStep;
 	};
 }] call BIS_fnc_addStackedEventHandler;
