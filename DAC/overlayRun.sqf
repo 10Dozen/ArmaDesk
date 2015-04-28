@@ -6,6 +6,9 @@ dzn_dac_customScriptEAST = { player sideChat format ["Script for EAST unit %1", 
 dzn_dac_customScriptINDEP = { player sideChat format ["Script for INDEP unit %1", str(_this)]};
 dzn_dac_customScriptCIV = { player sideChat format ["Script for CIVILIAN unit %1", str(_this)]};
 
+dzn_dac_overlayTimerStep = 10; // seconds
+dzn_dac_overlayTimer = 0 + dzn_dac_overlayTimerStep; 
+
 // Return all alive infantries
 dzn_dac_getAliveInfantries = {
 	private ["_units","_vehicles"];
@@ -32,21 +35,25 @@ _units = call dzn_dac_getAliveInfantries;
 // Wait until mission starts and sciprt-placed units are spawned and apply custom script on them. 
 // I think, it should be running on FSM, but here is script-version
 waitUntil { time > 1 };
-while { true } do {
-	sleep 10;
-	
-	_units = call dzn_dac_getAliveInfantries;
-	{
-		if ( isNil { _x getVariable "dzn_isEquipedAfterSpawn" } && { !(isPlayer _x) }) then {
-			_x setVariable ["dzn_isEquipedAfterSpawn", true];
-			_x spawn {
-				switch (side _this) do {
-					case west: {		_this call dzn_dac_customScriptWEST;	};
-					case east: {		_this call dzn_dac_customScriptEAST;	};
-					case resistance: {	_this call dzn_dac_customScriptINDEP;	};
-					case civilian: {	_this call dzn_dac_customScriptCIV;	};
+
+
+["DAC_overlayLoop", "onEachFrame", {
+	if (time > dzn_dac_overlayTimer) then {
+		_units = call dzn_dac_getAliveInfantries;
+		{
+			if ( isNil { _x getVariable "dzn_isEquipedAfterSpawn" } && { !(isPlayer _x) }) then {
+				_x setVariable ["dzn_isEquipedAfterSpawn", true];
+				_x spawn {
+					switch (side _this) do {
+						case west: {		_this call dzn_dac_customScriptWEST;	};
+						case east: {		_this call dzn_dac_customScriptEAST;	};
+						case resistance: {	_this call dzn_dac_customScriptINDEP;	};
+						case civilian: {	_this call dzn_dac_customScriptCIV;	};
+					};
 				};
 			};
-		};
-	} forEach _units;
-};
+		} forEach _units;
+		
+		dzn_dac_overlayTimer = time + dzn_dac_overlayTimerStep;
+	};
+}] call BIS_fnc_addStackedEventHandler;
