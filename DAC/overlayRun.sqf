@@ -55,6 +55,7 @@ if !(dzn_dac_includeEditorUnits) then {
 
 ["DAC_overlayLoop", "onEachFrame", {
 	if (time > dzn_dac_overlayTimer) then {
+		private["_units"];
 		_units = call dzn_dac_getAliveInfantries;
 		{
 			if ( isNil { _x getVariable "dzn_isEquipedAfterSpawn" } && { !(isPlayer _x) }) then {
