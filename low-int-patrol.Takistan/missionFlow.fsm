@@ -1,0 +1,256 @@
+/*%FSM<COMPILE "D:\GMZ\BI Toolz\FSM Editor Personal Edition\scriptedFSM.cfg, missionFlow">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Start",0,250,0.000000,-1025.000000,100.000000,-975.000000,0.000000,"Start"};
+item1[] = {"true",4,218,0.000000,-950.000000,100.000000,-900.000000,0.000000,"true"};
+item2[] = {"Start_1",2,250,0.000000,-875.000000,100.000000,-825.000000,0.000000,"Start"};
+item3[] = {"Wait_to_FUP",4,218,0.000000,-800.000000,100.000000,-750.000000,0.000000,"Wait to FUP"};
+item4[] = {"FUP",2,4346,0.000000,-725.000000,100.000000,-675.000000,0.000000,"FUP"};
+item5[] = {"Wait_to_CP_X",4,218,0.000000,-650.000000,100.000000,-600.000000,2.000000,"Wait to CP X"};
+item6[] = {"CP_X",2,250,125.000000,-650.000000,225.000000,-600.000000,0.000000,"CP X"};
+item7[] = {"timer",4,218,125.000000,-575.000000,225.000000,-525.000000,0.000000,"timer"};
+item8[] = {"Set_timer",2,250,0.000000,-575.000000,100.000000,-525.000000,0.000000,"Set timer"};
+item9[] = {"CP11_Reached",4,218,275.000000,-650.000000,375.000000,-600.000000,0.000000,"CP11 Reached"};
+item10[] = {"Patrol_over",2,250,275.000000,-575.000000,375.000000,-525.000000,0.000000,"Patrol over"};
+item11[] = {"Patrol_over_",4,218,275.000000,-500.000000,375.000000,-450.000000,0.000000,"Patrol over "};
+item12[] = {"End",1,250,275.000000,-425.000000,375.000000,-375.000000,0.000000,"End"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,3};
+link3[] = {3,4};
+link4[] = {4,5};
+link5[] = {5,6};
+link6[] = {6,5};
+link7[] = {6,7};
+link8[] = {6,9};
+link9[] = {7,8};
+link10[] = {8,5};
+link11[] = {8,7};
+link12[] = {9,10};
+link13[] = {10,11};
+link14[] = {11,12};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,300,6316128,1,-232.177429,527.698730,-319.410889,-843.743408,842,581,1};
+window[] = {0,-1,-1,-32000,-32000,919,58,1525,193,1,860};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "missionFlow";
+  class States
+  {
+    /*%FSM<STATE "Start">*/
+    class Start
+    {
+      name = "Start";
+      init = /*%FSM<STATEINIT""">*/"private[""_timer"",""_ied""];" \n
+       "" \n
+       "_ied = _this select 0;" \n
+       "_timer = time + 10;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "true">*/
+        class true
+        {
+          priority = 0.000000;
+          to="Start_1";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > 10"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Start_1">*/
+    class Start_1
+    {
+      name = "Start_1";
+      init = /*%FSM<STATEINIT""">*/"[east, ""HQ""] sideChat ""Patrol unit, this is Crossroad, proceed to FUP and start patroling. Over'n'out."";" \n
+       "" \n
+       "_timer = time + 20;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Wait_to_FUP">*/
+        class Wait_to_FUP
+        {
+          priority = 0.000000;
+          to="FUP";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer && { [units group player, getMarkerPos ""mrkPatrolFUP"" , 50] call dzn_fnc_unitsInArea2d }"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "FUP">*/
+    class FUP
+    {
+      name = "FUP";
+      init = /*%FSM<STATEINIT""">*/"(leader group player) sideChat ""Crossroad, this is Patrol unit, reached FUP. Strating patrol. Over."";" \n
+       "" \n
+       "[] spawn { " \n
+       "	sleep 2;" \n
+       "	[east, ""HQ""] sideChat ""Patrol unit, this is Crossroad, copied, be aware of IEDs on the roads. Over'n'out."";" \n
+       "	[""task0"",""Succeeded"",true] call BIS_fnc_taskSetState;" \n
+       "};" \n
+       "" \n
+       "pointToReach = 1;" \n
+       "" \n
+       "_timer = time + 10;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Wait_to_CP_X">*/
+        class Wait_to_CP_X
+        {
+          priority = 2.000000;
+          to="CP_X";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer " \n
+           "&& { call compile format[" \n
+           "	""[units group player, getMarkerPos 'mrkCP%1' , 50] call dzn_fnc_unitsInArea2d""" \n
+           "	, pointToReach" \n
+           "] }"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "CP_X">*/
+    class CP_X
+    {
+      name = "CP_X";
+      init = /*%FSM<STATEINIT""">*/"(leader group player) sideChat format [" \n
+       "	""Crossroad, this is Patrol unit, reached Checkpoint %1. Over.""" \n
+       "	, pointToReach" \n
+       "];" \n
+       "" \n
+       "[] spawn {" \n
+       "	sleep 1;" \n
+       "	[format [""task%1"",pointToReach] ,""Succeeded"",true] call BIS_fnc_taskSetState;" \n
+       "};" \n
+       "" \n
+       "pointToReach = pointToReach + 1;" \n
+       "" \n
+       "_timer = time + 20;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Wait_to_CP_X">*/
+        class Wait_to_CP_X
+        {
+          priority = 2.000000;
+          to="CP_X";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer " \n
+           "&& { call compile format[" \n
+           "	""[units group player, getMarkerPos 'mrkCP%1' , 50] call dzn_fnc_unitsInArea2d""" \n
+           "	, pointToReach" \n
+           "] }"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "CP11_Reached">*/
+        class CP11_Reached
+        {
+          priority = 0.000000;
+          to="Patrol_over";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"pointToReach == 11"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "timer">*/
+        class timer
+        {
+          priority = 0.000000;
+          to="Set_timer";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Set_timer">*/
+    class Set_timer
+    {
+      name = "Set_timer";
+      init = /*%FSM<STATEINIT""">*/"_timer = time + 10;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Wait_to_CP_X">*/
+        class Wait_to_CP_X
+        {
+          priority = 2.000000;
+          to="CP_X";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer " \n
+           "&& { call compile format[" \n
+           "	""[units group player, getMarkerPos 'mrkCP%1' , 50] call dzn_fnc_unitsInArea2d""" \n
+           "	, pointToReach" \n
+           "] }"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "timer">*/
+        class timer
+        {
+          priority = 0.000000;
+          to="Set_timer";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timer"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Patrol_over">*/
+    class Patrol_over
+    {
+      name = "Patrol_over";
+      init = /*%FSM<STATEINIT""">*/"[] spawn { " \n
+       "	sleep 2;" \n
+       "	[east, ""HQ""] sideChat ""Patrol unit, this is Crossroad, Patrol is ended, return to base. Over'n'out."";" \n
+       "};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Patrol_over_">*/
+        class Patrol_over_
+        {
+          priority = 0.000000;
+          to="End";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "End">*/
+    class End
+    {
+      name = "End";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="Start";
+  finalStates[] =
+  {
+    "End",
+  };
+};
+/*%FSM</COMPILE>*/
