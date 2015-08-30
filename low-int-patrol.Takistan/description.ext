@@ -1,0 +1,246 @@
+
+class Header {
+	gameType = Coop;
+	minPlayers = 1;
+	maxPlayers = 20;
+};
+
+onLoadName 			= "Low Intense Patrol";
+author 				  = "10Dozen";
+
+enableDebugConsole = 2;
+
+
+// ==============
+// Respawn - Base
+// ==============
+respawn = 3;
+respawnDelay = 10;    // Should be specified after mission init with setPlayerRespawnTime (local)
+respawnOnStart = -1;  //Dont respawn on start. Don't run respawn script on start.
+respawnTemplates[] = {"Counter","Revive"}; // Wave doesn't work =(
+
+reviveDelay = 10;		// 10 second to Revie another player. MedKit will half.
+reviveForceRespawnDelay = 5;	// 12 second to hold space to respawn. Anyway u can do it with Menu - Respawn
+reviveBleedOutDelay = 600;	// 10 minutes of bleedout
+
+// ==============
+// Mission Parameters
+// ==============
+class Params
+{
+/*
+	// Start cash Settings
+	class paramEmptyDelimiter0 
+	{
+		title = "--- Cash";
+		values[] = {""};
+		default = "";
+	}
+	class par_startCash	
+	{
+		title = "  Start cash per player";
+		values[] = {2500,5000,7500,10000,12500,30000};
+		default = 5000;		
+	};
+	class par_taskPurchaseMultiplayer	
+	{
+		title = "  Cash multiplier for task completion";
+		values[] = {0.5,1,1.25,1.5,2,3,5};
+		texts[] = {
+			"x0.5",
+			"x1",
+			"x1.25",
+			"x1.5",
+			"x2",
+			"x3",
+			"x5"
+		};
+		default = 1;		
+	};
+	
+	// Respawn Settings
+	class paramEmptyDelimiter1 
+	{
+		title = "--- Respawn Setting";
+		values[] = {""};
+		default = "";
+	}
+	class par_respawnTime	
+	{
+		title = "  Respawn time";
+		values[] = {15,30,60,120,240,360};
+		default = 15;		
+	};
+	class par_respawnCost	
+	{
+		title = "  Respawn price";
+		values[] = {0,500,1000,2000,5000,10000};
+		default = 1000;		
+	};
+	
+	// Enviroment Condition
+	class paramEmptyDelimiter2 
+	{
+		title = "--- Enviroment";
+		values[] = {""};
+		default = "";
+	};
+	class par_weather	
+	{
+		title = "  Weather";
+		values[] = {0,1,2,3,4,5};
+		texts[] = {
+			"Random",
+			"Clear",
+			"Cloudy",
+			"Overcast",
+			"Rain",
+			"Storm"			
+		};
+		default = 0;		
+	};
+	class par_fog
+	{
+		title = "  Fog";
+		values[] = {0,1,2,3};
+		texts[] = {
+			"Random",
+			"No",
+			"Light",
+			"Heavy"
+		};
+		default = 1;		
+	};
+	class par_daytime
+	{
+		title = "  Daytime";
+		values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+		texts[] = {
+			$STR_par_optionRandom,
+			"01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00",
+			"11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00",
+			"21:00","22:00","23:00","00:00"
+		};
+		default = 12;
+	};
+	class par_month
+	{
+		title = "  Month";
+		values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12};
+		texts[] = {
+			"Random",
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec"
+		};
+		default = 6; 		
+	};
+	class par_year
+	{
+		title = "  Year";
+		values[] = {2012,2013,2014,2015,2016,2017};
+		default = 2015;
+	};
+	
+	// Hostile forces Conditions
+	class paramEmptyDelimiter3 
+	{
+		title = "--- Hostile forces";
+		values[] = {""};
+		default = "";
+	};
+	class par_hostilesForces_skill
+	{
+		title = "  Hostile forces - Skill";
+		values[] = {0,1,2};
+		texts[] = {
+			"Newbie",
+			"Experienced",
+			"Skilled"
+		};
+		default = 0; 		
+	};
+	class par_hostilesForces_amount
+	{
+		title = "  Hostile forces - Amount";
+		values[] = {0,1,2,3,4};
+		texts[] = {
+			"Few",
+			"Small",
+			"Normal",
+			"Many",
+			"Large"
+		};
+		default = 2; 		
+	};
+	class par_hostilesForces_vehicles
+	{
+		title = "  Hostile forces - Vehicles";
+		values[] = {0,1,2,3,4};
+		texts[] = {
+			"No",
+			"Technicans",
+			"Light Armor (previous and armored cars, APC)",
+			"Medium Armor (previous and IFV)",
+			"Heavy Armor (previous and MBT)"
+		};
+		default = 2; 		
+	};
+	
+	// Allied forces Conditions
+	class paramEmptyDelimiter4 
+	{
+		title = "--- Allied forces";
+		values[] = {""};
+		default = "";
+	};
+	class par_alliesForces_skill
+	{
+		title = "  Allied forces - Skill";
+		values[] = {0,1,2};
+		texts[] = {
+			"Newbie",
+			"Experienced",
+			"Skilled"
+		};
+		default = 0; 		
+	};
+	class par_alliesForces_amount
+	{
+		title = "  Allied forces - Amount";
+		values[] = {0,1,2,3,4};
+		texts[] = {
+			"Few",
+			"Small",
+			"Normal",
+			"Many",
+			"Large"
+		};
+		default = 2; 		
+	};
+	class par_alliesForces_vehicles
+	{
+		title = "  Allied forces - Vehicles";
+		values[] = {0,1,2,3,4};
+		texts[] = {
+			"No",
+			"Technicans",
+			"Light Armor (previous and armored cars, APC)",
+			"Medium Armor (previous and IFV)",
+			"Heavy Armor (previous and MBT)"
+		};
+		default = 2; 		
+	};
+	*/
+};
+
+// ======== END OF MISSION PARAMETERS =============
