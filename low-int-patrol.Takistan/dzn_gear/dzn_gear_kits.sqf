@@ -8,31 +8,6 @@
 
 
 /*
-_kitName = [[],[],
-
-[
-
-["ACE_fieldDressing",25],
-["ACE_packingBandage",25],
-["ACE_elasticBandage",25],
-["ACE_tourniquet",15],
-["ACE_morphine",15],
-["ACE_atropine",15],
-["ACE_epinephrine",15],
-["ACE_plasmaIV",7],
-["ACE_plasmaIV_500",7],
-["ACE_plasmaIV_250",7],
-["ACE_salineIV",7],
-["ACE_salineIV_500",7],
-["ACE_salineIV_250",7],
-["ACE_bloodIV",7],
-["ACE_bloodIV_500",7],
-["ACE_bloodIV_250",7],
-["ACE_quikclot",20],
-["ACE_personalAidKit",3],
-["ACE_surgicalKit",2],
-["ACE_bodyBag",5]],[]];
-
 
 M112:					"rhsusf_m112_mag"
 M112x4				"rhsusf_m112x4_mag"
@@ -148,8 +123,9 @@ asadLoyalistsKit_M = [
 
 vehicleCombatKit = [
 	[
-		["CUP_arifle_AKS74",2],
-		["CUP_launch_RPG18",2]
+		["rhs_weap_akms", 1],
+		["rhs_weap_ak74m",1],
+		["rhs_weap_rshg2",2]	
 	],
 	[
 		["MiniGrenade",10],
@@ -157,7 +133,7 @@ vehicleCombatKit = [
 		["rhs_VOG25",10],
 		["rhs_VG40OP_white",5],
 		["rhs_30Rnd_762x39mm",20],
-		["CUP_30Rnd_545x39_AK_M",20],
+		["rhs_30Rnd_545x39_AK",20],
 		["CUP_100Rnd_TE4_LRT4_762x54_PK_Tracer_Green_M",3],
 		["rhs_10Rnd_762x54mmR_7N1",4],
 		["Chemlight_red",2],
@@ -183,7 +159,7 @@ vehicleCombatKit = [
 		["ACE_personalAidKit",3],
 		["ACE_surgicalKit",2]
 	],
-	[]
+	[["CUP_B_AlicePack_Khaki", 1]]
 ];
 
 vehicleEmptyKit = [
@@ -195,9 +171,9 @@ vehicleEmptyKit = [
 
 vehicleAmmoboxKit = [
 	[
-		["rhs_weap_akms", 2],
-		["CUP_arifle_AKS74",2],
-		["CUP_launch_RPG18",2]		
+		["rhs_weap_akms", 1],
+		["rhs_weap_ak74m",1],
+		["rhs_weap_rshg2",2]		
 	],
 	[
 		["MiniGrenade",20],
@@ -207,7 +183,7 @@ vehicleAmmoboxKit = [
 		["rhs_VG40OP_white",15],
 		
 		["rhs_30Rnd_762x39mm",30],
-		["CUP_30Rnd_545x39_AK_M",30],
+		["rhs_30Rnd_545x39_AK",30],
 		["CUP_100Rnd_TE4_LRT4_762x54_PK_Tracer_Green_M", 15],
 		["rhs_10Rnd_762x54mmR_7N1", 20],
 		
@@ -232,13 +208,14 @@ vehicleMediboxKit = [
 
 //	***************
 //	Insurgent's Kits
-//	Mods: 	RHS, CUP
+//	Mods: 	RHS, CUP, ACE3, Leight OPFOR
 //	***************
-#define INS_UNIFORM		["U_C_HunterBody_grn","U_BG_Guerilla2_1","U_BG_Guerilla1_1","U_BG_leader"]
-#define	INS_VEST		["rhsusf_spc"] 
-#define	INS_HEADGEAR	["H_ShemagOpen_tan","H_ShemagOpen_khk","rhs_fieldcap_ml","rhs_beanie_green","rhs_Booniehat_m81"]
-#define	INS_MASK		["G_Balaclava_blk","G_Bandanna_blk","G_Bandanna_khk"]
-#define INS_ITEMS	["ItemCompass","ItemWatch","ItemRadio"]
+
+#define INS_UNIFORM			["LOP_U_AM_Fatigue_01","LOP_U_AM_Fatigue_02","LOP_U_AM_Fatigue_03","LOP_U_AM_Fatigue_04","U_BG_Guerilla2_1","U_BG_Guerilla1_1"]
+#define	INS_VEST				["LOP_V_Chestrig_Kamysh","V_HarnessO_brn","rhsusf_spc"] 
+#define	INS_HEADGEAR		["LOP_H_Turban_mask","LOP_H_Turban","H_ShemagOpen_tan","LOP_H_Pakol","H_ShemagOpen_khk"]
+#define	INS_MASK				["G_Balaclava_blk","G_Bandanna_blk","G_Bandanna_khk"]
+#define INS_ITEMS				["ItemCompass","ItemWatch","ItemRadio"]
 
 
 kit_insurgentsRandom = [
@@ -250,13 +227,11 @@ kit_insurgentsRandom = [
 
 insurgentKit_Rifleman = [
 	[INS_UNIFORM,INS_VEST,"",INS_HEADGEAR,INS_MASK],
-	[["CUP_arifle_AKS74","CUP_arifle_AK74","rhs_weap_akms","rhs_weap_akm","CUP_arifle_FNFAL"],"","",""],
+	[["rhs_weap_ak74m","rhs_weap_akms","rhs_weap_akm"],"","",""],
 	EMPTYWEAPON,EMPTYWEAPON,INS_ITEMS,
 	[
 		[
-			["CUP_30Rnd_545x39_AK_M",6],["CUP_30Rnd_545x39_AK_M",6],
-			["rhs_30Rnd_762x39mm",4],["rhs_30Rnd_762x39mm",4],
-			["CUP_20Rnd_762x51_FNFAL_M",5]
+			["rhs_30Rnd_545x39_AK",6],["rhs_30Rnd_762x39mm",5],["rhs_30Rnd_762x39mm",5]
 		],
 		["",0],["",0],["rhs_mag_rdg2_white",2],["rhs_mag_rgd5",2],["",0],["",0],["",0],["",0]
 	],
