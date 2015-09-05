@@ -1,3 +1,20 @@
+<h3>Enviroment</h3>
+
+<h5>BIS_fnc_setOvercast</h5>
+Number
+<h5>BIS_fnc_setFog</h5>
+Number or Array [density, volume, height]
+<h5>BIS_fnc_setDate</h5>
+Parameter(s):
+		0:
+			ARRAY - date in format [Y,M,D,H,M]
+			NUMBER - hours to skip
+		1: BOOL - true for global execution (default: true)
+		2 (Optional): BOOL - true to show a transition effect instead of immediate skip (default: false)
+	Returns:
+	ARRAY
+
+
 <h3>Code control</h3>
 
 
