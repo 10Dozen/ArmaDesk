@@ -57,6 +57,7 @@ if (typename _list == "STRING") then {
 } forEach (synchronizedObjects _core);
 
 _core spawn {
+	private["_i"];
 	sleep 5;
 	for "_i" from 0 to (count (synchronizedObjects _this) - 1) do {
 		deleteVehicle (synchronizedObjects _this select _i);
