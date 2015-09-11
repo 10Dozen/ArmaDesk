@@ -10,7 +10,7 @@
 */
 
 params["_core", "_list", ["_isRandom", false]];
-private["_output","_classList","_singleClassname","_v","_i"];
+private["_output","_classList","_singleClassname","_v","_i","_output"];
 
 _output = [];
 _classList = [];
@@ -53,6 +53,7 @@ if (typename _list == "STRING") then {
 	
 	_v = _class createVehicle (getPos _x);
 	_v setDir (getDir _x);
+	_output pushBack _v;
 } forEach (synchronizedObjects _core);
 
 _core spawn {
@@ -62,3 +63,5 @@ _core spawn {
 	};
 	deleteVehicle _this;
 };
+
+_output
