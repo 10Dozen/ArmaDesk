@@ -14,6 +14,7 @@
 #define RRR_FUEL_STEP			0.1
 
 
+
 private["_v"];
 _v = vehicle player;
 player setVariable ["dzn_rrr_servicing",true,true];
@@ -49,3 +50,14 @@ _v setVehicleAmmo 1;
 
 1000 cutText [RRR_MESSAGE_TEXT_END, "PLAIN"];
 player setVariable ["dzn_rrr_servicing",false,true];
+
+
+
+#undef RRR_MESSAGE_TEXT_START
+#undef RRR_MESSAGE_TEXT_END
+#undef RRR_DAMAGE_SERVICE_TIMEOUT
+#undef RRR_FUEL_SERVICE_TIMEOUT
+#undef RRR_WEAPON_SERVICE_TIMEOUT
+#undef RRR_WEAPON_FULL_TIMEOUT
+#undef RRR_DAMAGE_STEP
+#undef RRR_FUEL_STEP
