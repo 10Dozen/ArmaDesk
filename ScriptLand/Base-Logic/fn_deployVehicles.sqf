@@ -1,5 +1,5 @@
 /*
-	[@GameLogic-Core, @Classname or @Array of classnames or @Considered array of classnames, @Randomize?] spawn dzn_fnc_deployVehicles
+	@ListOfSpawned = [@GameLogic-Core, @Classname or @Array of classnames or @Considered array of classnames, @Randomize?] spawn dzn_fnc_deployVehicles
 	  
 	0:  @GameLogic-Core (OBJECT	- gamelogic synchronized with other game logics, which are placeholders of vehicles to spawn.
 	1:  
@@ -10,7 +10,9 @@
 */
 
 params["_core", "_list", ["_isRandom", false]];
+private["_output","_classList","_singleClassname","_v","_i"];
 
+_output = [];
 _classList = [];
 _singleClassname = false;
 
