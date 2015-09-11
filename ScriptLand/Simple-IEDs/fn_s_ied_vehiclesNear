@@ -1,0 +1,11 @@
+fnc_s_ied_vehiclesNear = {
+	// @Boolean = [ @Side, @Pos, @Distance ] call fnc_s_ied_vehiclesNear;
+	private["_result"];
+	_result = false;
+	{
+		if (side _x == (_this select 0) && alive _x && { [ _x, _this select 1, _this select 2 ] call dzn_fnc_isInArea2d}) exitWith {
+			_result = true;
+		};		
+	} forEach vehicles;	
+	_result
+};
