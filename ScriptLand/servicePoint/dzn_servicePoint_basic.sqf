@@ -1,6 +1,7 @@
 /*
   Should be runned on DRIVER of vehicle
-  All vehicles should have "dzn_rrr_magazines" variable with list of magazines to reffer.
+  All vehicles should have "dzn_rrr_magazines" variable with list of magazines to reffer:
+    (magazines VEHICLE)
 */
 
 #define RRR_MESSAGE_TEXT_START		"Vehicle Servicing"
@@ -45,6 +46,7 @@ if (!isNil { _v getVariable "dzn_rrr_magazines" }) then {
   } foreach (_v getVariable "dzn_rrr_magazines");
 } else {
   sleep RRR_WEAPON_FULL_TIMEOUT;
+  _v setVariable ["dzn_rrr_magazines", magazines _v, true];
 };
 _v setVehicleAmmo 1;
 
