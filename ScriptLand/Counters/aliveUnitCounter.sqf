@@ -3,7 +3,7 @@ dzn_fnc_aliveCounter = {
 	{ alive _x } count _this
 };
 
-// dzn_fnc_condCounter
+// [@WhatToCount, @Condition] dzn_fnc_condCounter
 dzn_fnc_condCounter = {
 	call compile format [
 		"{ %2 } count %1"
