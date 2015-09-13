@@ -3,11 +3,11 @@
 	listOfMarkersOnStart = allMapMarkers;
 	listOfMarkersTimer = time + 2;
 	["markerCheckId", "onEachFrame", {		
-		if (time > listOfMarkersTimer && { !(listOfMarkersOnStart isEqualTo allMapMarkers) })then {
+		if (time > listOfMarkersTimer && { !(listOfMarkersOnStart isEqualTo allMapMarkers) }) then {
 			listOfMarkersTimer = time + 2;
 			{
 				if !(_x in listOfMarkersOnStart) then {
-					deleteMarker _x;
+					deleteMarkerLocal _x;
 				};
 			} forEach allMapMarkers;
 		};
