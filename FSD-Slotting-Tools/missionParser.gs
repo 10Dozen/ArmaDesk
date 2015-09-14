@@ -27,7 +27,7 @@ function dzn_mp_parseFromMenu() {
 				role = [values[i]];      
 		} else {
 			// Role
-			role.push(values[i]);
+			role.push(values[i]); // role = [ "WEST", "Rifleman" ]
 			switch (role[0]) {
 				case "EAST":
 					eastRoles.push(values[i])
@@ -35,6 +35,7 @@ function dzn_mp_parseFromMenu() {
 				case "WEST":
 					westRoles.push(values[i])
 					break;
+				case "GUER":
 				case "INDEP":
 					indepRoles.push(values[i])
 					break;
@@ -113,12 +114,14 @@ function dzn_mp_confirmParsingFromMenu() {
 		var cell = ss.getRangeByName(rolesRange);
 		var n = 0;
 		var k = 0;         
-		while ( k < 2) {
-			if (cell.offset(n,0).isBlank()) {
+		while ( k < 2) {          
+			if (cell.offset(n,0).isBlank() && cell.offset(n+1,0).isBlank() && cell.offset(n+2,0).isBlank() && cell.offset(n+3,0).isBlank()) {
 				k++;              
 			} else {
 				k = 0;
-				output.push(cell.offset(n,0).getValue());
+				if (cell.offset(n,0).isBlank() == false) {
+					output.push(cell.offset(n,0).getValue());
+                }
 			}       
 			n++
 		}
@@ -138,6 +141,7 @@ function dzn_mp_confirmParsingFromMenu() {
 	dzn_clearData();
 
 	var sides = getEditedValuesFromRange('mp_sides');
+  Logger.log(sides);
 	ss.getRangeByName('slotForm_defSides').setValue(sides.join(" | "));      
     
 	var slotSides = ['mp_westRoles', 'mp_eastRoles', 'mp_indepRoles', 'mp_civRoles'];
