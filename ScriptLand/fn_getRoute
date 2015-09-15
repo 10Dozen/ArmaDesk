@@ -1,0 +1,9 @@
+/*
+  [@Object, (@Option)] call dzn_fnc_getRoute
+  INPUT:
+    0: OBJECT - object with waypoints
+    1: OPTION - "Roads", "Buildings"
+    
+  OUTPUT: @Array of positions  OR  [ @Array of positions, @Array of objects by options ]
+*/
+
