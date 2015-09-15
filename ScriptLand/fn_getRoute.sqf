@@ -11,7 +11,7 @@
 */
 
 params ["_core", ["_option", ["none", 0, []]]];
-
+_output = [];
 _outputWP = [];
 
 _wps = waypoints _core;
@@ -32,3 +32,4 @@ if (_option select 0 != "none") then {
 	} forEach _wps;
 };
 
+_output
