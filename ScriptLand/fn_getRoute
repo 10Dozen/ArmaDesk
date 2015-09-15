@@ -1,9 +1,14 @@
 /*
-  [@Object, (@Option)] call dzn_fnc_getRoute
+  [@Object, ([@Option, @Radius])] call dzn_fnc_getRoute
+  Object's waypoints will be collected as Pos3d. If option is given - roads or building  will be collected in given radius (or waypointCompleteRadius)
   INPUT:
     0: OBJECT - object with waypoints
-    1: OPTION - "Roads", "Buildings"
-    
+    1: 
+      OPTION - "Roads", "Buildings"
+      RADIUS - Radius in meters to check option, if 0 then waypointCompleteRadius will be used
   OUTPUT: @Array of positions  OR  [ @Array of positions, @Array of objects by options ]
 */
 
+params ["_core", ["_option", "none"]];
+
+_wps = waypoints _core;
