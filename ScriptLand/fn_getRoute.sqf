@@ -10,7 +10,7 @@
 	OUTPUT: @Array of positions  OR  [ @Array of positions, @Array of objects by options ]
 */
 
-params ["_core", ["_option", "none"]];
+params ["_core", ["_option", ["none", 0, []]]];
 
 _outputWP = [];
 
@@ -19,9 +19,9 @@ _wps = waypoints _core;
 	_outputWP pushBack (waypointPosition _x);
 } forEach _wps;
 
-if (_option != "none") then {
+if (_option select 0 != "none") then {
 	{
-		switch toLower(_option) do {
+		switch toLower(_option select 0) do {
 			case "roads": {
 			
 			};
