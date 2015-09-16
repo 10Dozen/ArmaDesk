@@ -37,17 +37,10 @@ while {player getVariable "dzn_rrr_servicing" && (fuel _v < 1)} do {
 };
 _v setFuel 1;
 
-if (!isNil { _v getVariable "dzn_rrr_magazines" }) then {
-  {
-    if !(_x in magazines _v) then {
-      _v addmagazine _x;
-      sleep RRR_WEAPON_SERVICE_TIMEOUT;
-    };
-  } foreach (_v getVariable "dzn_rrr_magazines");
-} else {
-  sleep RRR_WEAPON_FULL_TIMEOUT;
-  _v setVariable ["dzn_rrr_magazines", magazines _v, true];
-};
+sleep 3;
+_v setVehicleAmmo 0.7;
+
+sleep 3;
 _v setVehicleAmmo 1;
 
 1000 cutText [RRR_MESSAGE_TEXT_END, "PLAIN"];
