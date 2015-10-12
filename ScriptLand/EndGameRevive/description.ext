@@ -1,0 +1,12 @@
+
+// ==============
+// Respawn - Base
+// ==============
+respawn = 3;
+respawnDelay = 10;    // Should be specified after mission init with setPlayerRespawnTime (local)
+respawnOnStart = -1;  //Dont respawn on start. Don't run respawn script on start.
+respawnTemplates[] = {"Counter","Revive"};
+
+reviveDelay = 10;		// 10 second to Revie another player. MedKit will half.
+reviveForceRespawnDelay = 25;	// 25 second to hold space to respawn. Anyway u can do it with Menu - Respawn
+reviveBleedOutDelay = 600;	// 10 minutes of bleedout
