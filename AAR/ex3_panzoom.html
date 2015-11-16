@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.mousewheel.js"></script>
+		
+		<style>
+			body  {				
+				margin: 0px;
+				padding: 0px;				
+			}
+			
+			.nav {
+				width: 100%;
+				z-index: 10;
+				position:fixed;
+				display: inline;
+			}
+			
+			.zoom button {
+				
+				display: inline;				
+				padding: 5px;
+				width: 32px;
+				height: 32px;
+			}			
+			
+		</style>
+	</head>
+	<body>
+		<div class="nav">
+			<div class="zoom">
+				<button class="zoom-in">+</button>
+				<button class="zoom-out">-</button>
+			</div>
+		</div>
+		
+		<div class="panzoom">
+			<img src="img/map_stratis_8192.png" />
+		</div>
+		
+		<script>			
+			(function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 0.1,
+					maxScale: 4				
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: false,
+						focal: e
+					});
+				});
+			})();
+		</script>
+	</body>
+</html>
