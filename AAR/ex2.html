@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<title>TestMap</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+				
+			}
+			
+			.icn {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				
+			
+				width: 32px;
+				height: 32px;
+			}
+			
+			
+		</style>
+		
+		<script>
+			// Meta
+			// [ @Display name, @IsPlayer, @IsVehicle ]
+			var aarData = {
+				"meta": {
+					"time": 5,
+					"units": [["10Dozen", 1, 0]] // [ [ @Display name, @IsPlayer, @IsVehicle ], ... ]
+				},
+				"timeline" : [
+						[	// time 0 = [ @unit1, @unit2 ...]
+							[0, 100, 100, 0, 1, -1]	 // UnitData [ @unitId, @posx, @posy, @dir, @alive, @vehicleid ]
+						]
+						, [
+							[0, 120, 120, 0, 1, -1]	
+						]
+						, [
+							[0, 125, 125, 0, 1, -1]	
+						]
+						, [
+							[0, 130, 130, 0, 1, -1]	
+						]
+						, [
+							[0, 135, 135, 0, 1, -1]	
+						]
+						, [
+							[0, 140, 140, 0, 1, -1]	
+						]
+					]
+				
+			};
+		
+			
+			function playAAR() {
+				function nextStep() {
+					if (i < aarData.meta.time) {
+						i = i + 1;
+						
+						var currentTimeData = aarData.timeline[i];
+						// For each units
+						for (var j = 0; j < currentTimeData.length; j++) {
+							var unit = currentTimeData[j];
+							$( "#unit" + unit[0] ).attr( "style", "top: " + unit[2] + "px; left: " + unit[1] + "px;" );
+						
+						}						
+						console.log("Time played " + i);		
+					} else {
+						clearInterval( aarTimer );
+					}
+				}
+				
+				var lenght = aarData.meta.time;			
+				var i = -1;
+				var aarTimer = setInterval( nextStep , 1000);		
+			}
+		
+			$(document).ready(function(){
+				$("#draggable").draggable();
+			});
+			playAAR();
+			
+		</script>
+	</head>
+	<body>
+	
+		<div  class="drag-image" id="draggable">
+			<img src="img/pict.jpg" />
+			<img id="unit0" class="icn" src="img/cicn.png" />
+		</div>
+	</body>		
+</html>
