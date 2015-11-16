@@ -1,0 +1,166 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.mousewheel.js"></script>
+		
+		<style>
+			body  {				
+				margin: 0px;
+				padding: 0px;				
+			}
+			
+			.nav {
+				width: 100%;
+				z-index: 10;
+				position:fixed;
+				display: inline;
+			}
+			
+			.icn {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				
+				width: 32px;
+				height: 32px;
+				
+				top: 100px;
+				left: 100px;
+			}	
+			
+			canvas {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				
+				top: 116px;
+				left: 116px;
+			}
+		</style>
+		<script>
+			// Meta
+			// [ @Display name, @IsPlayer, @IsVehicle ]
+			var aarData = {
+				"meta": {
+					"time": 5,
+					"units": [["10Dozen", 1, 0]] // [ [ @Display name, @IsPlayer, @IsVehicle ], ... ]
+				},
+				"timeline" : [
+						[	// time 0 = [ @unit1, @unit2 ...]
+							[0, 100, 100, 90, 1, -1]	 // UnitData [ @unitId, @posx, @posy, @dir, @alive, @vehicleid ]
+						]
+						, [
+							[0, 120, 120, 150, 1, -1]	
+						]
+						, [
+							[0, 125, 125, 130, 1, -1]	
+						]
+						, [
+							[0, 130, 130, 120, 1, -1]	
+						]
+						, [
+							[0, 135, 135, 115, 1, -1]	
+						]
+						, [
+							[0, 140, 140, 125, 1, -1]	
+						]
+					]
+				
+			};
+		
+			var rotation = 0;
+			jQuery.fn.rotate = function(degrees) {
+				$(this).css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
+							 '-moz-transform' : 'rotate('+ degrees +'deg)',
+							 '-ms-transform' : 'rotate('+ degrees +'deg)',
+							 'transform' : 'rotate('+ degrees +'deg)'});
+				return $(this);
+			};
+		
+			function playAAR() {
+				function nextStep() {
+					if (i < aarData.meta.time) {
+						i = i + 1;
+						
+						var currentTimeData = aarData.timeline[i];
+						// For each units
+						for (var j = 0; j < currentTimeData.length; j++) {
+							var unit = currentTimeData[j];
+							$( "#unit" + unit[0] ).css({								
+								"left": unit[1] + "px",
+								"top": unit[2] + "px"
+							});
+							$( "#unit" + unit[0] ).rotate(unit[3]);
+						
+						}						
+						console.log("Time played " + i);		
+					} else {
+						clearInterval( aarTimer );
+					}
+				}
+				
+				var lenght = aarData.meta.time;			
+				var i = -1;
+				var aarTimer = setInterval( nextStep , 1000);		
+			}
+		
+		
+			$(document).ready(function(){				
+				$('.icn').click(function() {
+					rotation += 5;
+					$(this).rotate(rotation);
+				});
+			});
+		</script>	
+	</head>
+	<body>
+		<div class="nav">
+			<div class="zoom">
+				<button class="zoom-in">+</button>
+				<button class="zoom-out">-</button>
+			</div>
+		</div>
+		
+		<div class="panzoom">
+			<img src="img/map_stratis_8192.png" />
+			<img id="unit0" class="icn" src="img/cicn.png" />
+			<canvas id="myCanvas" width="578" height="200"></canvas>
+		</div>
+		
+		
+		<script>
+		  var canvas = document.getElementById('myCanvas');
+		  var context = canvas.getContext('2d');
+
+		  context.beginPath();
+		  context.moveTo(0, 0);
+		  context.lineTo(353, 123);
+		  context.stroke();
+		  context.strokeStyle = '#ff0000';
+			context.stroke();
+		</script>
+		
+		<script>			
+			(function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 0.1,
+					maxScale: 4				
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: false,
+						focal: e
+					});
+				});
+			})();
+		</script>
+	</body>
+</html>
