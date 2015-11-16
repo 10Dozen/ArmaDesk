@@ -15,25 +15,83 @@
 				z-index: 2;
 				display: inline;
 				position:absolute;
-				top: 140px;
-				left: 100px;
+				
 			
 				width: 32px;
 				height: 32px;
 			}
+			
+			
 		</style>
 		
 		<script>
+			var aarData = {
+				"meta": {
+					"time": 2,
+					"units": {
+						"unit0": "10Dozen",
+						"unit1": "JohnDoe"		
+					}
+				},
+				"timeline" : {
+					"t0": {
+						"unit0": {
+							"posx": 100,
+							"posy": 100,
+							"dir": 0,
+							"alive": 1,
+							"vid": -1
+						}				
+					},
+					"t1": {
+						"unit0": {
+							"posx": 120,
+							"posy": 120,
+							"dir": 0,
+							"alive": 1,
+							"vid": -1
+						}				
+					}
+				}
+			};
+		
+			
+			function playAAR() {
+				function nextStep() {
+					if (i < aarData.meta.time) {
+						for ( var p in aarData.timeline) {							
+							if (p == ("t" + i)) {
+								console.log(p);
+							}
+						}
+						
+						$( ".icn" ).attr( "style", "top: 150px; left: 120px;" );
+					
+					
+						i = i + 1;
+						console.log("Time played " + i);						
+					} else {
+						clearInterval( aarTimer );
+					}
+				}
+				
+				var lenght = aarData.meta.time;			
+				var i = -1;
+				var aarTimer = setInterval( nextStep , 2000);		
+			}
+		
 			$(document).ready(function(){
 				$("#draggable").draggable();
 			});
+			playAAR();
+			
 		</script>
 	</head>
 	<body>
 	
 		<div  class="drag-image" id="draggable">
 			<img src="img/pict.jpg" />
-			<img class="icn" src="img/cicn.png" />
+			<img id="unit0" class="icn" src="img/cicn.png" />
 		</div>
 	</body>		
 </html>
