@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>TestMap</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+				
+			}
+			
+			.icn {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				top: 140px;
+				left: 100px;
+			
+				width: 32px;
+				height: 32px;
+			}
+		</style>
+		
+		<script>
+			$(document).ready(function(){
+				$("#draggable").draggable();
+			});
+		</script>
+	</head>
+	<body>
+	
+		<div  class="drag-image" id="draggable">
+			<img src="img/pict.jpg" />
+			<img class="icn" src="img/cicn.png" />
+		</div>
+	</body>		
+</html>
