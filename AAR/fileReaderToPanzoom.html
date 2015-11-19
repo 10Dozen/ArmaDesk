@@ -1,0 +1,146 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.mousewheel.js"></script>
+		
+		<style>
+			body  {				
+				margin: 0px;
+				padding: 0px;				
+			}
+			
+			.nav {
+				width: 100%;
+				z-index: 10;
+				position:fixed;
+				display: inline;
+			}
+			
+			.icn {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				
+				width: 32px;
+				height: 32px;
+				
+				top: 100px;
+				left: 100px;
+			}	
+			
+			canvas {
+				z-index: 2;
+				display: inline;
+				position:absolute;
+				
+				top: 116px;
+				left: 116px;
+			}
+			
+			#uploader {
+				position: absolute;
+				height: 200px;
+				width: 200px;
+				margin: -100px 0 0 -200px;
+				top: 50%;
+				left: 50%;
+				
+				background-color: #cceeff;
+				border: 1px solid #cceeff;
+				border-radius: 100px;
+			}
+			
+			#uploader input {
+				position: absolute;			
+				top: 45%;
+				left: 30%;			
+			}			
+		</style>
+		
+		<script> 
+			var aarData = "";
+			var openFile = function(event) { 
+				$( '.details-wrapper' ).remove();
+				var input = event.target; 
+
+				var reader = new FileReader(); 
+				reader.onload = function(){ 
+					var text = reader.result;
+					try {
+						aarData = JSON.parse(text);
+						console.log("Parsed!");
+						showAARDetailsScreen();
+					} catch (e) {
+						alert("File is not AAR file!");
+						console.log("File is not AAR file!");
+					}
+				};				
+				reader.readAsText(input.files[0]);
+			};
+			
+			var startAAR  = function() { 
+				$( '.details-wrapper' ).remove();
+				$( '#uploader' ).remove();
+				
+				var imgSrc = "img/pict.jpg";
+				
+				
+				$( 'body' ).append("<div class='nav'></div><div class='panzoom'><img src="+imgSrc+" /></div>");
+				panzoomInit();
+				
+			}
+			
+			var panzoomInit = function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 0.1,
+					maxScale: 4				
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: false,
+						focal: e
+					});
+				});
+			};
+			
+			function getTimeLabel (t) {
+					var time = t;
+					var timeHours = time / 60 /60 | 0;
+					var timeMinutes = (time - timeHours*60*60) /60 | 0;
+					var timeSeconds = time - timeHours*60*60 - timeMinutes*60;
+					var output = "";
+					
+					function formatTimeNum(t,l) {						
+						var output = t + " " + l + " ";	
+						if (t > 0) { if (t < 10) {output = "0" + output;} } else { output = "" }
+						return output
+					}		
+					
+					return formatTimeNum(timeHours,"h") + formatTimeNum(timeMinutes,"m") + formatTimeNum(timeSeconds,"s")
+				}
+			
+			function showAARDetailsScreen() {
+				var timelabel = getTimeLabel(aarData.metadata.time);
+				
+				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h3>on " + aarData.metadata.island + "</h3><p>Date: " + aarData.metadata.date + "</p><p>Time elapased: " + timelabel + "</p><input type='button' value='Play' onclick='startAAR()'></div>")
+			};
+		</script> 
+	</head>	
+	<body>
+		<div class="nav">
+			<div class="zoom"></div>
+		</div>
+		
+		<div id="uploader">
+			<input type='file' accept='text/plain' onchange='openFile(event)'>			
+		</div>
+	</body>
+</html>
