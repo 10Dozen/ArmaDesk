@@ -68,11 +68,24 @@
 				var reader = new FileReader(); 
 				reader.onload = function(){ 
 					var text = reader.result;
-					aarData = JSON.parse(text);
-					console.log("Parsed"); 
+					try {
+						aarData = JSON.parse(text);
+						console.log("Parsed!");
+					} catch (e) {
+						alert("File is not AAR file!");
+						console.log("File is not AAR file!");
+					}
 				};				
 				reader.readAsText(input.files[0]);
 			}; 
+			
+			function showAARDetailsScreen() {
+				
+			};
+			
+			
+			
+			
 		</script> 
 	</head>
 	<body>
