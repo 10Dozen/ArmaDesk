@@ -71,6 +71,7 @@
 					try {
 						aarData = JSON.parse(text);
 						console.log("Parsed!");
+						showAARDetailsScreen();
 					} catch (e) {
 						alert("File is not AAR file!");
 						console.log("File is not AAR file!");
@@ -80,12 +81,10 @@
 			}; 
 			
 			function showAARDetailsScreen() {
+				var time = aarData.metadata.time;
 				
+				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h4>" + aarData.metadata.island + "</h4><p>Time elapased: " + time + "</p></div>")
 			};
-			
-			
-			
-			
 		</script> 
 	</head>
 	<body>
