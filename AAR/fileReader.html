@@ -63,6 +63,7 @@
 		<script> 
 			var aarData = "";
 			var openFile = function(event) { 
+				$( '.details-wrapper' ).remove();
 				var input = event.target; 
 
 				var reader = new FileReader(); 
@@ -80,13 +81,31 @@
 				reader.readAsText(input.files[0]);
 			}; 
 			
+			
+			function getTimeLabel (t) {
+					var time = t;
+					var timeHours = time / 60 /60 | 0;
+					var timeMinutes = (time - timeHours*60*60) /60 | 0;
+					var timeSeconds = time - timeHours*60*60 - timeMinutes*60;
+					var output = "";
+					
+					function formatTimeNum(t,l) {						
+						var output = t + " " + l + " ";	
+						if (t > 0) { if (t < 10) {output = "0" + output;} } else { output = "" }
+						return output
+					}		
+					
+					return formatTimeNum(timeHours,"h") + formatTimeNum(timeMinutes,"m") + formatTimeNum(timeSeconds,"s")
+				}
+			
+			
 			function showAARDetailsScreen() {
-				var time = aarData.metadata.time;
+				var timelabel = getTimeLabel(aarData.metadata.time);
 				
-				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h4>" + aarData.metadata.island + "</h4><p>Time elapased: " + time + "</p></div>")
+				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h4>" + aarData.metadata.island + "</h4><p>Time elapased: " + timelabel + "</p><input type='button' value='Play' onclick='startAAR()'></div>")
 			};
 		</script> 
-	</head>
+	</head>	
 	<body>
 		<div class="nav">
 			<div class="zoom">
@@ -95,7 +114,7 @@
 		</div>
 		
 		<div id="uploader">
-			<input type='file' accept='text/plain' onchange='openFile(event)'>
+			<input type='file' accept='text/plain' onchange='openFile(event)'>			
 		</div>
 	</body>
 </html>
