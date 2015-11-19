@@ -3,24 +3,43 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Example Page</title>
-	<link href="jquery-ui.css" rel="stylesheet">
+	<link href="src/jquery-ui.css" rel="stylesheet">
 	<style>
 		body {				
 			margin: 0px;
 			padding: 0px;				
 		}
+		
+		
+		.player-line {
+			display: inline;			
+		}
+		
+		#player-step {
+			display: inline;
+			margin: 10px;
+			width: 5%;
+		}
+		
+		#slider {
+			display: inline-block;			
+			width: 25%;
+		}
 	</style>
 </head>
 <body>
 
-	<label for="player">Time played:</label>
-	<input type="text" id="player-step" readonly style="border:0;">
-	<div id="slider"></div>
+	<div class="player-line">
+		<label for="player">Time played:</label>
+		<input id="player-step" type="text"  readonly style="border:0;">
+		<div id="slider"></div>
+	</div>
+	
 	
 	<button onclick="nextStep()">
 	
-	<script src="external/jquery/jquery.js"></script>
-	<script src="jquery-ui.js"></script>
+	<script src="src/external/jquery/jquery.js"></script>
+	<script src="src/jquery-ui.js"></script>
 	<script>
 		$( "#slider" ).slider({
 			range: "min",
