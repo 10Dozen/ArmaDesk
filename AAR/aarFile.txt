@@ -1,0 +1,20 @@
+{
+	"metadata": { 
+		"island": "Stratis" ,
+		"name": "CO-4 Test Operation",
+		"time": 10,
+		"objects": {
+			"units": [],
+			"vehs": []
+		}
+	},
+	"timeline": [
+		[
+			[
+				[0,400,400,1,-1]
+			],
+			[],
+			[]
+		]	
+	]
+}
