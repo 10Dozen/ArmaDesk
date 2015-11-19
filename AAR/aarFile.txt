@@ -3,6 +3,7 @@
 		"island": "Stratis" ,
 		"name": "CO-4 Test Operation",
 		"time": 10,
+		"date": "2015-11-19",
 		"objects": {
 			"units": [],
 			"vehs": []
