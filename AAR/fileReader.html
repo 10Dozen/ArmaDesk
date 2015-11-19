@@ -102,7 +102,7 @@
 			function showAARDetailsScreen() {
 				var timelabel = getTimeLabel(aarData.metadata.time);
 				
-				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h4>" + aarData.metadata.island + "</h4><p>Time elapased: " + timelabel + "</p><input type='button' value='Play' onclick='startAAR()'></div>")
+				$( "body" ).append("<div class='details-wrapper'><h1>AAR - " + aarData.metadata.name + "</h1><h3>on " + aarData.metadata.island + "</h3><p>Date: " + aarData.metadata.date + "</p><p>Time elapased: " + timelabel + "</p><input type='button' value='Play' onclick='startAAR()'></div>")
 			};
 		</script> 
 	</head>	
