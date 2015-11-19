@@ -61,17 +61,17 @@
 		</style>
 		
 		<script> 
+			var aarData = "";
 			var openFile = function(event) { 
 				var input = event.target; 
 
 				var reader = new FileReader(); 
 				reader.onload = function(){ 
-					var text = reader.result; 
-					var node = document.getElementById('output'); 
-					node.innerText = text; 
-					console.log(reader.result.substring(0, 200)); 
-				}; 
-				reader.readAsText(input.files[0]); 
+					var text = reader.result;
+					aarData = JSON.parse(text);
+					console.log("Parsed"); 
+				};				
+				reader.readAsText(input.files[0]);
 			}; 
 		</script> 
 	</head>
@@ -85,10 +85,5 @@
 		<div id="uploader">
 			<input type='file' accept='text/plain' onchange='openFile(event)'>
 		</div>
-		<div id='output'>
-		...
-		</div>
-		
-		
 	</body>
 </html>
