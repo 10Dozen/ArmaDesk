@@ -1,9 +1,40 @@
+
+		
 <!doctype html>
 <html lang="us">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Example Page</title>
-	<link href="src/jquery-ui.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+	<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.mousewheel.js"></script>
+	<script>
+		var aarCurrentTime = 0;
+	
+		$( document ).ready(function () {
+			$( "#slider" ).slider({
+				range: "min",
+				min: 0,
+				max: 10,
+				slide: function( event, ui ) {
+					$( "#player-step" ).html( ui.value + " sec" );
+					aarCurrentTime = ui.value;
+				}
+			});
+			$( "#player-step" ).html( "0 sec" );	
+		});
+		
+		
+		
+		var nextStep = function () {
+			aarCurrentTime = aarCurrentTime + 1;
+			$( "#slider" ).slider({value: aarCurrentTime});
+			$( "#player-step" ).html( aarCurrentTime + " sec" );			
+		}
+	</script>
+	
 	<style>
 		body {				
 			margin: 0px;
@@ -12,7 +43,9 @@
 		
 		
 		.player-line {
-			display: inline;			
+			position: absolute;
+			display: inline;
+			top: 0px;
 		}
 		
 		#player-step {
@@ -23,39 +56,28 @@
 		
 		#slider {
 			display: inline-block;			
-			width: 25%;
+			width:300px;
 		}
 	</style>
 </head>
 <body>
 
 	<div class="player-line">
-		<label for="player">Time played:</label>
-		<input id="player-step" type="text"  readonly style="border:0;">
+		<button class="player-step-backward"><</button>
+		<button class="player-step-play">Play</button>
+		<button class="player-step-forward" onClick="nextStep()">></button>
+		<label id="player-step">0 sec</label><label id="player-maxtime">/ 10 sec</label>		
 		<div id="slider"></div>
-	</div>
+	</div>	
 	
 	
-	<button onclick="nextStep()">
 	
-	<script src="src/external/jquery/jquery.js"></script>
-	<script src="src/jquery-ui.js"></script>
-	<script>
-		$( "#slider" ).slider({
-			range: "min",
-			min: 1,
-			max: 700,
-			slide: function( event, ui ) {
-				$( "#player-step" ).val( ui.value + " sec" );
-			}
-		});
-		$( "#player-step" ).val( "0 sec" );
-		
-		var nextStep = function () {
-			$( "#slider" ).slider({
-				value: 100
-			});
-		}
-	</script>
+	
+	
+	
+	
+	
+	
+	
 </body>
 </html>
