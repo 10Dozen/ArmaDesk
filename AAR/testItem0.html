@@ -1,0 +1,173 @@
+
+		
+<!doctype html>
+<html lang="us">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	  
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/dist/jquery.panzoom.js"></script>
+		<script src="http://timmywil.github.io/jquery.panzoom/test/libs/jquery.mousewheel.js"></script>
+		
+		
+		<style>
+			body {				
+				margin: 0px;
+				padding: 0px;
+				font-family: sans-serif;
+			}
+			
+			#uploader {
+				position: absolute;
+				height: 200px;
+				width: 200px;
+				margin: -100px 0 0 -200px;
+				top: 50%;
+				left: 50%;
+				
+				background-color: #cceeff;
+				border: 1px solid #cceeff;
+				border-radius: 100px;
+			}
+			
+			#uploader input {
+				position: absolute;
+				top: 45%;
+				left: 30%;
+			}
+			
+			#details-wrapper {
+				padding-top: 0px;				
+			}
+			
+			#details-wrapper h1 {
+				padding-left: 20px;
+				background-color: #3366CC;
+				color: white;
+			}
+			
+			#details-wrapper li {
+				list-style-type: none;
+			}
+			
+			
+			
+			.player-line {
+				position: absolute;
+				display: inline;
+				top: -30px;
+			}
+			
+			#player-step {
+				display: inline;
+				margin: 10px;
+				width: 5%;
+			}
+			
+			#slider {
+				display: inline-block;			
+				width:300px;
+			}
+			
+			
+		</style>
+		
+		
+		<script>
+			var aarData = {};
+			var aarCurrentTime = 0;
+			
+			
+			// Open file
+			var openFile = function(event) { 
+				$( '#details-wrapper' ).remove();
+				var input = event.target; 
+
+				var reader = new FileReader(); 
+				reader.onload = function(){ 
+					var text = reader.result;
+					try {
+						aarData = JSON.parse(text);
+						console.log("Parsed!");
+						showAARDetailsScreen();
+					} catch (e) {
+						alert("File is not AAR file!");
+						console.log("File is not AAR file!");
+					}
+				};				
+				reader.readAsText(input.files[0]);
+			};
+			
+			function getTimeLabel(t) {
+				var time = t;
+				var timeHours = time / 60 /60 | 0;
+				var timeMinutes = (time - timeHours*60*60) /60 | 0;
+				var timeSeconds = time - timeHours*60*60 - timeMinutes*60;
+				var output = "";
+
+				function formatTimeNum(t,l) {
+					var output = t + " " + l + " ";
+					if (t > 0) { if (t < 10) {output = "0" + output;} } else { output = "" }
+					return output
+				}
+				
+				return formatTimeNum(timeHours,"h") + formatTimeNum(timeMinutes,"m") + formatTimeNum(timeSeconds,"s")
+			}
+			
+			function showAARDetailsScreen() {
+				var timelabel = getTimeLabel(aarData.metadata.time);				
+				$( "body" ).append("<div id='details-wrapper'><h1>" + aarData.metadata.name + "</h1><ul><li>Location: <b>" + aarData.metadata.island + "</b></li><li>Date: " + aarData.metadata.date + "</li><li>Duration: " + timelabel + "</li><li><br /></li><li><button onClick='startAAR()'>Play</button></li></ul></div>")
+			};
+			
+			
+		
+			$( document ).ready(function () {
+				$( "#slider" ).slider({
+					range: "min",
+					min: 0,
+					max: 10,
+					slide: function( event, ui ) {
+						$( "#player-step" ).html( ui.value + " sec" );
+						aarCurrentTime = ui.value;
+					}
+				});
+				$( "#player-step" ).html( "0 sec" );	
+			});
+			
+			
+			var nextStep = function () {
+				aarCurrentTime = aarCurrentTime + 1;
+				$( "#slider" ).slider({value: aarCurrentTime});
+				$( "#player-step" ).html( aarCurrentTime + " sec" );			
+			}
+		</script>
+	</head>
+	<body>
+
+		<div class="player-line">
+			<button class="player-step-backward"><</button>
+			<button class="player-step-play">Play</button>
+			<button class="player-step-forward" onClick="nextStep()">></button>
+			<label id="player-step">0 sec</label><label id="player-maxtime">/ 10 sec</label>		
+			<div id="slider"></div>
+		</div>
+		<!-- 
+		<div id="details-wrapper">			
+				<h1>CO-07 Headhunters</h1>
+				<ul>
+					<li>Location: <b>Stratis</b></li>
+					<li>Date: 2015-11-20</li>
+					<li>Duration: 1h 20m 43s</li>
+					<li> </li>
+					<li><button>Play</button></li>					
+				</ul>
+		</div>
+		-->
+		
+		<div id="uploader">
+			<input type='file' accept='text/plain' onchange='openFile(event)'>			
+		</div>
+	</body>
+</html>
