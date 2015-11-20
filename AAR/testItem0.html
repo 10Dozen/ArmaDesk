@@ -36,6 +36,15 @@
 				left: 30%;
 			}
 			
+			#error-label {
+				padding-top: 0px;
+				padding-left: 20px;
+				font-size: 24px;
+				font-weight: bold;
+				background-color: #b30000;
+				color: white;
+			}
+			
 			#details-wrapper {
 				padding-top: 0px;				
 			}
@@ -50,12 +59,20 @@
 				list-style-type: none;
 			}
 			
+			#view-header {
+				padding-top: 0px;
+				padding-left: 20px;
+				background-color: #3366CC;
+				
+				font-size: 18px;
+				font-weight: bold;
+				color: white;				
+			}
 			
-			
-			.player-line {
+			#player-line {
 				position: absolute;
 				display: inline;
-				top: -30px;
+				top: 30px;
 			}
 			
 			#player-step {
@@ -64,25 +81,32 @@
 				width: 5%;
 			}
 			
+			#player-indicator {
+				display: inline-block;
+				padding-left: 20px;
+				font-size: 10px;
+			}
+			
 			#slider {
-				display: inline-block;			
-				width:300px;
+				display: inline-block;
+				left: 20px;
+				top: 4px;
+				width: 300px;
 			}
 			
 			
 		</style>
 		
 		
-		<script>			
-			
-		
+		<script>	
 			var aarData = {};
 			var aarCurrentTime = 0;
 			
 			
 			// Open file
 			var openFile = function(event) { 
-				$( '#details-wrapper' ).remove();
+				$( "#details-wrapper" ).remove();
+				$( "#error-label" ).remove();
 				var input = event.target; 
 
 				var reader = new FileReader(); 
@@ -91,15 +115,18 @@
 					try {
 						aarData = JSON.parse(text);
 						console.log("Parsed!");
-						showAARDetailsScreen();
+						// Detail screen
+						var timelabel = getTimeLabel(aarData.metadata.time);				
+						$( "body" ).append("<div id='details-wrapper'><h1>" + aarData.metadata.name + "</h1><ul><li>Location: <b>" + aarData.metadata.island + "</b></li><li>Date: " + aarData.metadata.date + "</li><li>Duration: " + timelabel + "</li><li><br /></li><li><button onClick='initAAR()'>Play</button></li></ul></div>")
 					} catch (e) {
-						alert("File is not AAR file!");
+						$( "body" ).append("<div id='error-label'>" + "File is not AAR file!" + "</div>");
 						console.log("File is not AAR file!");
 					}
 				};				
 				reader.readAsText(input.files[0]);
 			};
 			
+			// Time label
 			function getTimeLabel(t) {
 				var time = t;
 				var timeHours = time / 60 /60 | 0;
@@ -108,24 +135,37 @@
 				var output = "";
 
 				function formatTimeNum(t,l) {
-					var output = t + " " + l + " ";
-					if (t > 0) { if (t < 10) {output = "0" + output;} } else { output = "" }
+					var output = t + " " + l + " ";					
+					if (t > 0) { 
+						if (t < 10) {output = "0" + output;} 
+					} else { 
+						if (l == "s") {
+							output = "00 s"
+						} else {
+							output = ""
+						}
+					}
 					return output
 				}
 				
 				return formatTimeNum(timeHours,"h") + formatTimeNum(timeMinutes,"m") + formatTimeNum(timeSeconds,"s")
 			}
 			
-			function showAARDetailsScreen() {
-				var timelabel = getTimeLabel(aarData.metadata.time);				
-				$( "body" ).append("<div id='details-wrapper'><h1>" + aarData.metadata.name + "</h1><ul><li>Location: <b>" + aarData.metadata.island + "</b></li><li>Date: " + aarData.metadata.date + "</li><li>Duration: " + timelabel + "</li><li><br /></li><li><button onClick='startAAR()'>Play</button></li></ul></div>")
-			};
+			function initAAR() {
+				$( "#details-wrapper" ).remove();
+				$( "#uploader" ).remove();
+				$( "body" ).append("<div id='view-header'>" + aarData.metadata.name + " (" + aarData.metadata.date + ")</div>")
+				
+				$( "#player-step" ).html( "<span>0 s</span> / " + getTimeLabel(aarData.metadata.time) );
+				$( "#slider").slider( "option", "max", aarData.metadata.time );
+				$( "#player-line" ).css( "top", "25px" );
+			}
 			
 			
 			var nextStep = function () {
 				aarCurrentTime = aarCurrentTime + 1;
 				$( "#slider" ).slider({value: aarCurrentTime});
-				$( "#player-step" ).html( aarCurrentTime + " sec" );			
+				$( "#player-step > span" ).html( getTimeLabel(aarCurrentTime) );			
 			}
 		</script>
 		
@@ -134,24 +174,36 @@
 				$( "#slider" ).slider({
 					range: "min",
 					min: 0,
-					max: 10,
+					max: 100,
 					slide: function( event, ui ) {
-						$( "#player-step" ).html( ui.value + " sec" );
+						$( "#player-step > span" ).html( getTimeLabel(ui.value) );
 						aarCurrentTime = ui.value;
 					}
 				});
-				$( "#player-step" ).html( "0 sec" );	
+				$( "#player-step > span" ).html( "0 s" );
+				
+				//$( "#player-speed" ).selectmenu();
 			});
 		</script>
 	</head>
 	<body>
-
-		<div class="player-line">
-			<button class="player-step-backward"><</button>
-			<button class="player-step-play">Play</button>
-			<button class="player-step-forward" onClick="nextStep()">></button>
-			<label id="player-step">0 sec</label><label id="player-maxtime">/ 10 sec</label>		
+		<div id="player-line">
+			<button id="player-step-backward"><</button>
+			<button id="player-step-play">Play</button>
+			<button id="player-step-forward" onClick="nextStep()">></button>
+			<select name="player-speed" id="player-speed">
+				<optgroup label="Play speed">
+					<option value="1">x1</option>
+					<option value="2">x2</option>
+					<option value="5">x5</option>
+					<option value="10">x10</option>
+					<option value="50">x50</option>
+				</optgroup>
+			</select>
 			<div id="slider"></div>
+			<div id="player-indicator">
+				<label id="player-step"><span>0 sec</span> / 10 sec</label>					
+			</div>	
 		</div>
 		
 		<div id="uploader">
