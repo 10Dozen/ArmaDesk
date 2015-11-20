@@ -1,5 +1,3 @@
-
-		
 <!doctype html>
 <html lang="us">
 	<head>
@@ -75,7 +73,9 @@
 		</style>
 		
 		
-		<script>
+		<script>			
+			
+		
 			var aarData = {};
 			var aarCurrentTime = 0;
 			
@@ -122,7 +122,14 @@
 			};
 			
 			
+			var nextStep = function () {
+				aarCurrentTime = aarCurrentTime + 1;
+				$( "#slider" ).slider({value: aarCurrentTime});
+				$( "#player-step" ).html( aarCurrentTime + " sec" );			
+			}
+		</script>
 		
+		<script>
 			$( document ).ready(function () {
 				$( "#slider" ).slider({
 					range: "min",
@@ -135,13 +142,6 @@
 				});
 				$( "#player-step" ).html( "0 sec" );	
 			});
-			
-			
-			var nextStep = function () {
-				aarCurrentTime = aarCurrentTime + 1;
-				$( "#slider" ).slider({value: aarCurrentTime});
-				$( "#player-step" ).html( aarCurrentTime + " sec" );			
-			}
 		</script>
 	</head>
 	<body>
@@ -153,18 +153,6 @@
 			<label id="player-step">0 sec</label><label id="player-maxtime">/ 10 sec</label>		
 			<div id="slider"></div>
 		</div>
-		<!-- 
-		<div id="details-wrapper">			
-				<h1>CO-07 Headhunters</h1>
-				<ul>
-					<li>Location: <b>Stratis</b></li>
-					<li>Date: 2015-11-20</li>
-					<li>Duration: 1h 20m 43s</li>
-					<li> </li>
-					<li><button>Play</button></li>					
-				</ul>
-		</div>
-		-->
 		
 		<div id="uploader">
 			<input type='file' accept='text/plain' onchange='openFile(event)'>			
