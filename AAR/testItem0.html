@@ -69,14 +69,28 @@
 				font-size: 18px;
 				font-weight: bold;
 				color: white;
-				z-index: 50;
+				z-index: 0;
 			}
 			
 			#player-line {
 				position: absolute;
 				display: inline;
-				top: -350px;
-				z-index: 50;
+				width: 100%;
+				top: -100px;
+				z-index: 0;
+			}
+			
+			#player-header {				
+				position: absolute;
+				width: 100%;
+				top: -12px;
+				padding: 0px 0px 25px 20px;			
+				background-color: #3366CC;
+				
+				font-size: 18px;
+				font-weight: bold;
+				color: white;
+				z-index: -4;
 			}
 			
 			#player-step {
@@ -89,6 +103,8 @@
 				display: inline-block;
 				padding-left: 20px;
 				font-size: 10px;
+				color: white;
+				z-index: 151;
 			}
 			
 			#slider {
@@ -110,14 +126,10 @@
 				font-size: 10px;
 			}
 			
-			.nav {
-				width: 100%;
-				position:fixed;
-				display: inline;
-			}
-
-			.panzoom {
-				z-index: -4;
+			#player-info {
+				right: 10px;
+				top: 10px;
+				float: right;
 			}
 		</style>
 		
@@ -178,11 +190,9 @@
 			function initAAR() {
 				$( "#details-wrapper" ).remove();
 				$( "#uploader" ).remove();
-				$( "body" ).append("<div id='view-header'>" + aarData.metadata.name + " (" + aarData.metadata.date + ")</div>")
-				
 				$( "#player-step" ).html( "<span>0 s</span> / " + getTimeLabel(aarData.metadata.time) );
 				$( "#slider").slider( "option", "max", aarData.metadata.time );
-				$( "#player-line" ).css( "top", "25px" );
+				$( "#player-line" ).css( "top", "12px" );
 				
 				var bgImg = "";
 				switch (aarData.metadata.island) {
@@ -195,28 +205,8 @@
 				panzoomInit();
 				document.map.onload = function() {
 					$( ".panzoom" ).panzoom('resetDimensions');
-					//alert("AAR LOADED");
+					$( "#player-header" ).html(aarData.metadata.name + " (" + aarData.metadata.date + ")");
 				};
-			};
-			
-			var panzoomInit = function() {
-				var $panzoom = $('.panzoom').panzoom();
-				$('.panzoom').panzoom("option", {
-					minScale: 1,
-					maxScale: 4
-					
-				});
-				
-				$panzoom.parent().on('mousewheel.focal', function( e ) {
-					e.preventDefault();
-					var delta = e.delta || e.originalEvent.wheelDelta;
-					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-					$panzoom.panzoom('zoom', zoomOut, {
-						increment: 0.1,
-						animate: false,
-						focal: e
-					});
-				});
 			};
 			
 			
@@ -224,8 +214,7 @@
 				var $panzoom = $('.panzoom').panzoom();
 				$('.panzoom').panzoom("option", {
 					minScale: 0.1,
-					maxScale: 4,
-					
+					maxScale: 4					
 				});
 				
 				$panzoom.parent().on('mousewheel.focal', function( e ) {
@@ -276,7 +265,8 @@
 							options = {label: "play",icons: {primary: "ui-icon-play"}};
 						}
 						$( this ).button( "option", options );
-					});	
+					});
+				$( "#player-info" ).button({text: false, icons: { primary: "ui-icon-info" }});
 			});
 		</script>
 		
@@ -285,10 +275,12 @@
 		</style>
 	</head>
 	<body>
-		<div id="player-line">
-			<button id="player-step-backward">rewind</button>
+		<div class="panzoom"><img name="map" src="" /></div>
+		
+		<div id="player-line">			
+			<button id="player-step-backward">prev</button>
 			<button id="player-step-play">play</button>
-			<button id="player-step-forward" onClick="nextStep()">fast forward</button>
+			<button id="player-step-forward" onClick="nextStep()">next</button>
 			<select name="player-speed" id="player-speed">
 				<optgroup label="Play speed">
 					<option value="1">x1</option>
@@ -301,10 +293,10 @@
 			<div id="slider"></div>
 			<div id="player-indicator">
 				<label id="player-step"><span>0 sec</span> / 10 sec</label>					
-			</div>	
+			</div>
+			<button id="player-info">info</button>
+			<div id="player-header"> Loading... </div>
 		</div>
-		
-		<div class="panzoom"><img name="map" src="" /></div>
 		
 		<div id="uploader">
 			<input type='file' accept='text/plain' onchange='openFile(event)'>			
