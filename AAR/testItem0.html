@@ -60,19 +60,23 @@
 			}
 			
 			#view-header {
+				position: absolute;
+				width: 100%;
 				padding-top: 0px;
 				padding-left: 20px;
 				background-color: #3366CC;
 				
 				font-size: 18px;
 				font-weight: bold;
-				color: white;				
+				color: white;
+				z-index: 50;
 			}
 			
 			#player-line {
 				position: absolute;
 				display: inline;
-				top: 30px;
+				top: -350px;
+				z-index: 50;
 			}
 			
 			#player-step {
@@ -89,12 +93,32 @@
 			
 			#slider {
 				display: inline-block;
-				left: 20px;
-				top: 4px;
+				left: 10px;
 				width: 300px;
 			}
 			
+			#player-step-backward, #player-step-play, #player-step-forward {
+				height: 24px;
+				width: 24px;
+			}
 			
+			#player-speed-button {
+				top: 8px;
+			}
+			
+			.ui-widget {
+				font-size: 10px;
+			}
+			
+			.nav {
+				width: 100%;
+				position:fixed;
+				display: inline;
+			}
+
+			.panzoom {
+				z-index: -4;
+			}
 		</style>
 		
 		
@@ -159,7 +183,63 @@
 				$( "#player-step" ).html( "<span>0 s</span> / " + getTimeLabel(aarData.metadata.time) );
 				$( "#slider").slider( "option", "max", aarData.metadata.time );
 				$( "#player-line" ).css( "top", "25px" );
-			}
+				
+				var bgImg = "";
+				switch (aarData.metadata.island) {
+					case "Stratis": bgImg = "img/map_stratis_8192.png"; break;
+					default: bgImg = "img/map_stratis_8192.png";
+				}
+				
+				$( ".panzoom > img" ).attr( "src", bgImg );
+				
+				panzoomInit();
+				document.map.onload = function() {
+					$( ".panzoom" ).panzoom('resetDimensions');
+					//alert("AAR LOADED");
+				};
+			};
+			
+			var panzoomInit = function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 1,
+					maxScale: 4
+					
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: false,
+						focal: e
+					});
+				});
+			};
+			
+			
+			var panzoomInit = function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 0.1,
+					maxScale: 4,
+					
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: true,
+						easing: "ease-in-out",
+						focal: e						
+					});
+				});
+			};
 			
 			
 			var nextStep = function () {
@@ -182,15 +262,33 @@
 				});
 				$( "#player-step > span" ).html( "0 s" );
 				
-				//$( "#player-speed" ).selectmenu();
+				$( "#player-speed" ).selectmenu();				
+				$( "#player-step-backward" ).button({text: false,icons: { primary: "ui-icon-seek-prev" }})
+					.click(function() { $( "#player-step-play" ).button( "option", {label: "play",icons: {primary: "ui-icon-play"} }) });
+				$( "#player-step-forward" ).button({text: false,icons: {primary: "ui-icon-seek-next"}})
+					.click(function() { $( "#player-step-play" ).button( "option", {label: "play",icons: {primary: "ui-icon-play"} }) });
+				$( "#player-step-play" ).button({text: false,icons: {primary: "ui-icon-play"}})
+					.click(function() {
+						var options;
+						if ( $( this ).text() === "play" ) {
+							options = {label: "pause",icons: {primary: "ui-icon-pause"}};
+						} else {
+							options = {label: "play",icons: {primary: "ui-icon-play"}};
+						}
+						$( this ).button( "option", options );
+					});	
 			});
 		</script>
+		
+		<style>
+			
+		</style>
 	</head>
 	<body>
 		<div id="player-line">
-			<button id="player-step-backward"><</button>
-			<button id="player-step-play">Play</button>
-			<button id="player-step-forward" onClick="nextStep()">></button>
+			<button id="player-step-backward">rewind</button>
+			<button id="player-step-play">play</button>
+			<button id="player-step-forward" onClick="nextStep()">fast forward</button>
 			<select name="player-speed" id="player-speed">
 				<optgroup label="Play speed">
 					<option value="1">x1</option>
@@ -205,6 +303,8 @@
 				<label id="player-step"><span>0 sec</span> / 10 sec</label>					
 			</div>	
 		</div>
+		
+		<div class="panzoom"><img name="map" src="" /></div>
 		
 		<div id="uploader">
 			<input type='file' accept='text/plain' onchange='openFile(event)'>			
