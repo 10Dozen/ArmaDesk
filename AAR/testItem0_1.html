@@ -60,19 +60,23 @@
 			}
 			
 			#view-header {
+				position: absolute;
+				width: 100%;
 				padding-top: 0px;
 				padding-left: 20px;
 				background-color: #3366CC;
 				
 				font-size: 18px;
 				font-weight: bold;
-				color: white;				
+				color: white;
+				z-index: 50;
 			}
 			
 			#player-line {
 				position: absolute;
 				display: inline;
-				top: -35px;
+				top: -350px;
+				z-index: 50;
 			}
 			
 			#player-step {
@@ -106,6 +110,11 @@
 				font-size: 10px;
 			}
 			
+			.nav {
+				width: 100%;
+				position:fixed;
+				display: inline;
+			}			
 		</style>
 		
 		
@@ -170,7 +179,36 @@
 				$( "#player-step" ).html( "<span>0 s</span> / " + getTimeLabel(aarData.metadata.time) );
 				$( "#slider").slider( "option", "max", aarData.metadata.time );
 				$( "#player-line" ).css( "top", "25px" );
+				
+				var bgImg = "";
+				switch (aarData.metadata.island) {
+					case "Stratis": bgImg = "img/map_stratis_8192.png"; break;
+					default: bgImg = "img/map_stratis_8192.png";
+				}
+				
+				$( "body" ).append("<div class='nav'></div><div class='panzoom'><img src=" + bgImg + " /></div>");
+				panzoomInit();
+				
 			}
+			
+			var panzoomInit = function() {
+				var $panzoom = $('.panzoom').panzoom();
+				$('.panzoom').panzoom("option", {
+					minScale: 0.1,
+					maxScale: 4				
+				});
+				
+				$panzoom.parent().on('mousewheel.focal', function( e ) {
+					e.preventDefault();
+					var delta = e.delta || e.originalEvent.wheelDelta;
+					var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+					$panzoom.panzoom('zoom', zoomOut, {
+						increment: 0.1,
+						animate: false,
+						focal: e
+					});
+				});
+			};
 			
 			
 			var nextStep = function () {
