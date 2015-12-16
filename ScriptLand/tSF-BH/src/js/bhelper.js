@@ -1,4 +1,5 @@
 var locale = 0; // 0 - EN, 1 - RU
+var code = "";
 
 var defaultTopics = [
 	["I. Situation:", "I. Обстановка:"]
@@ -26,7 +27,7 @@ function generateDefaultTopics() {
 			+ "<input class='topicInput' topicId='" + i + "' value='" + defaultTopics[i][locale] + "' placeholder='" + defaultTopics[i][locale] + "'></input>"
 			+ "</div></li>"
 			+ "<li><div class='dl-3'>"
-			+ "<textarea cols='" + textAreaSettings.cols + "' rows='" + textAreaSettings.rows + "'></textarea>"
+			+ "<textarea class='topicData' cols='" + textAreaSettings.cols + "' rows='" + textAreaSettings.rows + "'></textarea>"
 			+ "</div></li><hr />"	
 		);
 	};
@@ -60,11 +61,31 @@ $( document ).ready(function() {
 	generateDefaultTopics();
 });
 
-
-
 function getCode() {
+	var defineBlock = "//     tSF Briefing\n// Do not modify this part"
+		+ "\n#define BRIEFING		_briefing = [];"
+		+ "\n#define TOPIC(NAME) 	_briefing pushBack [\"Diary\", [ NAME,"
+		+ "\n#define END			]];"
+		+ "\n#define ADD_TOPICS	for \"_i\" from (count _briefing) to 0 step -1 do {player createDiaryRecord (_briefing select _i);};"
+		+ "\n//\n//\n// Briefing goes here"
+		+ "\n\nBRIEFING\n";
+		
+	var topics = "";
+	var topicCount = $( ".topicInput" ).length;
 	
+	for (var i = 0; i < topicCount; i++) {
+		var text = ( $($( ".topicData" )[i]).val() ).replace(/(\r\n|\n|\r)/g,"<br />");
+		
+		topics = topics
+			+ "\nTOPIC(\"" + $($( ".topicInput" )[i]).val() + "\")"
+			+ "\n\"" +  text + "\""
+			+ "\nEND\n";
+	}
 	
+	var endBlock = "\nADD_TOPICS"
+	
+	code = (defineBlock + topics + endBlock)
+	return (defineBlock + topics + endBlock);
 };
 
 
