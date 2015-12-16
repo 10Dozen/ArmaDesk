@@ -23,12 +23,88 @@
 		</div>
 		
 		<div id="briefing-form">
-			<ul>
-				
-				
-			</ul>
+			<ul></ul>
 			<hr />
+		</div>
+		<style>
+			#result-tab {
+				background-color: #666666;
+				position: fixed;
+				width: 75%;
+				top: 15%;
+				left: 13%;
+			}
 			
+			#result-tab-header {
+				font-size: 20px;
+				padding: 4px 20px;
+				color: white;
+			}
+			
+			#result-tab-header span {
+				font-size: 9px;
+				float: right;
+				cursor: pointer;
+			}
+			
+			#result-tab-data {
+				padding: 4px 30px;
+				background-color: #CCCCCC;
+				font-size: 10px;
+				font-family: monospace;
+				overflow-y: scroll; 
+				height: 300px;
+			}
+		</style>
+		<div id="result-tab">
+			<div id="result-tab-header">SQF Code <span>Close</span></div>
+			<div id="result-tab-data">
+//     tSF Briefing "text" $&
+// Do not modify this part
+#define BRIEFING		_briefing = [];
+#define TOPIC(NAME) 	_briefing pushBack ["Diary", [ NAME,
+#define END			]];
+#define ADD_TOPICS	for "_i" from (count _briefing) to 0 step -1 do {player createDiaryRecord (_briefing select _i);};
+//
+//
+// Briefing goes here
+
+BRIEFING
+
+TOPIC(I. Situation:)
+&quot;asdasd&lt;br /&gt;asd&lt;br /&gt;         asd&lt;br /&gt;          as sad as d&lt;br /&gt;   sad asd&lt;br /&gt;    sadasd&quot;
+END
+
+TOPIC(A. Enemy Forces:)
+""
+END
+
+TOPIC(B. Friendly Forces:)
+""
+END
+
+TOPIC(II. Mission:)
+""
+END
+
+TOPIC(III. Execution:)
+""
+END
+
+TOPIC(IV. Service Support:)
+""
+END
+
+TOPIC(V. Command & Signal:)
+""
+END
+
+TOPIC(VI. Mission notes:)
+""
+END
+
+ADD_TOPICS
+			"</div>
 		</div>
 	</body>
 </html>
