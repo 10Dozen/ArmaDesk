@@ -88,7 +88,26 @@ function getCode() {
 	return (defineBlock + topics + endBlock);
 };
 
+function getCodeToDisplay() {
+	var code = getCode();	
+	code = escapeHTML(code)
+	code = code.replace(/(\r\n|\n|\r)/g,"<br />");
+	
+	return code
+}
 
+function escapeHTML(str) {
+	str = str.replace(/<br \/>/g, "\n&lt;br /&gt;");	
+	return str
+}
+
+
+/*' is replaced with &apos;
+" is replaced with &quot;
+& is replaced with &amp;
+< is replaced with &lt;
+> is replaced with &gt;
+*/
 
 
 var rptData = "";
