@@ -1,4 +1,6 @@
-<h3>Enviroment</h3>
+[this, 90,0] call BIS_fnc_setPitchBank; - rotate objects
+
+h3>Enviroment</h3>
 
 <h5>BIS_fnc_setOvercast</h5>
 Number
