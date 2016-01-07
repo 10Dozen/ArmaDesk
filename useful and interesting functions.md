@@ -1,6 +1,8 @@
-[this, 90,0] call BIS_fnc_setPitchBank; - rotate objects
+https://forums.bistudio.com/topic/84952-how-to-destroy-wheels-in-editor/
 
-h3>Enviroment</h3>
+<h5>[this, 90,0] call BIS_fnc_setPitchBank;<h5> - rotate objects
+
+<h3>Enviroment</h3>
 
 <h5>BIS_fnc_setOvercast</h5>
 Number
