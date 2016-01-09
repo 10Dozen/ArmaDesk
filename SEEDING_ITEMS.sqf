@@ -131,7 +131,25 @@
 "CUP_srifle_Mk12SPR","CUP_20Rnd_556x45_Stanag","CUP_muzzle_snds_M16","","CUP_optic_SB_11_4x20_PM","bipod_01_F_blk","30Rnd_556x45_Stanag","CUP_30Rnd_556x45_Stanag","20Rnd_762x51_Mag","optic_DMS"
 "rhs_weap_M590_8RD","rhsusf_8Rnd_Slug","rhsusf_8Rnd_00Buck"
 "rhs_weap_m4a1_carryhandle_m203S","rhs_mag_30Rnd_556x45_Mk318_Stanag","rhsusf_acc_nt4_black","rhsusf_acc_anpeq15A","rhsusf_acc_ACOG3_USMC"
-"rhs_weap_m4a1_carryhandle_m203"
+"rhs_weap_m4a1_carryhandle_m203", "rhs_mag_M433_HEDP","rhs_mag_M441_HE","1Rnd_SmokeOrange_Grenade_shell","1Rnd_SmokeBlue_Grenade_shell","1Rnd_SmokePurple_Grenade_shell","1Rnd_SmokeYellow_Grenade_shell","1Rnd_SmokeGreen_Grenade_shell","1Rnd_SmokeRed_Grenade_shell","1Rnd_Smoke_Grenade_shell","UGL_FlareCIR_F","UGL_FlareYellow_F","UGL_FlareRed_F","UGL_FlareGreen_F","UGL_FlareWhite_F","1Rnd_HE_Grenade_shell"
+"rhs_weap_m4a1_carryhandle_grip"
+"rhs_weap_m4a1_carryhandle_grip2","rhsusf_acc_anpeq15side"
+"rhs_weap_m4a1_carryhandle_pmag"
+"rhs_weap_m4a1_carryhandle_grip"
+
+,"rhsusf_acc_ELCAN","rhsusf_acc_ACOG","rhsusf_acc_eotech_552","CUP_optic_CompM4","CUP_optic_MRad","optic_Holosight","CUP_optic_TrijiconRx01_black","optic_NVS"
+,"acc_flashlight"
+
+
+"rhs_weap_m249_pip_S_para","rhs_200rnd_556x45_M_SAW","rhs_200rnd_556x45_B_SAW","rhs_200rnd_556x45_T_SAW","rhsusf_100Rnd_556x45_soft_pouch","rhsusf_200Rnd_556x45_soft_pouch"
+
+
+
+
+
+
+
+
 
 
 
