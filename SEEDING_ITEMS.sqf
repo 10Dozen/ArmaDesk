@@ -90,6 +90,7 @@
 
 
 
+
 /* Items */
 
 "ItemMap","ItemCompass","ItemWatch","tf_anprc152_4","Laserdesignator_03"
@@ -117,10 +118,20 @@
 "rhs_weap_M136_hp","rhs_m136_hp_mag"
 "rhs_weap_smaw_green","rhs_mag_smaw_HEAA","rhs_weap_optic_smaw","rhs_mag_smaw_HEDP","rhs_mag_smaw_SR"
 "rhs_weap_rpg7","rhs_rpg7_PG7VL_mag","rhs_acc_pgo7v","rhs_rpg7_PG7VR_mag","rhs_rpg7_OG7V_mag","rhs_rpg7_TBG7V_mag"
+"rhs_weap_rshg2","rhs_rshg2_mag"
+"rhs_weap_fgm148","rhs_fgm148_magazine_AT"
+
 
 
 /* Weapons */
-
+"SMG_01_F","30Rnd_45ACP_Mag_SMG_01","muzzle_snds_acp"
+"rhs_weap_svdp_wd","rhs_10Rnd_762x54mmR_7N1","rhs_acc_pso1m2"
+"rhs_weap_pkm","rhs_100Rnd_762x54mmR","rhs_100Rnd_762x54mmR_green"
+"CUP_smg_MP5SD6","CUP_30Rnd_9x19_MP5"
+"CUP_srifle_Mk12SPR","CUP_20Rnd_556x45_Stanag","CUP_muzzle_snds_M16","","CUP_optic_SB_11_4x20_PM","bipod_01_F_blk","30Rnd_556x45_Stanag","CUP_30Rnd_556x45_Stanag","20Rnd_762x51_Mag","optic_DMS"
+"rhs_weap_M590_8RD","rhsusf_8Rnd_Slug","rhsusf_8Rnd_00Buck"
+"rhs_weap_m4a1_carryhandle_m203S","rhs_mag_30Rnd_556x45_Mk318_Stanag","rhsusf_acc_nt4_black","rhsusf_acc_anpeq15A","rhsusf_acc_ACOG3_USMC"
+"rhs_weap_m4a1_carryhandle_m203"
 
 
 
