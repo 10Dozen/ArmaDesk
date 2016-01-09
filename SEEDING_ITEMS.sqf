@@ -76,6 +76,23 @@
 
 
 
+/* Backpack */
+
+,"B_AssaultPack_cbr"
+,"B_AssaultPack_rgr"
+,"B_AssaultPack_mcamo"
+,"CUP_B_Bergen_BAF"
+,"rhsusf_assault_eagleaiii_ocp"
+,"rhsusf_assault_eagleaiii_ucp"
+,"rhs_rpg_empty"
+,"CUP_B_GER_Medic_Desert"
+
+
+
+
+
+
+
 
 
 
