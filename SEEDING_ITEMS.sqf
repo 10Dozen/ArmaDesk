@@ -90,6 +90,41 @@
 
 
 
+/* Items */
+
+"ItemMap","ItemCompass","ItemWatch","tf_anprc152_4","Laserdesignator_03"
+
+
+,"ItemcTab"
+,"ACE_Vector"
+,"Laserdesignator_03"
+,"Laserbatteries"
+
+
+
+
+
+/* Handguns */
+"rhsusf_weap_glock17g4","rhsusf_mag_17Rnd_9x19_JHP","rhsusf_mag_17Rnd_9x19_FMJ"
+"rhs_weap_M320","rhs_mag_M441_HE","rhs_mag_M433_HEDP"
+"CUP_hgun_M9","CUP_15Rnd_9x19_M9","CUP_muzzle_snds_M9"
+"hgun_ACPC2_F","9Rnd_45ACP_Mag","muzzle_snds_acp"
+
+
+/* Launchers */
+"rhs_weap_M136","rhs_m136_mag"
+"rhs_weap_M136_hedp","rhs_m136_hedp_mag"
+"rhs_weap_M136_hp","rhs_m136_hp_mag"
+"rhs_weap_smaw_green","rhs_mag_smaw_HEAA","rhs_weap_optic_smaw","rhs_mag_smaw_HEDP","rhs_mag_smaw_SR"
+"rhs_weap_rpg7","rhs_rpg7_PG7VL_mag","rhs_acc_pgo7v","rhs_rpg7_PG7VR_mag","rhs_rpg7_OG7V_mag","rhs_rpg7_TBG7V_mag"
+
+
+/* Weapons */
+
+
+
+
+
 
 
 
