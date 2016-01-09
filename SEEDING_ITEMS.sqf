@@ -48,6 +48,31 @@
 ,"CUP_V_B_PilotVest"
 
 
+/* Headgear */
+
+,"CUP_H_USMC_Helmet_Pilot"
+,"LOP_H_6B27M_RACS"
+,"LOP_H_6B27M_ess_RACS"
+,"rhsusf_ach_bare_wood_headset"
+,"rhsusf_ach_bare_wood_headset_ess"
+,"rhsusf_ach_helmet_headset_ocp"
+,"rhsusf_ach_helmet_headset_ucp"
+,"rhsusf_ach_helmet_headset_ess_ucp"
+,"rhsusf_ach_helmet_headset_ess_ocp"
+,"rhsusf_mich_bare_norotos_arc_alt_headset"
+,"rhsusf_mich_bare_norotos_arc_alt_tan_headset"
+,"rhsusf_mich_bare_norotos_arc_alt_tan"
+,"LOP_H_Pakol"
+,"H_Cap_headphones"
+,"H_HelmetCrew_I"
+,"rhs_Booniehat_ocp"
+,"rhs_Booniehat_ucp"
+,"rhs_Booniehat_m81"
+,"LOP_H_Booniehat_RACS"
+,"H_Booniehat_tan"
+,"H_Booniehat_khk_hs"
+,"H_Watchcap_blk"
+,"LOP_H_6B27M_UN
 
 
 
