@@ -13,7 +13,7 @@
 
 /* Vest */
 
-"LOP_V_CarrierLite_OLV"
+,"LOP_V_CarrierLite_OLV"
 ,"LOP_V_CarrierRig_OLV"
 ,"V_PlateCarrierL_CTRG"
 ,"V_PlateCarrierH_CTRG"
@@ -90,7 +90,7 @@
 
 /* Items */
 
-"ItemMap"
+,"ItemMap"
 ,"ItemCompass"
 ,"ItemWatch"
 ,"Laserdesignator_03"
