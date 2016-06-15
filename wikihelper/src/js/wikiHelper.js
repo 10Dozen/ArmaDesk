@@ -1,6 +1,4 @@
-var locale = 0; // 0 - EN, 1 - RU
-var EndingsMaxId = 0;
-var Endings = [];
+var Spec;
 
 var code = "";
 
@@ -67,6 +65,91 @@ function getCodeToFile() {
 /*		
  *	ENDING FUNCTIONS
 */ 
+
+var Specification = function () {
+	this.name = "";
+	this.expression = "";
+	this.inputs = [];
+	this.output = "";
+	this.description = "";
+	this.examples = "";
+	
+	this.$form = $(".fnc-item");
+	this.init = function () {
+		$( ".inputs-btn" ).on('click', function () {
+			Spec.addInput();
+		});
+	};
+	
+	
+	this.clear = function () {
+		$( ".fnc-name" ).val("");
+		$( ".fnc-expression" ).val("");
+		$( ".fnc-output" ).val("");
+		$( ".fnc-desc" ).val("");
+		$( ".fnc-examples" ).val("");
+		this.inputs = [];
+		$( ".inputs-list" ).html("");
+		this.get();
+	};
+	this.get = function () {
+		this.name = $( ".fnc-name" ).val();
+		this.expression = $( ".fnc-expression" ).val();
+		this.output = $( ".fnc-output" ).val();
+		this.description = $( ".fnc-desc" ).val();
+		this.examples = $( ".fnc-examples" ).val();
+		
+		var inputsItems = $(".inputs-list").children();
+		for (var i = 0; i < this.inputs.length; i++) {
+			var input = (this.inputs)[i];
+			input.type = $( inputsItems[i] ).find(".input-type").val();
+			input.desc = $( inputsItems[i] ).find(".input-desc").val();
+		}		
+	};
+	
+	this.addInput = function () {
+		var id = (this.inputs).length;
+		
+		$( ".inputs-list" ).append( "<div class='inputs-" + id + "' iid='" + id + "'><li><span class='inputs-number'>" + id + "</span><span class='inputs-remove'>✘</span>"
+			+ "<div class='dl-2'><input class='input-type' placeholder='Type (e.g. STRING)'></input></div>"
+			+ "</li><li><div class='dl-2'><textarea class='input-desc' cols='35' rows='3' placeholder='Description'></textarea></div></li></div>"
+		);
+		
+		$(".inputs-list").find(".inputs-" + id).find('.inputs-remove').on('click', function () {
+			console.log(123);
+			var $item = $(this).parent().parent();
+			console.log($item);
+			var id = $( $item ).attr("iid");
+			
+			$($item).remove();
+			(Spec.inputs).splice(id,1);
+			Spec.recalculateInputs();
+		});
+		
+		(this.inputs).push( {"type":"","desc":""} );		
+	};
+	
+	this.recalculateInputs = function () {
+		var inputsItems = $(".inputs-list").children();
+		for (var i = 0; i < this.inputs.length; i++) {
+			$( inputsItems[i] ).attr("iid", i);
+			$( inputsItems[i] ).attr("class", "inputs-" + i);
+			$( inputsItems[i] ).find(".inputs-number").html(i);
+		}	
+	};
+	
+	this.init();
+};
+
+$( document ).ready(function() {
+    Spec = new Specification();
+	$( ".btn-clear" ).on("click", function () {
+			Spec.clear();
+	});
+});
+
+/*
+
 var a = [];
 
 function getEndingById(id) {
@@ -204,3 +287,5 @@ function addEnding() {
 	var ending = new Ending();
 	console.log('Ending added');
 }
+
+*/
