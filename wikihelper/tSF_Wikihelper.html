@@ -16,9 +16,9 @@
 				<span>tSF</span> Wiki Helper
 			</div>
 			<div id="header-status">
-				<button onClick="getCodeToDisplay()">Get Wiki</button>
-				<button onClick="getCodeToFile()">Get SQF</button>
-				<button onClick="addEnding()">Clear</button>
+				<button class="btn-get-wiki">Get Wiki</button>
+				<button class="btn-get-sqf">Get SQF</button>
+				<button class="btn-clear">Clear</button>
 				
 			</div>
 		</div>
@@ -28,13 +28,13 @@
 				<li>
 					<div class='dl-1'>Function Name</div>
 					<div class='dl-2'>
-						<input class='fncName' placeholder='fnc_name'></input>
+						<input class='fnc-name' placeholder='fnc_name'></input>
 					</div>
 				</li>
 				<li>
 					<div class='dl-1'>Expression</div>
 					<div class='dl-2'>
-						<input class='fncExpression' placeholder='@Result = @Input call fnc_name'></input>
+						<input class='fnc-expression' placeholder='@Result = @Input call fnc_name'></input>
 					</div>
 				</li>
 				<hr />
@@ -43,6 +43,7 @@
 					<button class='inputs-btn'>+</button>
 				</li>
 				<div class='inputs-list'>
+					<!--
 					<li>
 						<li>
 							<span class='inputs-number'>0</span>
@@ -58,26 +59,27 @@
 							</div>
 						</li>				
 					</li>
+					-->
 					
 				</div>
 				<hr />
 				<li>
 					<div class='dl-1'>Output</div>
 					<div class='dl-2'>
-						<input class='topicInput' topicId='1' placeholder='e.g. STRING (Short descripion)'></input>
+						<input class='fnc-output' placeholder='e.g. STRING (Short descripion)'></input>
 					</div>
 				</li>
 				<hr />
 				<li>
 					<div class='dl-1'>Function Description</div>
 					<div class='dl-3'>
-						<textarea class='topicData' cols='25' rows='5'></textarea>
+						<textarea class='fnc-desc' cols='25' rows='5' placeholder="What does function do?"></textarea>
 					</div>
 				</li>
 				<li>
 					<div class='dl-1'>Examples</div>
 					<div class='dl-3'>
-						<textarea class='topicData' cols='25' rows='5'></textarea>
+						<textarea class='fnc-examples' cols='25' rows='5' placeholder="Some examples of usage"></textarea>
 					</div>
 				</li>
 			</ul>			
