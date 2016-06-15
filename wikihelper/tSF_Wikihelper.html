@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="us">
+	<head>
+		<meta charset="utf-8">
+		<title>tSF Mission Endings Helper</title>
+		
+		<link rel="stylesheet" href="src/css/wikiHelper.css">
+		<script src="src/js/jquery.min.js"></script>
+		<script src="src/js/wikiHelper.js"></script>
+	</head>
+	<body>
+	
+	
+		<div id="header">
+			<div id="header-title">
+				<span>tSF</span> Wiki Helper
+			</div>
+			<div id="header-status">
+				<button onClick="getCodeToDisplay()">Get Wiki</button>
+				<button onClick="getCodeToFile()">Get SQF</button>
+				<button onClick="addEnding()">Clear</button>
+				
+			</div>
+		</div>
+		
+		<div id="items-form">
+			<ul class="fnc-item">
+				<li>
+					<div class='dl-1'>Function Name</div>
+					<div class='dl-2'>
+						<input class='fncName' placeholder='fnc_name'></input>
+					</div>
+				</li>
+				<li>
+					<div class='dl-1'>Expression</div>
+					<div class='dl-2'>
+						<input class='fncExpression' placeholder='@Result = @Input call fnc_name'></input>
+					</div>
+				</li>
+				<hr />
+				<li>
+					<div class='dl-1'>Input</div>
+					<button class='inputs-btn'>+</button>
+				</li>
+				<div class='inputs-list'>
+					<li>
+						<li>
+							<span class='inputs-number'>0</span>
+							<span class='inputs-remove'>✘</span>
+							<div class='dl-2'>
+								<input class='input-type' topicId='1' placeholder='Type (e.g. STRING)'></input>
+							</div>
+							
+						</li>
+						<li>
+							<div class='dl-2'>
+								<textarea class='input-desc' cols='35' rows='3' placeholder='Description'></textarea>
+							</div>
+						</li>				
+					</li>
+					
+				</div>
+				<hr />
+				<li>
+					<div class='dl-1'>Output</div>
+					<div class='dl-2'>
+						<input class='topicInput' topicId='1' placeholder='e.g. STRING (Short descripion)'></input>
+					</div>
+				</li>
+				<hr />
+				<li>
+					<div class='dl-1'>Function Description</div>
+					<div class='dl-3'>
+						<textarea class='topicData' cols='25' rows='5'></textarea>
+					</div>
+				</li>
+				<li>
+					<div class='dl-1'>Examples</div>
+					<div class='dl-3'>
+						<textarea class='topicData' cols='25' rows='5'></textarea>
+					</div>
+				</li>
+			</ul>			
+		</div>
+		
+		<div id="result-tab">
+			<div id="result-tab-header"><b>SQF Code</b> <span onClick="closeCodeDisplay()">Close</span></div>
+			<div id="result-tab-data"></div>
+		</div>
+	</body>
+</html>
