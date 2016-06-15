@@ -79,8 +79,7 @@ var Specification = function () {
 		$( ".inputs-btn" ).on('click', function () {
 			Spec.addInput();
 		});
-	};
-	
+	};	
 	
 	this.clear = function () {
 		$( ".fnc-name" ).val("");
@@ -128,7 +127,6 @@ var Specification = function () {
 		
 		(this.inputs).push( {"type":"","desc":""} );		
 	};
-	
 	this.recalculateInputs = function () {
 		var inputsItems = $(".inputs-list").children();
 		for (var i = 0; i < this.inputs.length; i++) {
@@ -136,6 +134,33 @@ var Specification = function () {
 			$( inputsItems[i] ).attr("class", "inputs-" + i);
 			$( inputsItems[i] ).find(".inputs-number").html(i);
 		}	
+	};
+	
+	this.getWikiCode = function () {};
+	this.getSqfCode = function () {
+		Spec.get();
+		var inputText = "";
+		for (var i=0; i< Spec.inputs.length; i++) {
+			var inputData = Spec.inputs[i];
+			inputText += "<br /> * " + i + ": "+ inputData.type + " - " + inputData.desc;
+		};
+		
+		var codeBlocks = [
+			"/*"
+			, " * " + Spec.expression
+			, " * " + Spec.description
+			, " * "
+			, " * INPUT:" + inputText
+			, " * OUTPUT: " + Spec.output
+			, " * " + Spec.examples
+		];
+		
+		var output = "";
+		for (var i=0; i<codeBlocks.length; i++) {
+			output += "<br />" + codeBlocks[i];
+		};
+		
+		return output;
 	};
 	
 	this.init();
