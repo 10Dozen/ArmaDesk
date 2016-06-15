@@ -1,12 +1,3 @@
-var Spec;
-
-var code = "";
-
-var textAreaSettings = {
-	"cols": 50
-	,"rows": 10
-	,"width": "800px"
-}
 
 /*		
  *	COMMON FUNCTIONS
@@ -23,10 +14,8 @@ function showFormattedCode(code, type) {
 		$( "#result-tab-header > b" ).html("Git Wiki Code");
 	};
 	$( "#result-tab" ).css( "top", "15%" );
-	$( "#result-tab-data" ).html( code );
-	
+	$( "#result-tab-data" ).html( code );	
 }
-
 
 
 function getCodeToDisplay() {
@@ -43,13 +32,6 @@ function getCodeToDisplay() {
 function closeCodeDisplay() {
 	$( "#result-tab" ).css( "top", "-3000px" );
 };
-
-function getCodeToFile() {
-	var a = document.createElement('a');
-	a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( getCode() ));
-	a.setAttribute('download', "Endings.hpp" );
-	a.click();
-}
 
 
 /*		
@@ -126,10 +108,38 @@ var Specification = function () {
 		}	
 	};
 	
-	this.getWikiCode = function () {};
-	this.getSqfCode = function () {
+	this.getWikiCode = function () {
 		Spec.get();
 		
+		var inputText = "";
+		for (var i=0; i< Spec.inputs.length; i++) {
+			var inputData = Spec.inputs[i];
+			
+			var inputDescs = inputData.desc.split("\n");
+			var inputDesc = inputDescs[0];
+			for (var j=1; j < inputDescs.length; j++) {
+				inputDesc += " " + inputDescs[i];
+			}
+			
+			inputText += "<br />&lt;br /&gt;`" + i + ": "+ inputData.type + "	- " + inputDesc + "`";
+		};
+		
+		var codeBlocks = [
+			"##### " + Spec.name
+			, "`" + Spec.expression + "`"
+			, "&lt;br /&gt;&lt;br /&gt;`INPUT:`" + inputText
+			, "&lt;br /&gt;`OUTPUT: " + Spec.output + "`"
+			, "&lt;br /&gt;&lt;br /&gt;" + Spec.description
+		];
+		var output = "";
+		for (var i=0; i<codeBlocks.length; i++) {
+			output += "<br />" + codeBlocks[i];
+		};
+	
+		return output;
+	};
+	this.getSqfCode = function () {
+		Spec.get();
 		
 		var descriptionLines = Spec.description.split("\n");
 		var description = descriptionLines[1];
