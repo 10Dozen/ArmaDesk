@@ -129,7 +129,7 @@ var Specification = function () {
 			, "`" + Spec.expression + "`"
 			, "&lt;br /&gt;&lt;br /&gt;`INPUT:`" + inputText
 			, "&lt;br /&gt;`OUTPUT: " + Spec.output + "`"
-			, "&lt;br /&gt;&lt;br /&gt;" + Spec.description
+			, "&lt;br /&gt;&lt;br /&gt;" + Spec.description.replace(/(\r\n|\n|\r)/g," ")
 		];
 		var output = "";
 		for (var i=0; i<codeBlocks.length; i++) {
