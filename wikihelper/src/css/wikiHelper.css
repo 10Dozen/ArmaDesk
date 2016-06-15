@@ -85,7 +85,8 @@ body {
 .inputs-number {
 	color: gray;
 	background-color: #bbb;	
-	padding: 2px 10px 2px 10px;
+	margin: 5px 0px 0px 0px;
+	padding: 5px 10px 8px 10px;
 	display: inline-block;
 }
 
@@ -93,7 +94,8 @@ body {
 	float: right;
 	color: gray;
 	background-color: #bbb;	
-	padding: 2px 5px 2px 5px;
+	margin-top: 5px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block;
 }
 
@@ -133,7 +135,7 @@ body {
 }
 
 .dl-3 textarea {
-	width: 500px;
+	width: 475px;
 	padding: 3px 6px;
 	font-family: monospace;
 }
