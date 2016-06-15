@@ -142,7 +142,7 @@ var Specification = function () {
 		Spec.get();
 		
 		var descriptionLines = Spec.description.split("\n");
-		var description = descriptionLines[1];
+		var description = descriptionLines[0];
 		for (var i=1; i< descriptionLines.length; i++) {
 			description += "<br /> *      " +  descriptionLines[i];
 		};
