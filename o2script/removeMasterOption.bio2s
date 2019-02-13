@@ -1,0 +1,123 @@
+
+// Presets
+SelectionsToRemove = [
+	"---Comment options that shouldn't be deleted!---"
+	
+	,"--Option: Grenade Launcher"	
+	,"--Option: RIS adapter"
+	/*
+	,"--Option: Dovetail mount"
+	,"--Option: Dovetail Scope Proxy"
+	,"--Option: Barrel side RIS"
+	,"--Option: Plastic handguard"
+	,"--Option: Railed handguard"
+	*/
+];
+
+scopeName "mainScope";
+console = openStandardIO;
+echo "--------------- Script START ---------------";
+
+/*
+	- Select "--Option: Grenade Launcher" selection
+	- Select it's face 
+	- Deletes faces and vertexes
+	- Delete selection
+*/
+
+_initLevel = (activeLevel this);
+_objects = (getObjects this);
+
+{	
+	console << ("Removing [" + _x + "] selection") << eoln;
+	echo ("Removing [" + _x + "] selection");
+	
+	SelectionToRemove = _x;
+	
+	_selectionFound = false;
+	{
+		if (_x checkSelectionName SelectionToRemove) then {		
+			_selectionFound = true;
+		};
+	} forEach _objects;
+
+	if (_selectionFound) then {
+		console << ("Selection found " + SelectionToRemove) << eoln; echo "Selection found";
+
+		_levels = (getResolutions this);
+		echo ("LODs: " + str(_levels)); console << ("LODs: " + str(_levels)) << eoln;
+
+		{
+			this setActive (this findLevel _x);
+			
+			// Removing target selection
+			_objectData = ((getObjects this) select (activeLevel this));
+			
+			console << ("Removing from " + str(_x) + " LOD") << eoln;
+			echo ("LOD " + str(_x) + " > Objects: " + str(_objectData));
+			
+			_selectedSel = _objectData loadSelection SelectionToRemove;
+			deleteSelected _selectedSel;
+			
+			_objectData deleteSelection SelectionToRemove;
+			console << "Removed selected" << eoln; echo "Removed selected";
+
+			// Remove empty selections
+			_selectedSel = nil;
+			_selections = getSelections _objectData;
+			{
+				_selectedSel = _objectData loadSelection _x;
+				if (countPoints _selectedSel < 1) then {
+					_objectData deleteSelection _x;	
+
+					console << ("Removing empty selection! [Selection: " + _x + " Points: " + str(countPoints _selectedSel) + "]") << eoln;
+					echo ("Removing empty selection! Selection: " + _x + " Points: " + str(countPoints _selectedSel));
+				};
+			} forEach _selections;
+			
+			// Verify proxy number is correct (basically if there is 1 proxy per type and it's number is not 000 or 001 - rename to 001)
+			console << ("Verifying proxies IDs") << eoln;
+			_selections = getSelections _objectData;
+			_proxyTOP = [];
+			_proxySIDE = [];
+			_proxyMUZZLE = [];
+			_proxyFLASH = [];
+			_proxyMAGAZINE = [];
+			
+			// Get proxy selections for each type
+			{
+				_name = toLower _x;
+				if (_name find "proxy:" == 0) then {
+					switch (true) do {
+						case (_name find "\top" > -1): { _proxyTOP = _proxyTOP + [_x]; };
+						case (_name find "\side" > -1): { _proxySIDE = _proxySIDE + [_x]; };
+						case (_name find "flash" > -1): { _proxyFLASH = _proxyFLASH + [_x]; };
+						case (_name find "\muzzle" > -1): { _proxyMUZZLE = _proxyMUZZLE + [_x]; };
+						case (_name find "magazineslot" > -1): { _proxyMAGAZINE = _proxyMAGAZINE + [_x]; };
+					};
+				};		
+			} forEach _selections;
+				
+			{
+				if (count _x == 1) then {
+					_selName = _x select 0;
+					_proxyID = _selName @ [(count _selName) - 3, count _selName];
+					
+					if !(_proxyID in ["000","001"]) then {
+						_newSelName = _selName @ [0, (count _selName) - 3] + "001";
+						_sel = _objectData loadSelection _selName;
+						_objectData save _sel as _newSelName;
+						_objectData deleteSelection _selName;
+
+						console << ("Proxy " + _selName + " corrected to " + _newSelName) << eoln;
+						echo ("New selection name: " + (_newSelName));
+					};
+				};
+			} forEach [_proxyTOP, _proxySIDE, _proxyMUZZLE, _proxyFLASH, _proxyMAGAZINE];
+			
+			console << ("All done for " + SelectionToRemove + "! Have a nice day!") << eoln;
+		} forEach _levels;
+	};
+} forEach SelectionsToRemove;
+
+// save (this as "ak_test_save.p3d");
