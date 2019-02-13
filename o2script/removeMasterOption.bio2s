@@ -1,30 +1,40 @@
+// Settings:
+OutputFilename = "CUP_AK";
+Preset = "AK_Default";
 
 // Presets
-SelectionsToRemove = [
-	"---Comment options that shouldn't be deleted!---"
-	
-	,"--Option: Grenade Launcher"	
-	,"--Option: RIS adapter"
-	/*
-	,"--Option: Dovetail mount"
-	,"--Option: Dovetail Scope Proxy"
-	,"--Option: Barrel side RIS"
-	,"--Option: Plastic handguard"
-	,"--Option: Railed handguard"
-	*/
+// in format: [@PresetName, @OutputFileName, @ListOfSelectionsToRemove]
+#define GL				"--Option: Grenade Launcher"
+#define RIS_TOP			"--Option: RIS adapter"
+#define DOVETAIL_PROXY 	"--Option: Dovetail Scope Proxy"
+Presets = [
+	["AK_Default", "", [GL, RIS_TOP]],
+	["AK_GL", "gl", [RIS_TOP]],
+	["AK_Top_rail", "_top_rail", [GL, DOVETAIL_PROXY]],
+	["AK_GL_Top_rail", "gl_top_rail", [DOVETAIL_PROXY]]
 ];
+
+
+// ------------- Script ------------------------
+
+_selectedPreset = [];
+{
+	if (_x select 0 == Preset) exitWith {
+		_selectedPreset = _x;
+	};
+} forEach Presets;
+
+PresetName = _selectedPreset select 0;
+FilenameSuffix = _selectedPreset select 1;
+SelectionsToRemove = _selectedPreset select 2;
+
+_result = messageBox ["Are you sure to process master model with " + PresetName + " preset?",1];
+if (_result == 2) exitWith {};
+
 
 scopeName "mainScope";
 console = openStandardIO;
 echo "--------------- Script START ---------------";
-
-/*
-	- Select "--Option: Grenade Launcher" selection
-	- Select it's face 
-	- Deletes faces and vertexes
-	- Delete selection
-*/
-
 _initLevel = (activeLevel this);
 _objects = (getObjects this);
 
@@ -120,4 +130,8 @@ _objects = (getObjects this);
 	};
 } forEach SelectionsToRemove;
 
-// save (this as "ak_test_save.p3d");
+
+save (this as (OutputFilename + FilenameSuffix + ".p3d"));
+
+
+messageBox ["Done!",0];
