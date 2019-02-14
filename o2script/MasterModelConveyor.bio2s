@@ -1,0 +1,242 @@
+/* 
+ *  Presets
+ *	in format: [@PresetName, @OutputFileSuffix, @ListOfSelectionsToRemove]
+ */
+#define GL				"--Option: Grenade Launcher"
+#define RIS_TOP			"--Option: RIS adapter"
+#define DOVETAIL_PROXY 	"--Option: Dovetail Scope Proxy"
+Presets = [
+	["AK_Default"		, ""			, [GL, RIS_TOP]],
+	["AK_GL"			, "gl"			, [RIS_TOP]],
+	["AK_Top_rail"		, "_top_rail"	, [GL, DOVETAIL_PROXY]],
+	["AK_GL_Top_rail"	, "gl_top_rail"	, [DOVETAIL_PROXY]]
+];
+
+// ------------- Script ------------------------
+
+/* 
+ *  UI Initialization
+ */
+ 
+dzn_fnc_getDrawInfo = {
+	// Compose and return info about output
+	// Input: [0,1,2,3] ids of selected presets
+	private["_data","_output"];
+	_data = _this;
+	
+	_output = str(count _data) + " models";
+	{
+		_output = _output + ", " + _modelNamePrefix + ((Presets select _x) select 1) + ".p3d";
+	} forEach _data;
+	
+	if (count _data == 1) then {
+		_output = _output + ", Removing [";
+		_sep = "";
+		{			
+			_output = _output + _sep + _x;
+			_sep = ", ";
+		} forEach ((Presets select 0) select 2);
+		_output = _output + " ]";
+	};
+	
+	// echo _output;
+	_output
+};
+dzn_fnc_onUIChange = {
+	// echo ("Selected: " + str(_multilistbox));
+	if (count _multilistbox > 0) then {
+		_infoText = _multilistbox call dzn_fnc_getDrawInfo;
+	} else {
+		_infoText = "(select single preset to view info)";
+	};
+	["_infoText"]
+};
+
+_presetTitles = [];
+{ _presetTitles = _presetTitles + [_x select 0]; } forEach Presets;
+_multilistbox = [0];
+_infoText = ""; 
+
+_currentModelName = nameOf this;
+_modelNamePrefix = "";
+_folder = "P:\";
+_modelNamePrefixExtenstionID = 0;
+for "_i" from (count _currentModelName) to 0 step -1 do {
+	if (_currentModelName @ _i == ".") then {
+		_modelNamePrefixExtenstionID = _i;
+	};
+	
+	if (_currentModelName @ _i == "\") exitWith {
+		_folder = _currentModelName @ [0, _i];
+		_modelNamePrefix = (_currentModelName @ [_i + 1, _modelNamePrefixExtenstionID]) + "_out";
+		// echo _folder;
+	};
+};
+_modelNamePrefixExtenstionID = nil;
+
+// Draws dialog with preset selection and output options
+_dlg = dialogBox [400, 200, "Master model conveyor (MMC v0.1)"
+	, ["label",80,15,"Model name prefix:",0]
+	, ["textline",180,13,"_modelNamePrefix",1]
+	, 	["onchange",dzn_fnc_onUIChange]
+	
+	,["begin-subframe",310,90,"Presets (multiselect)"]
+	, 	["extended-listbox",160,70,"_multilistbox",_presetTitles]
+	, 	["onchange",dzn_fnc_onUIChange]
+	, 	["dynlabel",120,50,"_infoText",1]
+	,["end-subframe"]
+	
+	,["move-to", 10, 130]
+	, ["label",50,10,"Output folder:",0]
+	, ["textline",200,13,"_folder",0]
+	, ["browse-button",40,13,"folders"]
+	
+	,["move-to", 330, 15]
+	,["ok-button", 50, 40]
+	,["move-to", 330, 60]
+	,["cancel-button", 50, 15]
+];
+
+[] call dzn_fnc_onUIChange;
+if (_dlg == 2) exitWith {};
+
+echo ("Dialog result: " + str(_dlg));
+{echo ("Preset: " + str(Presets @ _x));} forEach _multilistbox;
+echo ("Model prefix: " + _modelNamePrefix);
+echo ("Target folder: " + _folder);
+
+_result = messageBox ["Are you sure to process master model (" + str(count _multilistbox) + " models will be created)?",1];
+if (_result == 2) exitWith {};
+
+// halt;
+/*
+ *	Bulk operation
+ */
+scopeName "bulkScope";
+echo "--------------- Bulk operation START ---------------";
+
+_p3d = this;
+{
+	/*
+	 *	For each preset:
+	 *		- get preset data
+	 *		- load p3d from file 
+	 *		- Process model - go through all LODs: delete target selection, remove empty selections, fix proxy ids
+	 *		- save LODObject to the new file
+	 */
+	 
+	// Get preset data
+	_presetFileSuffix = (Presets @ _x) @ 1;
+	_presetSelections = (Presets @ _x) @ 2;
+	echo ("PRESET: " + str(Presets @ _x));
+	
+	// Load p3d
+	_p3d = newLODObject;
+	_loadResult = _p3d loadP3D _currentModelName;
+	echo ("RESTORE MODEL: " + str(_loadResult));
+	if !(_loadResult) exitWith { messageBox ["Failed to restore master model from file!",1]; };
+	
+	// Process model by preset
+	_objects = (getObjects _p3d);
+	echo ("PROCESSING MODEL: ");
+	{
+		_selectionToRemove = _x;
+		
+		// Check that selection exist in model (any LOD)
+		_selectionFound = false;
+		{
+			if (_x checkSelectionName _selectionToRemove) then {		
+				_selectionFound = true;
+			};
+		} forEach _objects;
+		
+		if (_selectionFound) then {
+			echo ("Selection " + _selectionToRemove + " found");
+			
+			_LODs = (getResolutions _p3d);
+			echo ("LODs: " + str(_LODs));
+			
+			{
+				_p3d setActive (_p3d findLevel _x);
+				
+				// Removing target selection
+				_objectData = ((getObjects _p3d) select (activeLevel _p3d));
+				echo ("LOD " + str(_x) + " > Objects: " + str(_objectData));
+				
+				_selectedSel = _objectData loadSelection _selectionToRemove;
+				deleteSelected _selectedSel;
+				
+				_objectData deleteSelection _selectionToRemove;
+				echo ("Removed selection " + _selectionToRemove);
+				
+				// Remove empty selections
+				_selectedSel = nil;
+				_selections = getSelections _objectData;
+				{
+					_selectedSel = _objectData loadSelection _x;
+					if (countPoints _selectedSel < 1) then {
+						_objectData deleteSelection _x;	
+						echo ("Removing empty selection! Selection: " + _x + " Points: " + str(countPoints _selectedSel));
+					};
+				} forEach _selections;
+				
+				// Verify proxy number is correct
+				// (basically if there is 1 proxy per type and it's number is not 000 or 001 - rename to 001)
+				echo ("Verifying proxies IDs");
+				_selections = getSelections _objectData;
+				_proxyTOP = [];
+				_proxySIDE = [];
+				_proxyMUZZLE = [];
+				_proxyFLASH = [];
+				_proxyMAGAZINE = [];
+				
+				// Get proxy selections for each type
+				{
+					_name = toLower _x;
+					if (_name find "proxy:" == 0) then {
+						switch (true) do {
+							case (_name find "\top" > -1): { _proxyTOP = _proxyTOP + [_x]; };
+							case (_name find "\side" > -1): { _proxySIDE = _proxySIDE + [_x]; };
+							case (_name find "flash" > -1): { _proxyFLASH = _proxyFLASH + [_x]; };
+							case (_name find "\muzzle" > -1): { _proxyMUZZLE = _proxyMUZZLE + [_x]; };
+							case (_name find "magazineslot" > -1): { _proxyMAGAZINE = _proxyMAGAZINE + [_x]; };
+						};
+					};		
+				} forEach _selections;
+					
+				{
+					if (count _x == 1) then {
+						_selName = _x select 0;
+						_proxyID = _selName @ [(count _selName) - 3, count _selName];
+						
+						if !(_proxyID in ["000","001"]) then {
+							_newSelName = _selName @ [0, (count _selName) - 3] + "001";
+							_sel = _objectData loadSelection _selName;
+							_objectData save _sel as _newSelName;
+							_objectData deleteSelection _selName;
+
+							echo ("New selection name: " + (_newSelName));
+						};
+					};
+				} forEach [_proxyTOP, _proxySIDE, _proxyMUZZLE, _proxyFLASH, _proxyMAGAZINE];
+				
+				echo ("--- [All done for LOD " + str(_x) + "!] ---");
+			} forEach _LODs;
+			
+			echo ("------ [All done for Selection " + _selectionToRemove + "!] ------");			
+		} else {
+			echo ("Selection " + _selectionToRemove + " is not found!");
+		};		
+	} forEach _presetSelections;
+	
+	
+	_newFile = _folder + "\" + _modelNamePrefix + _presetFileSuffix + ".p3d";
+	save (_p3d as _newFile);	
+	echo ("P3D saved to: " + _newFile);
+	echo "---------------- DONE FOR PRESET ------------------";
+} forEach _multilistbox;
+
+echo ("Done");
+messageBox ["Done!",0];
+
+
