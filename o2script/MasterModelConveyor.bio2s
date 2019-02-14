@@ -1,3 +1,14 @@
+/*
+	Master Model Conveyor (MMC v0.1)
+
+	Script process master model (model that contain all possible details) and convert it to the serie of .p3d files where all unecessary detail (meshes/memory points) removed.
+	
+	Non-common details should be grouped in selection (e.g. RIS adapter and TOP proxy should be grouped in same selection) and the name of the selection should be used in 
+	
+	Author: 10Dozen
+*/
+scopeName "mmcScope";
+if (this in ["options"]) exitWith {messageBox ["No options available for this tool.", 0];};
 /* 
  *  Presets
  *	in format: [@PresetName, @OutputFileSuffix, @ListOfSelectionsToRemove]
@@ -11,6 +22,8 @@ Presets = [
 	["AK_Top_rail"		, "_top_rail"	, [GL, DOVETAIL_PROXY]],
 	["AK_GL_Top_rail"	, "gl_top_rail"	, [DOVETAIL_PROXY]]
 ];
+
+
 
 // ------------- Script ------------------------
 
@@ -43,6 +56,7 @@ dzn_fnc_getDrawInfo = {
 	_output
 };
 dzn_fnc_onUIChange = {
+	// Updates info text in dialog UI
 	// echo ("Selected: " + str(_multilistbox));
 	if (count _multilistbox > 0) then {
 		_infoText = _multilistbox call dzn_fnc_getDrawInfo;
@@ -56,7 +70,6 @@ _presetTitles = [];
 { _presetTitles = _presetTitles + [_x select 0]; } forEach Presets;
 _multilistbox = [0];
 _infoText = ""; 
-
 _currentModelName = nameOf this;
 _modelNamePrefix = "";
 _folder = "P:\";
@@ -105,6 +118,7 @@ echo ("Dialog result: " + str(_dlg));
 echo ("Model prefix: " + _modelNamePrefix);
 echo ("Target folder: " + _folder);
 
+// Ask for permission to start operation
 _result = messageBox ["Are you sure to process master model (" + str(count _multilistbox) + " models will be created)?",1];
 if (_result == 2) exitWith {};
 
@@ -112,7 +126,7 @@ if (_result == 2) exitWith {};
 /*
  *	Bulk operation
  */
-scopeName "bulkScope";
+
 echo "--------------- Bulk operation START ---------------";
 
 _p3d = this;
@@ -136,7 +150,7 @@ _p3d = this;
 	echo ("RESTORE MODEL: " + str(_loadResult));
 	if !(_loadResult) exitWith { messageBox ["Failed to restore master model from file!",1]; };
 	
-	// Process model by preset
+	// Process model by preset settings
 	_objects = (getObjects _p3d);
 	echo ("PROCESSING MODEL: ");
 	{
@@ -229,7 +243,7 @@ _p3d = this;
 		};		
 	} forEach _presetSelections;
 	
-	
+	// Save updated data 
 	_newFile = _folder + "\" + _modelNamePrefix + _presetFileSuffix + ".p3d";
 	save (_p3d as _newFile);	
 	echo ("P3D saved to: " + _newFile);
