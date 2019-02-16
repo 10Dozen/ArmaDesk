@@ -1,0 +1,350 @@
+/*
+	Master Model Conveyor (MMC v0.2)
+
+	Script process master model (model that contain all possible details) and convert it to the serie of .p3d files where all unecessary detail (meshes/memory points) removed.
+	
+	Non-common details should be grouped in selection (e.g. RIS adapter and TOP proxy should be grouped in same selection) and the name of the selection should be used in preset.
+	
+	
+	Author: 10Dozen
+*/
+
+/*
+TODO: 
+splitPath path
+Operand types:
+    path: String
+Type of returned value:
+    Array
+Description:
+    Splits path into araay
+
+Example:
+    splitPath "C:\test\anFile.txt" , result is ["c:","\test\","anFile",".txt"]
+
+Category: StringsArrays
+
+
+
+*/
+scopeName "mmcScope";
+if (this in ["options"]) exitWith {messageBox ["No options available for this tool.", 0];};
+/* 
+ *  Presets
+ *	in format: [@PresetName, @OutputFileSuffix, @ListOfOptionSelections]
+ */
+#define GL				"--Option: Grenade Launcher"
+#define RIS_TOP			"--Option: RIS adapter"
+#define DOVETAIL_MOUNT	"--Option: Dovetail mount"
+#define DOVETAIL_PROXY 	"--Option: Dovetail Scope Proxy"
+#define SIDE_F			"--Option: Side mount Front"
+#define SIDE_B			"--Option: Side mount Back"
+Presets = [
+	["AK_Default"		, ""			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_B]],
+	["AK_GL"			, "gl"			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, GL, SIDE_F]],
+	["AK_Top_rail"		, "_top_rail"	, [DOVETAIL_MOUNT, RIS_TOP, SIDE_B]],
+	["AK_GL_Top_rail"	, "gl_top_rail"	, [DOVETAIL_MOUNT, RIS_TOP, GL, SIDE_F]]
+];
+
+
+
+// ------------- Script ------------------------
+
+/* 
+ *  UI Initialization
+ */
+
+
+dzn_fnc_getDrawInfo = {
+	/* Compose and return info about output
+		Input: 
+		@SelectedIds	- [0,1,2,3] ids of selected presets
+		@Presets		- [] of presets corresponding to filtered list 
+	*/
+	private["_data","_presets","_output","_sep"];
+	_data = _this select 0;
+	_presets = _this select 1;
+	
+	_output = str(count _data) + " models";
+	{
+		_output = _output + ", " + _modelNamePrefix + ((_presets select _x) select 1) + ".p3d";
+	} forEach _data;
+	
+	if (count _data == 1) then {
+		_output = _output + ", Selected: [";
+		_sep = "";
+		{			
+			_output = _output + _sep + _x;
+			_sep = ", ";
+		} forEach ((_presets select (_data select 0)) select 2);
+		_output = _output + " ]";
+	};
+	
+	// echo _output;
+	_output
+};
+dzn_fnc_onUIChange = {
+	// Updates info text in dialog UI
+	// echo ("Selected: " + str(_multilistbox));
+	if (count _multilistbox > 0) then {
+		_infoText = [_multilistbox, _filteredPresets] call dzn_fnc_getDrawInfo;
+	} else {
+		_infoText = "(select single preset to view info)";
+	};
+	["_infoText"]
+};
+dzn_fnc_updatePresetListByNames = {
+	// Updates _filteredPresets variable with presets displayed in UI
+	private["_names","_name"];
+	_names = _this select 0;
+	_filteredPresets = [];
+	
+	{
+		_name = toLower _x;
+		{
+			if (_name == toLower (_x select 0)) exitWith {
+				_filteredPresets = _filteredPresets + [_x];
+			};
+		} forEach Presets;
+	} forEach _names;
+};
+dzn_fnc_filterAndUpdatePresets = {
+	// Updates _filteredPresets and _filteredPresetNames vars  and multiselect list in UI
+	private ["_name"];
+	_name = toLower (_this select 0);
+	_filteredPresetNames = [];
+	
+	{
+		if (_name == "" || (toLower(_x select 0) find _name > -1)) then {
+			_filteredPresetNames = _filteredPresetNames + [_x select 0];
+		};
+	} forEach Presets;
+	[_filteredPresetNames] call dzn_fnc_updatePresetListByNames;
+	
+	_multilistbox = [];
+	_infoText = "";
+	"_multilistbox" dlgUpdateList _filteredPresetNames;
+	dlgUpdate "_multilistbox";	
+	dlgUpdate "_infoText";	
+};
+
+_optionPattern = "--Option:";
+_optionPatternSubstr = [0,9];
+_filteredPresets = [];
+_filteredPresetNames = [];
+_multilistbox = [];
+_infoText = ""; 
+_currentModelName = nameOf this;
+
+_pathArray = (splitPath _currentModelName);
+_modelNamePrefix = (_pathArray select 2) + "_out";
+_folder = (_pathArray select 0) + (_pathArray select 1);
+if (_folder == "") then { _folder = "P:\"; };
+
+// Draws dialog with preset selection and output options
+_executionAllowed = false;
+while { !_executionAllowed } do {
+	_dlg = dialogBox [400, 200, "Master model conveyor (MMC v0.1)"
+		, ["label",80,15,"Model name prefix:",0]
+		, ["textline",180,13,"_modelNamePrefix",1]
+		, 	["onchange",dzn_fnc_onUIChange]
+		
+		,["begin-subframe",310,120,"Presets (multiselect)"]
+		,	["textline",160,13,"_listSearch",1]
+		, 	["onchange", {
+				[_listSearch] call dzn_fnc_filterAndUpdatePresets;
+			}]
+		,	["move-to", 8, 50]
+		, 	["extended-listbox",160,85,"_multilistbox",[]]
+		, 	["onchange",dzn_fnc_onUIChange]
+		, 	["dynlabel",120,85,"_infoText",1]
+		,["end-subframe"]
+		
+		,["move-to", 10, 150]
+		, ["label",50,10,"Output folder:",0]
+		, ["textline",200,13,"_folder",0]
+		, ["browse-button",40,13,"folders"]
+		
+		,["move-to", 330, 15]
+		,["ok-button", 50, 40]
+		,["move-to", 330, 60]
+		,["cancel-button", 50, 15]
+		,["init", {		
+			[""] call dzn_fnc_filterAndUpdatePresets;
+		}]
+	];
+
+	if (_dlg == 2) exitWith {};
+
+	{echo ("Preset: " + str(_filteredPresets @ _x));} forEach _multilistbox;
+	echo ("Model prefix: " + _modelNamePrefix);
+	echo ("Target folder: " + _folder);
+
+	if (count _multilistbox > 0) then { 
+		
+		_result = messageBox ["Are you sure to process master model (" + str(count _multilistbox) + " models will be created)?",1];
+		if (_result == 1) exitWith { _executionAllowed = true };
+	} else {
+		messageBox ["No preset selected. Pelase select preset and try again?",0];
+	}; 
+};
+
+if (!_executionAllowed) exitWith {};
+
+/*
+ *	Bulk operation
+ */
+
+echo "--------------- Bulk operation START ---------------";
+
+_p3d = this;
+
+dzn_fnc_getOptionsToRemove = {
+	private ["_optionsSel", "_optionsToRemove", "_selections"];
+	_optionsSel = _this select 0;
+	_selections = _this select 1;
+	_optionsToRemove = [];
+	
+	{
+		if (_x @ _optionPatternSubstr == _optionPattern) then {
+			if !(_x in _optionsSel) then {
+				_optionsToRemove = _optionsToRemove + [_x];
+			};
+		};
+	} forEach _selections;
+	
+	_optionsToRemove
+};
+
+dzn_fnc_fixProxyIDs = {
+	/*
+		Verifies that proxy number is correct
+		(basically if there is 1 proxy per type and it's number is not 000 or 001 - rename to 001)
+	*/
+	private [
+		"_obj","_selections",
+		"_name","_selName",
+		"_proxyTOP","_proxySIDE","_proxyMUZZLE","_proxyFLASH","_proxyMAGAZINE","_proxyID"
+	];
+	
+	echo ("Verifying proxies IDs");
+	_obj = _this select 0;
+	_selections = _this select 1;
+	_proxyTOP = [];	_proxySIDE = [];	_proxyMUZZLE = [];	_proxyFLASH = [];	_proxyMAGAZINE = [];
+	
+	// Get proxy selections for each type
+	{
+		_name = toLower _x;
+		if (_name find "proxy:" == 0) then {
+			switch (true) do {
+				case (_name find "\top" > -1): { _proxyTOP = _proxyTOP + [_x]; };
+				case (_name find "\side" > -1): { _proxySIDE = _proxySIDE + [_x]; };
+				case (_name find "flash" > -1): { _proxyFLASH = _proxyFLASH + [_x]; };
+				case (_name find "\muzzle" > -1): { _proxyMUZZLE = _proxyMUZZLE + [_x]; };
+				case (_name find "magazineslot" > -1): { _proxyMAGAZINE = _proxyMAGAZINE + [_x]; };
+			};
+		};		
+	} forEach _selections;
+	
+	{
+		if (count _x == 1) then {
+			_selName = _x select 0;
+			_proxyID = _selName @ [(count _selName) - 3, count _selName];
+
+			if !(_proxyID in ["000","001"]) then {
+				_newSelName = _selName @ [0, (count _selName) - 3] + "001";
+				_sel = _obj loadSelection _selName;
+				_obj save _sel as _newSelName;
+				_obj deleteSelection _selName;
+
+				echo ("New selection name: " + (_newSelName));
+			};
+		};
+	} forEach [_proxyTOP, _proxySIDE, _proxyMUZZLE, _proxyFLASH, _proxyMAGAZINE];	
+};
+
+
+{
+	/*
+	 *	For each preset:
+	 *		- get preset data
+	 *		- load p3d from file 
+	 *		- Process model - go through all LODs: delete target selection, remove empty selections, fix proxy ids
+	 *		- save LODObject to the new file
+	 */
+	 
+	// Get preset data
+	_presetFileSuffix = (_filteredPresets @ _x) @ 1;
+	_presetSelections = (_filteredPresets @ _x) @ 2;
+	echo ("PRESET: " + str(_filteredPresets @ _x));
+	
+	// Load p3d
+	_p3d = this; // newLODObject;
+	_loadResult = _p3d loadP3D _currentModelName;
+	echo ("RESTORE MODEL: " + str(_loadResult));
+	if !(_loadResult) exitWith { messageBox ["Failed to restore master model from file!",1]; };
+	
+	// Process model by preset settings
+	_objects = (getObjects _p3d);
+	echo ("PROCESSING MODEL: ");
+	
+	_LODs = (getResolutions _p3d);
+	echo ("LODs: " + str(_LODs));
+	
+	{
+		// Selecting specific LOD objects and get LOD selections to remove
+		_p3d setActive (_p3d findLevel _x);
+		_objectData = ((getObjects _p3d) select (activeLevel _p3d));
+		echo ("LOD " + str(_x) + " > Objects: " + str(_objectData));
+		
+		_selectionsToRemove = [_presetSelections, getSelections _objectData] call dzn_fnc_getOptionsToRemove;
+		echo ("Selections to remove at current LOD: " + str(_selectionsToRemove));
+		
+		{
+			private ["_selectionToRemove"];
+			_selectionToRemove = _x;
+			
+			if (_objectData checkSelectionName _selectionToRemove) then {
+				private ["_selectedSel"];
+				echo ("Removing [" + _selectionToRemove + "] selection");
+				
+				_selectedSel = _objectData loadSelection _selectionToRemove;
+				deleteSelected _selectedSel;				
+				_objectData deleteSelection _selectionToRemove;
+				
+				echo ("Selection removed!");
+			} else {
+				// Selection not found in LOD
+				echo ("No [" + _selectionToRemove + "] selection found in current LOD");
+			};			
+		} forEach _selectionsToRemove;
+		
+		// Removing empty selections
+		_selections = getSelections _objectData;
+		{
+			if (countPoints (_objectData loadSelection _x) < 1) then {
+				_objectData deleteSelection _x;	
+				echo ("Removing empty selection! Selection: " + _x + ", Points: 0");
+			};
+		} forEach _selections;
+		
+		// Fixing proxy
+		[_objectData, getSelections _objectData] call dzn_fnc_fixProxyIDs;
+		
+		echo ("--- [All done for LOD " + str(_x) + "!] ---");
+	} forEach _LODs;
+	
+	
+	// Save updated data 
+	_newFile = _folder + "\" + _modelNamePrefix + _presetFileSuffix + ".p3d";
+	// save (_p3d as _newFile);	
+	echo ("P3D saved to: " + _newFile);
+	echo "---------------- DONE FOR PRESET ------------------";
+} forEach _multilistbox;
+
+
+echo ("Done");
+halt;
+messageBox ["Done!",0];
+
+
