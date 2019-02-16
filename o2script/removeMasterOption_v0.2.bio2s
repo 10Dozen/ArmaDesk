@@ -9,29 +9,26 @@
 	Author: 10Dozen
 */
 
-/*
-TODO: 
-splitPath path
-Operand types:
-    path: String
-Type of returned value:
-    Array
-Description:
-    Splits path into araay
-
-Example:
-    splitPath "C:\test\anFile.txt" , result is ["c:","\test\","anFile",".txt"]
-
-Category: StringsArrays
-
-
-
-*/
 scopeName "mmcScope";
 if (this in ["options"]) exitWith {messageBox ["No options available for this tool.", 0];};
+
 /* 
  *  Presets
- *	in format: [@PresetName, @OutputFileSuffix, @ListOfOptionSelections]
+ *	in format: [
+ *		@PresetName 				(STRING) name to display in UI list 
+ *		@OutputFileSuffix 			(STRING) suffix added to output file when saved
+ *		@ListOfOptionSelections		(ARRAY) list of selection names (STRING) that should not be deleted, other selections that starts with "--Option:" will be removed
+ *		@MoveOffset 				(ARRAY) offset [x,y,z] to move entire model (all points). Optional, no move if not defined
+ *	]
+ *
+ * Example:		 
+ *		[
+ *			"AK_Default"
+ *			, "_RIS" (output file will be %filename%_RIS, e.g. AK_RIS)			
+ *			, ["--Option: RIS adapter"] (only RIS adapter selection will be saved, other options removed) 
+ *			, [0.06,0,0] (move X: +0.06)
+ *		]
+ *
  */
 #define GL				"--Option: Grenade Launcher"
 #define RIS_TOP			"--Option: RIS adapter"
@@ -40,7 +37,8 @@ if (this in ["options"]) exitWith {messageBox ["No options available for this to
 #define SIDE_F			"--Option: Side mount Front"
 #define SIDE_B			"--Option: Side mount Back"
 Presets = [
-	["AK_Default"		, ""			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_B]],
+	/* ["AK_Default"		, ""			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_B], 	[0.06,0,0]], */
+	["AK_Default"		, ""			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_B],			[0.06,0,0]],
 	["AK_GL"			, "gl"			, [DOVETAIL_MOUNT, DOVETAIL_PROXY, GL, SIDE_F]],
 	["AK_Top_rail"		, "_top_rail"	, [DOVETAIL_MOUNT, RIS_TOP, SIDE_B]],
 	["AK_GL_Top_rail"	, "gl_top_rail"	, [DOVETAIL_MOUNT, RIS_TOP, GL, SIDE_F]]
@@ -215,7 +213,6 @@ dzn_fnc_getOptionsToRemove = {
 	
 	_optionsToRemove
 };
-
 dzn_fnc_fixProxyIDs = {
 	/*
 		Verifies that proxy number is correct
@@ -227,7 +224,7 @@ dzn_fnc_fixProxyIDs = {
 		"_proxyTOP","_proxySIDE","_proxyMUZZLE","_proxyFLASH","_proxyMAGAZINE","_proxyID"
 	];
 	
-	echo ("Verifying proxies IDs");
+	echo ("    Verifying proxies IDs");
 	_obj = _this select 0;
 	_selections = _this select 1;
 	_proxyTOP = [];	_proxySIDE = [];	_proxyMUZZLE = [];	_proxyFLASH = [];	_proxyMAGAZINE = [];
@@ -257,12 +254,11 @@ dzn_fnc_fixProxyIDs = {
 				_obj save _sel as _newSelName;
 				_obj deleteSelection _selName;
 
-				echo ("New selection name: " + (_newSelName));
+				echo ("    New selection name: " + (_newSelName));
 			};
 		};
 	} forEach [_proxyTOP, _proxySIDE, _proxyMUZZLE, _proxyFLASH, _proxyMAGAZINE];	
 };
-
 
 {
 	/*
@@ -274,12 +270,18 @@ dzn_fnc_fixProxyIDs = {
 	 */
 	 
 	// Get preset data
+	private ["_presetFileSuffix","_presetSelections","_presetOffset","_newFile"];
 	_presetFileSuffix = (_filteredPresets @ _x) @ 1;
 	_presetSelections = (_filteredPresets @ _x) @ 2;
+	_presetOffset = [];
+	if (!isNil {_filteredPresets @ _x @ 3}) then {
+		_presetOffset = _filteredPresets @ _x @ 3;
+	};
 	echo ("PRESET: " + str(_filteredPresets @ _x));
+	echo str(_presetOffset);
 	
 	// Load p3d
-	_p3d = this; // newLODObject;
+	_p3d = newLODObject;
 	_loadResult = _p3d loadP3D _currentModelName;
 	echo ("RESTORE MODEL: " + str(_loadResult));
 	if !(_loadResult) exitWith { messageBox ["Failed to restore master model from file!",1]; };
@@ -298,7 +300,7 @@ dzn_fnc_fixProxyIDs = {
 		echo ("LOD " + str(_x) + " > Objects: " + str(_objectData));
 		
 		_selectionsToRemove = [_presetSelections, getSelections _objectData] call dzn_fnc_getOptionsToRemove;
-		echo ("Selections to remove at current LOD: " + str(_selectionsToRemove));
+		echo ("  Selections to remove at current LOD: " + str(_selectionsToRemove));
 		
 		{
 			private ["_selectionToRemove"];
@@ -306,16 +308,16 @@ dzn_fnc_fixProxyIDs = {
 			
 			if (_objectData checkSelectionName _selectionToRemove) then {
 				private ["_selectedSel"];
-				echo ("Removing [" + _selectionToRemove + "] selection");
+				echo ("  Removing [" + _selectionToRemove + "] selection");
 				
 				_selectedSel = _objectData loadSelection _selectionToRemove;
 				deleteSelected _selectedSel;				
 				_objectData deleteSelection _selectionToRemove;
 				
-				echo ("Selection removed!");
+				echo ("  Selection removed!");
 			} else {
 				// Selection not found in LOD
-				echo ("No [" + _selectionToRemove + "] selection found in current LOD");
+				echo ("  No [" + _selectionToRemove + "] selection found in current LOD");
 			};			
 		} forEach _selectionsToRemove;
 		
@@ -324,12 +326,22 @@ dzn_fnc_fixProxyIDs = {
 		{
 			if (countPoints (_objectData loadSelection _x) < 1) then {
 				_objectData deleteSelection _x;	
-				echo ("Removing empty selection! Selection: " + _x + ", Points: 0");
+				echo ("  Removing empty selection! Selection: " + _x + ", Points: 0");
 			};
 		} forEach _selections;
 		
 		// Fixing proxy
 		[_objectData, getSelections _objectData] call dzn_fnc_fixProxyIDs;
+		
+		// Move model
+		if (count _presetOffset > 0) then {
+			echo ("    Moving model " + str(_presetOffset));
+			_objectData forEachPoint [ 
+				"true"
+				, "_vector=_this getPoint _x; _this setPoint [_x,[(_vector @ 0) + " + str(_presetOffset @ 0) + ",(_vector @ 1) + " + str(_presetOffset @ 1) + ", (_vector @ 2) + " + str(_presetOffset @ 2) + "]]"
+			];
+			echo ("    Model moved");
+		};
 		
 		echo ("--- [All done for LOD " + str(_x) + "!] ---");
 	} forEach _LODs;
@@ -337,14 +349,11 @@ dzn_fnc_fixProxyIDs = {
 	
 	// Save updated data 
 	_newFile = _folder + "\" + _modelNamePrefix + _presetFileSuffix + ".p3d";
-	// save (_p3d as _newFile);	
+	save (_p3d as _newFile);	
 	echo ("P3D saved to: " + _newFile);
 	echo "---------------- DONE FOR PRESET ------------------";
 } forEach _multilistbox;
 
 
 echo ("Done");
-halt;
 messageBox ["Done!",0];
-
-
