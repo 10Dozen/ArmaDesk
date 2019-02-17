@@ -1,0 +1,42 @@
+#define GL					"--Option: Grenade Launcher"
+#define RIS_TOP				"--Option: RIS adapter"
+#define DOVETAIL_MOUNT		"--Option: Dovetail mount"
+#define DOVETAIL_PROXY 		"--Option: Dovetail Scope Proxy"
+#define SIDE_FRONT			"--Option: Side mount Front"
+#define SIDE_BACK			"--Option: Side mount Back"
+
+/* 
+ *  Presets
+ *	in format: [
+ *		@PresetName 				(STRING) name to display in UI list 
+ *		@OutputFileSuffix 			(STRING) suffix added to output file when saved
+ *		@ListOfOptionSelections		(ARRAY) list of selection names (STRING) that should not be deleted, other selections that starts with "--Option:" will be removed
+ *		@MoveOffset 				(ARRAY) offset [x,y,z] to move entire model (all points). Optional, no move if not defined
+ *	]
+ *
+ * Example:		 
+ *		[
+ *			"AK_Default"
+ *			, "_RIS" (output file will be %filename%_RIS, e.g. AK_RIS)			
+ *			, ["--Option: RIS adapter"] (only RIS adapter selection will be saved, other options removed) 
+ *			, [0.06,0,0] (move X: +0.06)
+ *		]
+ *
+ */
+Presets = [
+	/* AK */
+	["AK_Early"				, ""					, [SIDE_BACK]]
+	,["AK_GL"				, "_gl"					, [GL, SIDE_FRONT]]
+	,["AK_N_GL"				, "n_gl"				, [DOVETAIL_MOUNT, DOVETAIL_PROXY, GL, SIDE_FRONT]]
+	,["AK_N_Top_rail"		, "n_top_rail"			, [DOVETAIL_MOUNT, RIS_TOP, SIDE_BACK]]
+	,["AK_N_GL_Top_rail"	, "n_gl_top_rail"		, [DOVETAIL_MOUNT, RIS_TOP, GL, SIDE_FRONT]]
+	,["AK_N"				, "n"					, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_BACK]]
+	
+	/* AK-74 */
+	,["AK74_Early"			, ""					, [SIDE_BACK]]
+	,["AK74_Early_GL"		, "_gl"					, [GL, SIDE_FRONT]]
+	,["AK74_N"				, "n"					, [DOVETAIL_MOUNT, DOVETAIL_PROXY, SIDE_BACK]]
+	,["AK74_N_Top_rail"		, "n_top_rail"			, [DOVETAIL_MOUNT, RIS_TOP, SIDE_BACK]]
+	,["AK74_N_GL"			, "n_gl"				, [DOVETAIL_MOUNT, DOVETAIL_PROXY, GL, SIDE_FRONT]]
+	,["AK74_N_GL_Top_rail"	, "n_gl_top_rail"		, [DOVETAIL_MOUNT, RIS_TOP, GL, SIDE_FRONT]]
+];
