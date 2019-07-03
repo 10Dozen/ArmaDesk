@@ -1,4 +1,5 @@
 enableSaving [false, false];
+player addAction ["Arsenal", {["Open",true] call BIS_fnc_arsenal; }];
 
 USE_GUI_INFO = false;
 /*
@@ -394,6 +395,7 @@ fnc_addWeaponWithMag = {
 		_u disableAI "ANIM";
 		_u switchMove "amovppnemstpsnonwnondnon";
 		_u disableAI "ALL";
+		_u addBackpack "B_Carryall_khk";
 		_u addEventHandler ["Put", { (_this select 0) setPos [0,0,0]; ContainerLoaded = true;}];
 		player setVariable ["ContainerLoader", _u];
 	} else {
@@ -408,20 +410,3 @@ fnc_addWeaponWithMag = {
 	_container setPosATL _cPos;
 };
 
-fnc_createNewWH = {
-	params ["_class"];
-	
-	private _pos = [1024,1024,0.1];
-	private _weaponHolder = "GroundWeaponHolder_Scripted" createVehicle _pos;
-	CONT = _weaponHolder;
-	_weaponHolder setPosATL _pos;
-	
-	
-	clearItemCargo _weaponHolder;
-	clearWeaponCargo _weaponHolder;
-	// _weaponHolder addWeaponCargo [_class,1];
-	[_weaponHolder, _class] call fnc_addWeaponWithMag;
-	_weaponHolder setVectorDirAndUp [[0,0,1],[0,1,0]];
-	
-	hint 'done';
-};
