@@ -9,11 +9,11 @@
 
 	
 // List of classnames compatible with feature
-dzn_logGear_compatibleVehicles = ["CUP_B_Challenger2_2CW_BAF"];
+dzn_lowGear_compatibleVehicles = ["CUP_B_Challenger2_2CW_BAF"];
 
 // M/s and timeout to apply low gear effects
-dzn_logGear_torqueTimeout = 0.5;
-dzn_logGear_torquePower = 3;
+dzn_lowGear_torqueTimeout = 0.5;
+dzn_lowGear_torquePower = 3;
 dzn_lowGear_isKeyPressed = false;
 
 // Functions and initialization
@@ -52,7 +52,7 @@ dzn_lowGear_fnc_lowGearHandle = {
 		};
 	};
 	
-	[{ dzn_lowGear_isKeyPressed = false; }, [], dzn_logGear_torqueTimeout] call CBA_fnc_waitAndExecute;
+	[{ dzn_lowGear_isKeyPressed = false; }, [], dzn_lowGear_torqueTimeout] call CBA_fnc_waitAndExecute;
 	
 	_handled
 };
@@ -61,7 +61,7 @@ dzn_lowGear_fnc_applyTorque = {
 	params ["_direction"];
 	private _veh = vehicle player;
 	
-	if (dzn_logGear_compatibleVehicles findIf { _x == typeOf _veh } < 0) exitWith {};
+	if (dzn_lowGear_compatibleVehicles findIf { _x == typeOf _veh } < 0) exitWith {};
 	
 	private ["_msg","_dirMultiplier"];
 	
@@ -78,7 +78,7 @@ dzn_lowGear_fnc_applyTorque = {
 		|| (speed _veh < 0 && _dirMultiplier > 0) 
 	) exitWith {};
 	
-	_veh setVelocityModelSpace [0, dzn_logGear_torquePower * _dirMultiplier, 0.1];
+	_veh setVelocityModelSpace [0, dzn_lowGear_torquePower * _dirMultiplier, 0.1];
 	
 	private _v = velocity _veh;
 	_veh setVelocity [_v # 0, _v # 1, 0.01];		
