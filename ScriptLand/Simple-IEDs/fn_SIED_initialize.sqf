@@ -1,5 +1,7 @@
 /*
 	SERVER SIDE
+	
+	Object classnames can be edited in defines. Use only object that can be interacted!
 */
 #define IED_DEBUG		false
 #define IED_CLASSNAMES		"Land_Tyres_F" \
